@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document, ObjectId } from "mongoose";
+import { Document } from "mongoose";
 
 export type HabitDocument = Habit & Document;
 
 @Schema()
 export class Habit {
   @Prop({ required: true })
-  userId: ObjectId;
+  userId: string;
 
   @Prop({ required: true })
   title: string;

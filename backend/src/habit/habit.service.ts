@@ -12,7 +12,7 @@ export class HabitService {
     @InjectModel(Habit.name) private habitModel: Model<HabitDocument>,
   ) {}
 
-  async findAll(userId: string): Promise<Habit[]> {
+  async findAllByUserId(userId: string): Promise<Habit[]> {
     const habits = await this.habitModel
       .find({ userId })
       .sort({ dateCreated: "desc" });
@@ -28,10 +28,6 @@ export class HabitService {
     }
 
     return habits;
-  }
-
-  async findById(id: string): Promise<Habit> {
-    return this.habitModel.findById(id);
   }
 
   async createHabit(createHabitInput: CreateHabitInput): Promise<Habit> {

@@ -29,7 +29,7 @@ export class AuthService {
       throw new UnauthorizedException("Incorrect email or password!");
     }
 
-    const token = this.jwtService.sign(user._id);
+    const token = this.jwtService.sign(user._id, { expiresIn: "30 days" });
     return token;
   }
 
@@ -42,7 +42,7 @@ export class AuthService {
       hashedPassword,
     });
 
-    const token = this.jwtService.sign(user._id);
+    const token = this.jwtService.sign(user._id, { expiresIn: "30 days" });
     return token;
   }
 

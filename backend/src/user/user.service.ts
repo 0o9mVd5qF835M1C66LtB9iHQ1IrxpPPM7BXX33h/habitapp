@@ -14,11 +14,14 @@ export class UserService {
   }
 
   async createUser(createUserInput: CreateUserInput) {
-    return await this.userModel.create({
-      isTemp: false,
-      dateCreated: Number(new Date()),
-      ...createUserInput,
-    });
+    return await this.userModel.create(
+      {
+        isTemp: false,
+        dateCreated: Number(new Date()),
+        ...createUserInput,
+      },
+      (err) => console.log(err), // TODO Send proper error when unique
+    );
   }
 
   async createTempUser() {

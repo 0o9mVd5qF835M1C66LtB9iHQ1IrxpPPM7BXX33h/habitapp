@@ -16,6 +16,9 @@ export class User {
 
   @Prop()
   isTemp: boolean;
+
+  @Prop()
+  dateCreated: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -1,9 +1,8 @@
-import { IsEmail, MinLength } from "class-validator";
+import { IsEmail } from "class-validator";
 
-export class RegisterUserInput {
+export class CreateUserInput {
   @IsEmail()
   email: string;
 
-  @MinLength(5)
-  password: string;
+  hashedPassword: string;
 }

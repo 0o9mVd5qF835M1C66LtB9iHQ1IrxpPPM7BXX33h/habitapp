@@ -1,14 +1,55 @@
-import { Injectable } from "@nestjs/common";
-import { User } from "src/user/user.schema";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+
+import { LoginInput, RegisterUserInput } from "./auth.dto";
 import { UserService } from "../user/user.service";
+import { AuthHelper } from "./auth.helper";
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private jwtService: JwtService,
+    private authHelper: AuthHelper,
+  ) {}
 
-  async validateUser(email: string): Promise<User | null> {
-    const user = await this.userService.find(email);
+  async login(loginUserInput: LoginInput) {
+    const user = await this.userService.findByEmail(loginUserInput.email);
 
-    return user;
+    if (!user) {
+      throw new UnauthorizedException("Incorrect email or password!");
+    }
+
+    const isValidPassword = this.authHelper.validatePassword(
+      loginUserInput.password,
+      user.password,
+    );
+
+    if (!isValidPassword) {
+      throw new UnauthorizedException("Incorrect email or password!");
+    }
+
+    const token = this.jwtService.sign(user._id);
+    return token;
+  }
+
+  async register(registerUserInput: RegisterUserInput) {
+    const { password, email } = registerUserInput;
+    const hashedPassword = await this.authHelper.hashPassword(password);
+
+    const user = await this.userService.createUser({
+      email,
+      hashedPassword,
+    });
+
+    const token = this.jwtService.sign(user._id);
+    return token;
+  }
+
+  async registerTempUser() {
+    const tempUser = await this.userService.createTempUser();
+    const token = this.jwtService.sign(tempUser._id);
+
+    return token;
   }
 }

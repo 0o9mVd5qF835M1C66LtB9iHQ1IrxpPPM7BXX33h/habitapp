@@ -13,18 +13,27 @@ export class UserService {
     return await this.userModel.findOne({ email: email.toLowerCase() });
   }
 
-  async createUser(createUserInput: CreateUserInput) {
-    return await this.userModel.create({
-      isTemp: false,
-      dateCreated: Number(new Date()),
-      ...createUserInput,
-    });
-  }
-
   async createTempUser() {
     return await this.userModel.create({
       // _id: new Types.ObjectId(),
       isTemp: true,
     });
+  }
+
+  async setTempUserAsRegistered(
+    tempUserId: Types.ObjectId,
+    info: { email: string; password?: string },
+  ) {
+    return await this.userModel.findOneAndUpdate(
+      { _id: tempUserId },
+      {
+        email: info.email,
+        password: info.password,
+        isTemp: false,
+      },
+      {
+        new: true,
+      },
+    );
   }
 }

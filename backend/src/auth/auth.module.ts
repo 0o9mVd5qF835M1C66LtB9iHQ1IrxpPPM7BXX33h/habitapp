@@ -14,8 +14,10 @@ import { AuthController } from "./auth.controller";
   imports: [
     UserModule,
     PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
+    JwtModule.registerAsync({
+      useFactory: () => ({
+        secret: process.env.JWT_SECRET,
+      }),
     }),
     MongooseModule.forFeature([
       {

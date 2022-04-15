@@ -1,4 +1,3 @@
-import { BadRequestException } from "@nestjs/common";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
 
@@ -30,13 +29,3 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
-
-const nonUniqueErrorCode = 11000;
-
-UserSchema.post("save", (error, _, next) => {
-  if (error.code === nonUniqueErrorCode) {
-    next(new BadRequestException("User already exists"));
-  } else {
-    next(error);
-  }
-});

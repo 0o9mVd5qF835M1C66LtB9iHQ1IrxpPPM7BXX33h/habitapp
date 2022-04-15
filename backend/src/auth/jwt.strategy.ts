@@ -7,7 +7,7 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { User, UserDocument } from "../user/user.schema";
 
 type JwtPayload = {
-  _id: string;
+  userId: string;
 };
 
 @Injectable()
@@ -20,7 +20,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
-    const { password, ...user } = await this.userModel.findById(payload._id);
+    const { password, ...user } = (
+      await this.userModel.findById(payload.userId)
+    ).toObject();
 
     if (!user) {
       throw new UnauthorizedException();

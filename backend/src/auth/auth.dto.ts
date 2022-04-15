@@ -1,6 +1,10 @@
-import { IsEmail, MinLength } from "class-validator";
+import { Types } from "mongoose";
+import { IsEmail, IsMongoId, MinLength } from "class-validator";
 
 export class RegisterUserInput {
+  @IsMongoId()
+  tempUserId: Types.ObjectId;
+
   @IsEmail()
   email: string;
 

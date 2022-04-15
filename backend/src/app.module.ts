@@ -5,11 +5,13 @@ import { AuthModule } from "./auth/auth.module";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { HabitModule } from "./habit/habit.module";
+import { UserModule } from "./user/user.module";
 
 @Module({
   imports: [
     AuthModule,
-    ConfigModule.forRoot(),
+    UserModule,
+    ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.DATABASE_URI),
     HabitModule,
   ],

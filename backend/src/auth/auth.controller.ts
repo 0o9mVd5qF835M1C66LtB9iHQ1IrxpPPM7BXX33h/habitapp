@@ -12,13 +12,14 @@ export class AuthController {
     return await this.authService.login(loginInput);
   }
 
-  @Post("/tempRegister")
+  @Post("/temp-register")
   async tempRegister() {
     return await this.authService.registerTempUser();
   }
 
   @Post("/register")
   async register(@Body() registerUserInput: RegisterUserInput) {
+    console.log(process.env.JWT_SECRET);
     return await this.authService.register(registerUserInput);
   }
 }

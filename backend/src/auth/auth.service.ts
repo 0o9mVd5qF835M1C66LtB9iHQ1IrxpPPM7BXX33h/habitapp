@@ -29,8 +29,11 @@ export class AuthService {
       throw new UnauthorizedException("Incorrect email or password!");
     }
 
-    const token = this.jwtService.sign(user._id, { expiresIn: "30 days" });
-    return token;
+    const accessToken = this.jwtService.sign(user._id, {
+      expiresIn: "30 days",
+    });
+
+    return { accessToken };
   }
 
   async register(registerUserInput: RegisterUserInput) {
@@ -42,14 +45,16 @@ export class AuthService {
       hashedPassword,
     });
 
-    const token = this.jwtService.sign(user._id, { expiresIn: "30 days" });
-    return token;
+    const accessToken = this.jwtService.sign(user._id, {
+      expiresIn: "30 days",
+    });
+
+    return { accessToken };
   }
 
   async registerTempUser() {
     const tempUser = await this.userService.createTempUser();
-    const token = this.jwtService.sign(tempUser._id);
-
-    return token;
+    const accessToken = this.jwtService.sign(tempUser._id);
+    return { accessToken };
   }
 }

@@ -1,14 +1,22 @@
+import { BadRequestException } from "@nestjs/common";
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Types, Document } from "mongoose";
+import { Document } from "mongoose";
 
 export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  @Prop()
-  _id: Types.ObjectId;
-
-  @Prop({ unique: true, lowercase: true, trim: true, required: false })
+  @Prop({
+    lowercase: true,
+    trim: true,
+    required: false,
+    index: {
+      unique: true,
+      partialFilterExpression: {
+        email: { $type: "string" },
+      },
+    },
+  })
   email: string;
 
   @Prop({ required: false })
@@ -22,3 +30,13 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+const nonUniqueErrorCode = 11000;
+
+UserSchema.post("save", (error, _, next) => {
+  if (error.code === nonUniqueErrorCode) {
+    next(new BadRequestException("User already exists"));
+  } else {
+    next(error);
+  }
+});

@@ -9,7 +9,9 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
+import { CurrentUser } from "src/auth/auth.decorator";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { UserDocument } from "src/user/user.schema";
 
 import { CreateHabitInput, EditHabitInput } from "./habit.dto";
 import { HabitService } from "./habit.service";
@@ -18,11 +20,10 @@ import { HabitService } from "./habit.service";
 export class HabitController {
   constructor(private habitService: HabitService) {}
 
-  // TODO Get userId from AuthGuard
   @UseGuards(JwtAuthGuard)
   @Get()
-  async findAllByUserId(@Query("userId") userId: string) {
-    return await this.habitService.findAllByUserId(userId);
+  async findAllByUserId(@CurrentUser() user: UserDocument) {
+    return await this.habitService.findAllByUserId(user._id);
   }
 
   @Post("create")

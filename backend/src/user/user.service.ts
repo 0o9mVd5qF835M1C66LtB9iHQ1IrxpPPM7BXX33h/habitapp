@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 
 import { User, UserDocument } from "./user.schema";
@@ -14,17 +14,17 @@ export class UserService {
   }
 
   async createUser(createUserInput: CreateUserInput) {
-    return await this.userModel.create(
-      {
-        isTemp: false,
-        dateCreated: Number(new Date()),
-        ...createUserInput,
-      },
-      (err) => console.log(err), // TODO Send proper error when unique
-    );
+    return await this.userModel.create({
+      isTemp: false,
+      dateCreated: Number(new Date()),
+      ...createUserInput,
+    });
   }
 
   async createTempUser() {
-    return await this.userModel.create({ isTemp: true });
+    return await this.userModel.create({
+      // _id: new Types.ObjectId(),
+      isTemp: true,
+    });
   }
 }

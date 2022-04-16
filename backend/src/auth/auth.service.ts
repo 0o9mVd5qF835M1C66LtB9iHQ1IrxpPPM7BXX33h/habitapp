@@ -5,7 +5,6 @@ import {
   InternalServerErrorException,
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { Error } from "mongoose";
 
 import { LoginInput, RegisterUserInput } from "./auth.dto";
 import { UserService } from "../user/user.service";
@@ -47,6 +46,7 @@ export class AuthService {
 
   async register(registerUserInput: RegisterUserInput) {
     const { password, email, tempUserId } = registerUserInput;
+
     const hashedPassword = await this.authHelper.hashPassword(password);
 
     try {
@@ -79,7 +79,23 @@ export class AuthService {
     const tempUser = await this.userService.createTempUser();
 
     const accessToken = this.jwtService.sign({ userId: tempUser._id });
-
     return { accessToken };
+  }
+
+  async googleLogin(email: string) {
+    const existingUser = await this.userService.findByEmail(email);
+
+    if (existingUser) {
+      if (existingUser.password) {
+        throw new BadRequestException(
+          "Email and password was used to register",
+        );
+      }
+
+      const accessToken = this.jwtService.sign({ userId: existingUser._id });
+      return { accessToken };
+    }
+
+    return await this.register({ email });
   }
 }

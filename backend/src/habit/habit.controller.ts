@@ -30,7 +30,7 @@ export class HabitController {
     return await this.habitService.createHabit(createHabitInput);
   }
 
-  @Put("/:id/edit")
+  @Put("/:id")
   async editHabit(@Body() editHabitInput: EditHabitInput) {
     return await this.habitService.editHabit(editHabitInput);
   }

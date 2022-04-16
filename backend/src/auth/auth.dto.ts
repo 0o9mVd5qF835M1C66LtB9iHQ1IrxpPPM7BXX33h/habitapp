@@ -3,13 +3,13 @@ import { IsEmail, IsMongoId, MinLength } from "class-validator";
 
 export class RegisterUserInput {
   @IsMongoId()
-  tempUserId: Types.ObjectId;
+  tempUserId?: Types.ObjectId;
 
   @IsEmail()
   email: string;
 
   @MinLength(6)
-  password: string;
+  password?: string;
 }
 
 export class LoginInput {

@@ -1,4 +1,9 @@
-import { ArrayNotEmpty, IsNotEmpty } from "class-validator";
+import {
+  ArrayNotEmpty,
+  IsBoolean,
+  IsNotEmpty,
+  IsNumber,
+} from "class-validator";
 
 export class CreateHabitInput {
   @IsNotEmpty()
@@ -8,18 +13,20 @@ export class CreateHabitInput {
   userId: string;
 
   @ArrayNotEmpty()
+  @IsNumber({}, { each: true })
   isoWeekdays: number[];
 
   @IsNotEmpty()
   dateCreated: number;
 
   @IsNotEmpty()
+  @IsBoolean()
   archived: boolean;
 
-  @IsNotEmpty()
+  @IsNumber({}, { each: true })
   currentStreakDates: number[];
 
-  @IsNotEmpty()
+  @IsNumber({}, { each: true })
   longestStreakDates: number[];
 }
 
@@ -31,5 +38,6 @@ export class EditHabitInput {
   title: string;
 
   @ArrayNotEmpty()
+  @IsNumber({}, { each: true })
   isoWeekdays: number[];
 }

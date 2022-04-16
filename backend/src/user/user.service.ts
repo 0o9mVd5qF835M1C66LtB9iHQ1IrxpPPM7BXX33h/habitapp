@@ -3,7 +3,6 @@ import { Model, Types } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 
 import { User, UserDocument } from "./user.schema";
-import { CreateUserInput } from "./user.dto";
 
 @Injectable()
 export class UserService {
@@ -15,8 +14,8 @@ export class UserService {
 
   async createTempUser() {
     return await this.userModel.create({
-      // _id: new Types.ObjectId(),
       isTemp: true,
+      dateCreated: Number(new Date()),
     });
   }
 

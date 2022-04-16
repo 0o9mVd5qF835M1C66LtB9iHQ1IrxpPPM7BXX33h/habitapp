@@ -5,25 +5,25 @@ export type HabitDocument = Habit & Document;
 
 @Schema()
 export class Habit {
-  @Prop({ required: true })
+  @Prop()
   userId: string;
 
-  @Prop({ required: true })
+  @Prop({ trim: true })
   title: string;
 
-  @Prop({ required: true })
+  @Prop()
   isoWeekdays: number[];
 
-  @Prop({ required: true })
+  @Prop()
   dateCreated: number;
 
-  @Prop({ required: true })
+  @Prop()
   archived: boolean;
 
-  @Prop({ required: true })
+  @Prop()
   currentStreakDates: number[];
 
-  @Prop({ required: true })
+  @Prop()
   longestStreakDates: number[];
 }
 

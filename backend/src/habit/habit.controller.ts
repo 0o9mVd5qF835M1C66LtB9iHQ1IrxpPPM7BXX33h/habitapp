@@ -15,11 +15,11 @@ import { UserDocument } from "src/user/user.schema";
 import { CreateHabitInput, EditHabitInput } from "./habit.dto";
 import { HabitService } from "./habit.service";
 
+@UseGuards(JwtAuthGuard)
 @Controller("habits")
 export class HabitController {
   constructor(private habitService: HabitService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   async findAllByUserId(@CurrentUser() user: UserDocument) {
     return await this.habitService.findAllByUserId(user._id);
@@ -32,7 +32,6 @@ export class HabitController {
 
   @Put("/:id/edit")
   async editHabit(@Body() editHabitInput: EditHabitInput) {
-    console.log("What??");
     return await this.habitService.editHabit(editHabitInput);
   }
 

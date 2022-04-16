@@ -1,0 +1,15 @@
+{
+  "name": "habit-app",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node dist/main.js"
+  },
+  "author": {
+    "email": "alimatov.o@gmail.com",
+    "name": "Oybek Alimatov",
+    "url": "https://oybek.me"
+  },
+  "dependencies": {
+    "react-icons": "^4.3.1"
+  }
+}

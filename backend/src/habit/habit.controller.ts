@@ -31,6 +31,7 @@ export class HabitController {
   }
 
   @Post("create")
+  @ApiResponse({ type: Habit })
   async createHabit(@Body() createHabitInput: CreateHabitInput) {
     return await this.habitService.createHabit(createHabitInput);
   }
@@ -40,11 +41,13 @@ export class HabitController {
     name: "id",
     type: "string",
   })
+  @ApiResponse({ type: Habit })
   async editHabit(@Body() editHabitInput: EditHabitInput) {
     return await this.habitService.editHabit(editHabitInput);
   }
 
   @Delete("/:id")
+  @ApiResponse({ type: Habit })
   @ApiParam({
     name: "id",
     type: "string",

@@ -12,6 +12,7 @@ import { ApiParam, ApiResponse } from "@nestjs/swagger";
 import { CurrentUser } from "src/auth/auth.decorator";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { UserDocument } from "src/user/user.schema";
+import { Schema } from "mongoose";
 
 import { CreateHabitInput, EditHabitInput } from "./habit.dto";
 import { Habit } from "./habit.schema";
@@ -30,28 +31,23 @@ export class HabitController {
     return await this.habitService.findAllByUserId(user._id);
   }
 
-  @Post("create")
+  @Post("/create")
   @ApiResponse({ type: Habit })
   async createHabit(@Body() createHabitInput: CreateHabitInput) {
     return await this.habitService.createHabit(createHabitInput);
   }
 
   @Put("/:id")
-  @ApiParam({
-    name: "id",
-    type: "string",
-  })
   @ApiResponse({ type: Habit })
-  async editHabit(@Body() editHabitInput: EditHabitInput) {
-    return await this.habitService.editHabit(editHabitInput);
+  async editHabit(
+    @Param("id") id: Schema.Types.ObjectId,
+    @Body() editHabitInput: EditHabitInput,
+  ) {
+    return await this.habitService.editHabit(id, editHabitInput);
   }
 
-  @Delete("/:id")
+  @Delete()
   @ApiResponse({ type: Habit })
-  @ApiParam({
-    name: "id",
-    type: "string",
-  })
   async deleteHabit(@Param("id") id: string) {
     return await this.habitService.deleteHabit(id);
   }

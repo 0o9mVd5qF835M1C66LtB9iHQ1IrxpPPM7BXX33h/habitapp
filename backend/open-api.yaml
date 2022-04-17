@@ -58,8 +58,14 @@ paths:
       operationId: UserController_currentUser
       parameters: []
       responses:
-        "200":
+        default:
           description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
   /habits:
     get:
       operationId: HabitController_findAllByUserId
@@ -73,6 +79,21 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Habit"
+    delete:
+      operationId: HabitController_deleteHabit
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Habit"
   /habits/create:
     post:
       operationId: HabitController_createHabit
@@ -84,17 +105,16 @@ paths:
             schema:
               $ref: "#/components/schemas/CreateHabitInput"
       responses:
-        "201":
+        default:
           description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Habit"
   "/habits/{id}":
     put:
       operationId: HabitController_editHabit
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
+      parameters: []
       requestBody:
         required: true
         content:
@@ -102,19 +122,12 @@ paths:
             schema:
               $ref: "#/components/schemas/EditHabitInput"
       responses:
-        "200":
+        default:
           description: ""
-    delete:
-      operationId: HabitController_deleteHabit
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        "200":
-          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Habit"
 info:
   title: Habit App
   description: Habit App made by Oybek Alimatov
@@ -126,13 +139,55 @@ components:
   schemas:
     LoginInput:
       type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - email
+        - password
+    ObjectId:
+      type: object
       properties: {}
     RegisterUserInput:
       type: object
-      properties: {}
+      properties:
+        tempUserId:
+          $ref: "#/components/schemas/ObjectId"
+        email:
+          type: string
+        password:
+          type: string
+      required:
+        - tempUserId
+        - email
+        - password
     GoogleAuthInput:
       type: object
-      properties: {}
+      properties:
+        tempUserId:
+          $ref: "#/components/schemas/ObjectId"
+        email:
+          type: string
+      required:
+        - tempUserId
+        - email
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        isTemp:
+          type: boolean
+        dateCreated:
+          type: number
+      required:
+        - email
+        - isTemp
+        - dateCreated
     Habit:
       type: object
       properties:
@@ -166,7 +221,44 @@ components:
         - longestStreakDates
     CreateHabitInput:
       type: object
-      properties: {}
+      properties:
+        title:
+          type: string
+        userId:
+          type: string
+        isoWeekdays:
+          type: array
+          items:
+            type: number
+        dateCreated:
+          type: number
+        archived:
+          type: boolean
+        currentStreakDates:
+          type: array
+          items:
+            type: number
+        longestStreakDates:
+          type: array
+          items:
+            type: number
+      required:
+        - title
+        - userId
+        - isoWeekdays
+        - dateCreated
+        - archived
+        - currentStreakDates
+        - longestStreakDates
     EditHabitInput:
       type: object
-      properties: {}
+      properties:
+        title:
+          type: string
+        isoWeekdays:
+          type: array
+          items:
+            type: number
+      required:
+        - title
+        - isoWeekdays

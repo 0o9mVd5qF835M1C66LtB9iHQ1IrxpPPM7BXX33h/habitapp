@@ -1,6 +1,7 @@
 import { Model } from "mongoose";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
+import { Schema } from "mongoose";
 import dayjs from "dayjs";
 
 import { CreateHabitInput, EditHabitInput } from "./habit.dto";
@@ -34,12 +35,13 @@ export class HabitService {
     return await this.habitModel.create(createHabitInput);
   }
 
-  async editHabit(editHabitInput: EditHabitInput): Promise<Habit> {
-    return await this.habitModel.findByIdAndUpdate(
-      editHabitInput._id,
-      editHabitInput,
-      { new: true },
-    );
+  async editHabit(
+    habitId: Schema.Types.ObjectId,
+    editHabitInput: EditHabitInput,
+  ): Promise<Habit> {
+    return await this.habitModel.findByIdAndUpdate(habitId, editHabitInput, {
+      new: true,
+    });
   }
 
   async deleteHabit(id: string): Promise<Habit> {

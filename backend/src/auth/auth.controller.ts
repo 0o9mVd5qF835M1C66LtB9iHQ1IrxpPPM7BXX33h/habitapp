@@ -1,4 +1,5 @@
 import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { ApiBody } from "@nestjs/swagger";
 
 import { GoogleAuthInput, LoginInput, RegisterUserInput } from "./auth.dto";
 import { AuthService } from "./auth.service";

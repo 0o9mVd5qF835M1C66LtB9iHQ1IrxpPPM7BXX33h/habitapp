@@ -6,7 +6,7 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 
-import { LoginInput, RegisterUserInput } from "./auth.dto";
+import { GoogleAuthInput, LoginInput, RegisterUserInput } from "./auth.dto";
 import { UserService } from "../user/user.service";
 import { AuthHelper } from "./auth.helper";
 
@@ -82,20 +82,29 @@ export class AuthService {
     return { accessToken };
   }
 
-  async googleLogin(email: string) {
-    const existingUser = await this.userService.findByEmail(email);
+  async googleAuth(googleAuthInput: GoogleAuthInput) {
+    const { email, tempUserId } = googleAuthInput;
+    const tempUser = await this.userService.findById(tempUserId);
 
-    if (existingUser) {
-      if (existingUser.password) {
+    if (!tempUser) {
+      throw new BadRequestException("Temp user not found");
+    }
+
+    const accessToken = this.jwtService.sign({ userId: tempUser._id });
+
+    if (tempUser.email) {
+      if (tempUser.password) {
         throw new BadRequestException(
           "Email and password was used to register",
         );
       }
-
-      const accessToken = this.jwtService.sign({ userId: existingUser._id });
       return { accessToken };
     }
 
-    return await this.register({ email });
+    await this.userService.setTempUserAsRegistered(tempUser._id, {
+      email,
+    });
+
+    return { accessToken };
   }
 }

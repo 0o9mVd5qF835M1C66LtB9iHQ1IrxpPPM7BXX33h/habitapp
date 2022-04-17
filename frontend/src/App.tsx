@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { AddHabitPage, HomePage, RegisterPage } from "./pages";
+import { AddHabitPage, HomePage, LoginPage, RegisterPage } from "./pages";
 
 const queryClient = new QueryClient();
 
@@ -13,6 +13,7 @@ function App() {
         <Route path="/home" element={<HomePage />} />
         <Route path="/add-habit" element={<AddHabitPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
       </Routes>
     </QueryClientProvider>
   );

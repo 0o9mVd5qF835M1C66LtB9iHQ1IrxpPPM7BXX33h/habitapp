@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import dayjs, { Dayjs } from "dayjs";
 
+import { weekDays } from "../../constants";
 import { Button } from "../button";
 
 function getDays() {
@@ -14,8 +15,6 @@ function getDays() {
 
   return calendarDays;
 }
-
-const dayOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 type CalendarSliderProps = {
   onClick?: (day: Dayjs) => void;
@@ -46,7 +45,7 @@ export function CalendarSlider({ onClick = () => {} }: CalendarSliderProps) {
           >
             {day.date()}
             <br />
-            {dayOfWeek[day.day()]}
+            {weekDays[day.day()]}
           </Button>
         );
       })}

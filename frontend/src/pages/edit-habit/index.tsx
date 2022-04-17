@@ -9,7 +9,7 @@ import {
   HabitForm,
 } from "../../components";
 
-export function AddHabitPage() {
+export function EditHabitPage() {
   const navigate = useNavigate();
 
   function handleGoBackClick() {

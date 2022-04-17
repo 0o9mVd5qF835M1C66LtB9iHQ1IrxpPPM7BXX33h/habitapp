@@ -6,3 +6,4 @@ export * from "./week-selector";
 export * from "./modal";
 export * from "./form";
 export * from "./input";
+export * from "./habit-form";

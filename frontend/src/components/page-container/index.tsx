@@ -5,5 +5,9 @@ type PageContainerProps = {
 };
 
 export function PageContainer(props: PageContainerProps) {
-  return <div className="w-[600px] h-screen m-auto">{props.children}</div>;
+  return (
+    <div className="flex flex-col w-[390px] h-screen m-auto px-6">
+      {props.children}
+    </div>
+  );
 }

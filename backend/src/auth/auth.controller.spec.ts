@@ -20,6 +20,7 @@ describe("AuthController", () => {
   describe("registering temporary user", () => {
     it("should return valid access_token", async () => {
       const result = await authController.tempRegister();
+
       const decodedObject = jwtService.decode(result.accessToken);
       expect(decodedObject).toMatchInlineSnapshot();
     });

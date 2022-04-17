@@ -4,7 +4,7 @@ import {
   VerifyCallback,
   StrategyOptionsWithRequest,
 } from "passport-google-oauth20";
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 
@@ -31,6 +31,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, "google") {
     const user = {
       email: emails[0].value,
     };
-    cb(null, user);
+    return cb(null, user);
   }
 }

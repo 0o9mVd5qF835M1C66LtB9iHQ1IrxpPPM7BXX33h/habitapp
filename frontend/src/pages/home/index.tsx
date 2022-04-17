@@ -8,6 +8,7 @@ import {
   Button,
   CalendarSlider,
 } from "../../components";
+import { Link } from "react-router-dom";
 
 export function HomePage() {
   const [selectedDay, setSelectedDay] = useState<Dayjs>(dayjs());
@@ -45,9 +46,11 @@ export function HomePage() {
             </h4>
           </div>
           <div>
-            <Button className="bg-primary-600 text-white font-semibold">
-              <IoAdd className="text-lg" />
-            </Button>
+            <Link to="/add-habit">
+              <Button className="bg-primary-600 text-white font-semibold">
+                <IoAdd className="text-lg" />
+              </Button>
+            </Link>
             <Button className="bg-white">
               <IoEllipsisVertical className="text-lg text-gray-900" />
             </Button>

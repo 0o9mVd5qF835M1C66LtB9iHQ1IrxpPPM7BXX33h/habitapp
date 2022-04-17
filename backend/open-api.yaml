@@ -79,21 +79,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Habit"
-    delete:
-      operationId: HabitController_deleteHabit
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        default:
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Habit"
   /habits/create:
     post:
       operationId: HabitController_createHabit
@@ -114,13 +99,33 @@ paths:
   "/habits/{id}":
     put:
       operationId: HabitController_editHabit
-      parameters: []
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
       requestBody:
         required: true
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/EditHabitInput"
+      responses:
+        default:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Habit"
+    delete:
+      operationId: HabitController_deleteHabit
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
       responses:
         default:
           description: ""
@@ -147,14 +152,11 @@ components:
       required:
         - email
         - password
-    ObjectId:
-      type: object
-      properties: {}
     RegisterUserInput:
       type: object
       properties:
         tempUserId:
-          $ref: "#/components/schemas/ObjectId"
+          type: string
         email:
           type: string
         password:
@@ -167,7 +169,7 @@ components:
       type: object
       properties:
         tempUserId:
-          $ref: "#/components/schemas/ObjectId"
+          type: string
         email:
           type: string
       required:

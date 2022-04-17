@@ -4,13 +4,11 @@ import { WeekSelector } from "../week-selector";
 import { Button } from "../button";
 import { Habit } from "../../generated/api";
 
-type HabitFormProps = {
-  habit: Habit;
-};
+type HabitFormProps = {};
 
 export function HabitForm({}: HabitFormProps) {
   return (
-    <Form className="flex flex-1 flex-col items-center pt-32">
+    <Form className="flex flex-1 flex-col items-center">
       <h1 className="text-base text-gray-900 font-bold text-center mb-20">
         Add new habit
       </h1>

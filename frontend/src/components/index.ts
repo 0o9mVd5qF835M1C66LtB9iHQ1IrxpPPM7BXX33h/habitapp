@@ -7,3 +7,5 @@ export * from "./modal";
 export * from "./form";
 export * from "./input";
 export * from "./habit-form";
+export * from "./page-close-button";
+export * from "./google-login-button";

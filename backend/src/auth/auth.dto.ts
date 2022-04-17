@@ -4,7 +4,7 @@ import { ApiProperty } from "@nestjs/swagger";
 
 export class RegisterUserInput {
   @IsMongoId()
-  @ApiProperty()
+  @ApiProperty({ type: String })
   tempUserId: Schema.Types.ObjectId;
 
   @IsEmail()
@@ -28,7 +28,7 @@ export class LoginInput {
 
 export class GoogleAuthInput {
   @IsMongoId()
-  @ApiProperty()
+  @ApiProperty({ type: String })
   tempUserId: Schema.Types.ObjectId;
 
   @IsEmail()

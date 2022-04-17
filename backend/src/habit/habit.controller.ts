@@ -37,7 +37,11 @@ export class HabitController {
     return await this.habitService.createHabit(createHabitInput);
   }
 
-  @Put("/:id")
+  @Put(":id")
+  @ApiParam({
+    name: "id",
+    type: "string",
+  })
   @ApiResponse({ type: Habit })
   async editHabit(
     @Param("id") id: Schema.Types.ObjectId,
@@ -46,7 +50,11 @@ export class HabitController {
     return await this.habitService.editHabit(id, editHabitInput);
   }
 
-  @Delete()
+  @Delete(":id")
+  @ApiParam({
+    name: "id",
+    type: "string",
+  })
   @ApiResponse({ type: Habit })
   async deleteHabit(@Param("id") id: string) {
     return await this.habitService.deleteHabit(id);

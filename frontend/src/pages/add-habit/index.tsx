@@ -1,8 +1,5 @@
-import { HiOutlineX } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
-
 import {
-  Button,
+  PageCloseButton,
   Modal,
   PageContainer,
   PageHeader,
@@ -10,20 +7,12 @@ import {
 } from "../../components";
 
 export function AddHabitPage() {
-  const navigate = useNavigate();
-
-  function handleGoBackClick() {
-    navigate(-1);
-  }
-
   return (
     <Modal>
       <PageContainer>
         <PageHeader>
           <div className="flex flex-row-reverse justify-between items-center">
-            <Button onClick={handleGoBackClick}>
-              <HiOutlineX />
-            </Button>
+            <PageCloseButton />
           </div>
         </PageHeader>
         <HabitForm />

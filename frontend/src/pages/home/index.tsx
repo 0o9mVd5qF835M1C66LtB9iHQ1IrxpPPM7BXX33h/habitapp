@@ -45,7 +45,7 @@ export function HomePage() {
               All habits completed
             </h4>
           </div>
-          <div>
+          <div className="flex">
             <Link to="/add-habit">
               <Button className="bg-primary-600 text-white font-semibold">
                 <IoAdd className="text-lg" />

@@ -5,7 +5,11 @@
  * Habit App made by Oybek Alimatov
  * OpenAPI spec version: 1.0.0
  */
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import axios,{
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosError
+} from 'axios'
 import {
   useQuery,
   useMutation,
@@ -14,15 +18,24 @@ import {
   QueryFunction,
   MutationFunction,
   UseQueryResult,
-  QueryKey,
-} from "react-query";
-import { rest } from "msw";
+  QueryKey
+} from 'react-query'
+import {
+  rest
+} from 'msw'
 export interface EditHabitInput {
-  [key: string]: any;
+  title: string;
+  isoWeekdays: number[];
 }
 
 export interface CreateHabitInput {
-  [key: string]: any;
+  title: string;
+  userId: string;
+  isoWeekdays: number[];
+  dateCreated: number;
+  archived: boolean;
+  currentStreakDates: number[];
+  longestStreakDates: number[];
 }
 
 export interface Habit {
@@ -35,497 +48,429 @@ export interface Habit {
   longestStreakDates: number[];
 }
 
+export interface User {
+  email: string;
+  password?: string;
+  isTemp: boolean;
+  dateCreated: number;
+}
+
 export interface GoogleAuthInput {
-  [key: string]: any;
+  tempUserId: string;
+  email: string;
 }
 
 export interface RegisterUserInput {
-  [key: string]: any;
+  tempUserId: string;
+  email: string;
+  password: string;
 }
 
 export interface LoginInput {
-  [key: string]: any;
+  email: string;
+  password: string;
 }
 
+
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type AsyncReturnType<T extends (...args: any) => Promise<any>> = T extends (
-  ...args: any
-) => Promise<infer R>
-  ? R
-  : any;
+type AsyncReturnType<
+T extends (...args: any) => Promise<any>
+> = T extends (...args: any) => Promise<infer R> ? R : any;
+
 
 export const appControllerGetHello = (
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.get(`/`, options);
-};
+     options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    return axios.get(
+      `/`,options
+    );
+  }
+
 
 export const getAppControllerGetHelloQueryKey = () => [`/`];
 
-export type AppControllerGetHelloQueryResult = NonNullable<
-  AsyncReturnType<typeof appControllerGetHello>
->;
-export type AppControllerGetHelloQueryError = AxiosError<unknown>;
+    
+export type AppControllerGetHelloQueryResult = NonNullable<AsyncReturnType<typeof appControllerGetHello>>
+export type AppControllerGetHelloQueryError = AxiosError<unknown>
 
-export const useAppControllerGetHello = <
-  TData = AsyncReturnType<typeof appControllerGetHello>,
-  TError = AxiosError<unknown>
->(options?: {
-  query?: UseQueryOptions<
-    AsyncReturnType<typeof appControllerGetHello>,
-    TError,
-    TData
-  >;
-  axios?: AxiosRequestConfig;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const { query: queryOptions, axios: axiosOptions } = options || {};
+export const useAppControllerGetHello = <TData = AsyncReturnType<typeof appControllerGetHello>, TError = AxiosError<unknown>>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof appControllerGetHello>, TError, TData>, axios?: AxiosRequestConfig}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions, axios: axiosOptions} = options || {}
 
   const queryKey = queryOptions?.queryKey ?? getAppControllerGetHelloQueryKey();
 
-  const queryFn: QueryFunction<
-    AsyncReturnType<typeof appControllerGetHello>
-  > = () => appControllerGetHello(axiosOptions);
+  
 
-  const query = useQuery<
-    AsyncReturnType<typeof appControllerGetHello>,
-    TError,
-    TData
-  >(queryKey, queryFn, queryOptions);
+  const queryFn: QueryFunction<AsyncReturnType<typeof appControllerGetHello>> = () => appControllerGetHello(axiosOptions);
+
+  const query = useQuery<AsyncReturnType<typeof appControllerGetHello>, TError, TData>(queryKey, queryFn, queryOptions)
 
   return {
     queryKey,
-    ...query,
-  };
-};
+    ...query
+  }
+}
+
 
 export const authControllerTempRegister = (
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.post(`/auth/temp-register`, undefined, options);
-};
+     options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    return axios.post(
+      `/auth/temp-register`,undefined,options
+    );
+  }
 
-export type AuthControllerTempRegisterMutationResult = NonNullable<
-  AsyncReturnType<typeof authControllerTempRegister>
->;
 
-export type AuthControllerTempRegisterMutationError = AxiosError<unknown>;
 
-export const useAuthControllerTempRegister = <
-  TError = AxiosError<unknown>,
-  TVariables = void,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof authControllerTempRegister>,
-    TError,
-    TVariables,
-    TContext
-  >;
-  axios?: AxiosRequestConfig;
-}) => {
-  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
+    export type AuthControllerTempRegisterMutationResult = NonNullable<AsyncReturnType<typeof authControllerTempRegister>>
+    
+    export type AuthControllerTempRegisterMutationError = AxiosError<unknown>
 
-  const mutationFn: MutationFunction<
-    AsyncReturnType<typeof authControllerTempRegister>,
-    TVariables
-  > = () => {
-    return authControllerTempRegister(axiosOptions);
-  };
+    export const useAuthControllerTempRegister = <TError = AxiosError<unknown>,
+    TVariables = void,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof authControllerTempRegister>, TError,TVariables, TContext>, axios?: AxiosRequestConfig}
+) => {
+      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
 
-  return useMutation<
-    AsyncReturnType<typeof authControllerTempRegister>,
-    TError,
-    TVariables,
-    TContext
-  >(mutationFn, mutationOptions);
-};
+      
 
+
+      const mutationFn: MutationFunction<AsyncReturnType<typeof authControllerTempRegister>, TVariables> = () => {
+          ;
+
+          return  authControllerTempRegister(axiosOptions)
+        }
+
+      return useMutation<AsyncReturnType<typeof authControllerTempRegister>, TError, TVariables, TContext>(mutationFn, mutationOptions)
+    }
+    
 export const authControllerLogin = (
-  loginInput: LoginInput,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.post(`/auth/login`, loginInput, options);
-};
+    loginInput: LoginInput, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    return axios.post(
+      `/auth/login`,
+      loginInput,options
+    );
+  }
 
-export type AuthControllerLoginMutationResult = NonNullable<
-  AsyncReturnType<typeof authControllerLogin>
->;
-export type AuthControllerLoginMutationBody = LoginInput;
-export type AuthControllerLoginMutationError = AxiosError<unknown>;
 
-export const useAuthControllerLogin = <
-  TError = AxiosError<unknown>,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof authControllerLogin>,
-    TError,
-    { data: LoginInput },
-    TContext
-  >;
-  axios?: AxiosRequestConfig;
-}) => {
-  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
 
-  const mutationFn: MutationFunction<
-    AsyncReturnType<typeof authControllerLogin>,
-    { data: LoginInput }
-  > = (props) => {
-    const { data } = props || {};
+    export type AuthControllerLoginMutationResult = NonNullable<AsyncReturnType<typeof authControllerLogin>>
+    export type AuthControllerLoginMutationBody = LoginInput
+    export type AuthControllerLoginMutationError = AxiosError<unknown>
 
-    return authControllerLogin(data, axiosOptions);
-  };
+    export const useAuthControllerLogin = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof authControllerLogin>, TError,{data: LoginInput}, TContext>, axios?: AxiosRequestConfig}
+) => {
+      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
 
-  return useMutation<
-    AsyncReturnType<typeof authControllerLogin>,
-    TError,
-    { data: LoginInput },
-    TContext
-  >(mutationFn, mutationOptions);
-};
+      
 
+
+      const mutationFn: MutationFunction<AsyncReturnType<typeof authControllerLogin>, {data: LoginInput}> = (props) => {
+          const {data} = props || {};
+
+          return  authControllerLogin(data,axiosOptions)
+        }
+
+      return useMutation<AsyncReturnType<typeof authControllerLogin>, TError, {data: LoginInput}, TContext>(mutationFn, mutationOptions)
+    }
+    
 export const authControllerRegister = (
-  registerUserInput: RegisterUserInput,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.post(`/auth/register`, registerUserInput, options);
-};
+    registerUserInput: RegisterUserInput, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    return axios.post(
+      `/auth/register`,
+      registerUserInput,options
+    );
+  }
 
-export type AuthControllerRegisterMutationResult = NonNullable<
-  AsyncReturnType<typeof authControllerRegister>
->;
-export type AuthControllerRegisterMutationBody = RegisterUserInput;
-export type AuthControllerRegisterMutationError = AxiosError<unknown>;
 
-export const useAuthControllerRegister = <
-  TError = AxiosError<unknown>,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof authControllerRegister>,
-    TError,
-    { data: RegisterUserInput },
-    TContext
-  >;
-  axios?: AxiosRequestConfig;
-}) => {
-  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
 
-  const mutationFn: MutationFunction<
-    AsyncReturnType<typeof authControllerRegister>,
-    { data: RegisterUserInput }
-  > = (props) => {
-    const { data } = props || {};
+    export type AuthControllerRegisterMutationResult = NonNullable<AsyncReturnType<typeof authControllerRegister>>
+    export type AuthControllerRegisterMutationBody = RegisterUserInput
+    export type AuthControllerRegisterMutationError = AxiosError<unknown>
 
-    return authControllerRegister(data, axiosOptions);
-  };
+    export const useAuthControllerRegister = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof authControllerRegister>, TError,{data: RegisterUserInput}, TContext>, axios?: AxiosRequestConfig}
+) => {
+      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
 
-  return useMutation<
-    AsyncReturnType<typeof authControllerRegister>,
-    TError,
-    { data: RegisterUserInput },
-    TContext
-  >(mutationFn, mutationOptions);
-};
+      
 
+
+      const mutationFn: MutationFunction<AsyncReturnType<typeof authControllerRegister>, {data: RegisterUserInput}> = (props) => {
+          const {data} = props || {};
+
+          return  authControllerRegister(data,axiosOptions)
+        }
+
+      return useMutation<AsyncReturnType<typeof authControllerRegister>, TError, {data: RegisterUserInput}, TContext>(mutationFn, mutationOptions)
+    }
+    
 export const authControllerGoogleAuth = (
-  googleAuthInput: GoogleAuthInput,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.post(`/auth/google`, googleAuthInput, options);
-};
+    googleAuthInput: GoogleAuthInput, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    return axios.post(
+      `/auth/google`,
+      googleAuthInput,options
+    );
+  }
 
-export type AuthControllerGoogleAuthMutationResult = NonNullable<
-  AsyncReturnType<typeof authControllerGoogleAuth>
->;
-export type AuthControllerGoogleAuthMutationBody = GoogleAuthInput;
-export type AuthControllerGoogleAuthMutationError = AxiosError<unknown>;
 
-export const useAuthControllerGoogleAuth = <
-  TError = AxiosError<unknown>,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof authControllerGoogleAuth>,
-    TError,
-    { data: GoogleAuthInput },
-    TContext
-  >;
-  axios?: AxiosRequestConfig;
-}) => {
-  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
 
-  const mutationFn: MutationFunction<
-    AsyncReturnType<typeof authControllerGoogleAuth>,
-    { data: GoogleAuthInput }
-  > = (props) => {
-    const { data } = props || {};
+    export type AuthControllerGoogleAuthMutationResult = NonNullable<AsyncReturnType<typeof authControllerGoogleAuth>>
+    export type AuthControllerGoogleAuthMutationBody = GoogleAuthInput
+    export type AuthControllerGoogleAuthMutationError = AxiosError<unknown>
 
-    return authControllerGoogleAuth(data, axiosOptions);
-  };
+    export const useAuthControllerGoogleAuth = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof authControllerGoogleAuth>, TError,{data: GoogleAuthInput}, TContext>, axios?: AxiosRequestConfig}
+) => {
+      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
 
-  return useMutation<
-    AsyncReturnType<typeof authControllerGoogleAuth>,
-    TError,
-    { data: GoogleAuthInput },
-    TContext
-  >(mutationFn, mutationOptions);
-};
+      
 
+
+      const mutationFn: MutationFunction<AsyncReturnType<typeof authControllerGoogleAuth>, {data: GoogleAuthInput}> = (props) => {
+          const {data} = props || {};
+
+          return  authControllerGoogleAuth(data,axiosOptions)
+        }
+
+      return useMutation<AsyncReturnType<typeof authControllerGoogleAuth>, TError, {data: GoogleAuthInput}, TContext>(mutationFn, mutationOptions)
+    }
+    
 export const userControllerCurrentUser = (
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.get(`/user/current-user`, options);
-};
+     options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    return axios.get(
+      `/user/current-user`,options
+    );
+  }
 
-export const getUserControllerCurrentUserQueryKey = () => [
-  `/user/current-user`,
-];
 
-export type UserControllerCurrentUserQueryResult = NonNullable<
-  AsyncReturnType<typeof userControllerCurrentUser>
->;
-export type UserControllerCurrentUserQueryError = AxiosError<unknown>;
+export const getUserControllerCurrentUserQueryKey = () => [`/user/current-user`];
 
-export const useUserControllerCurrentUser = <
-  TData = AsyncReturnType<typeof userControllerCurrentUser>,
-  TError = AxiosError<unknown>
->(options?: {
-  query?: UseQueryOptions<
-    AsyncReturnType<typeof userControllerCurrentUser>,
-    TError,
-    TData
-  >;
-  axios?: AxiosRequestConfig;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const { query: queryOptions, axios: axiosOptions } = options || {};
+    
+export type UserControllerCurrentUserQueryResult = NonNullable<AsyncReturnType<typeof userControllerCurrentUser>>
+export type UserControllerCurrentUserQueryError = AxiosError<User[]>
 
-  const queryKey =
-    queryOptions?.queryKey ?? getUserControllerCurrentUserQueryKey();
+export const useUserControllerCurrentUser = <TData = AsyncReturnType<typeof userControllerCurrentUser>, TError = AxiosError<User[]>>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof userControllerCurrentUser>, TError, TData>, axios?: AxiosRequestConfig}
 
-  const queryFn: QueryFunction<
-    AsyncReturnType<typeof userControllerCurrentUser>
-  > = () => userControllerCurrentUser(axiosOptions);
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const query = useQuery<
-    AsyncReturnType<typeof userControllerCurrentUser>,
-    TError,
-    TData
-  >(queryKey, queryFn, queryOptions);
+  const {query: queryOptions, axios: axiosOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getUserControllerCurrentUserQueryKey();
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof userControllerCurrentUser>> = () => userControllerCurrentUser(axiosOptions);
+
+  const query = useQuery<AsyncReturnType<typeof userControllerCurrentUser>, TError, TData>(queryKey, queryFn, queryOptions)
 
   return {
     queryKey,
-    ...query,
-  };
-};
+    ...query
+  }
+}
+
 
 export const habitControllerFindAllByUserId = (
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<unknown>> => {
-  return axios.get(`/habits`, options);
-};
+     options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    return axios.get(
+      `/habits`,options
+    );
+  }
+
 
 export const getHabitControllerFindAllByUserIdQueryKey = () => [`/habits`];
 
-export type HabitControllerFindAllByUserIdQueryResult = NonNullable<
-  AsyncReturnType<typeof habitControllerFindAllByUserId>
->;
-export type HabitControllerFindAllByUserIdQueryError = AxiosError<Habit[]>;
+    
+export type HabitControllerFindAllByUserIdQueryResult = NonNullable<AsyncReturnType<typeof habitControllerFindAllByUserId>>
+export type HabitControllerFindAllByUserIdQueryError = AxiosError<Habit[]>
 
-export const useHabitControllerFindAllByUserId = <
-  TData = AsyncReturnType<typeof habitControllerFindAllByUserId>,
-  TError = AxiosError<Habit[]>
->(options?: {
-  query?: UseQueryOptions<
-    AsyncReturnType<typeof habitControllerFindAllByUserId>,
-    TError,
-    TData
-  >;
-  axios?: AxiosRequestConfig;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const { query: queryOptions, axios: axiosOptions } = options || {};
+export const useHabitControllerFindAllByUserId = <TData = AsyncReturnType<typeof habitControllerFindAllByUserId>, TError = AxiosError<Habit[]>>(
+  options?: { query?:UseQueryOptions<AsyncReturnType<typeof habitControllerFindAllByUserId>, TError, TData>, axios?: AxiosRequestConfig}
 
-  const queryKey =
-    queryOptions?.queryKey ?? getHabitControllerFindAllByUserIdQueryKey();
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
 
-  const queryFn: QueryFunction<
-    AsyncReturnType<typeof habitControllerFindAllByUserId>
-  > = () => habitControllerFindAllByUserId(axiosOptions);
+  const {query: queryOptions, axios: axiosOptions} = options || {}
 
-  const query = useQuery<
-    AsyncReturnType<typeof habitControllerFindAllByUserId>,
-    TError,
-    TData
-  >(queryKey, queryFn, queryOptions);
+  const queryKey = queryOptions?.queryKey ?? getHabitControllerFindAllByUserIdQueryKey();
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof habitControllerFindAllByUserId>> = () => habitControllerFindAllByUserId(axiosOptions);
+
+  const query = useQuery<AsyncReturnType<typeof habitControllerFindAllByUserId>, TError, TData>(queryKey, queryFn, queryOptions)
 
   return {
     queryKey,
-    ...query,
-  };
-};
+    ...query
+  }
+}
+
 
 export const habitControllerCreateHabit = (
-  createHabitInput: CreateHabitInput,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.post(`/habits/create`, createHabitInput, options);
-};
+    createHabitInput: CreateHabitInput, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    return axios.post(
+      `/habits/create`,
+      createHabitInput,options
+    );
+  }
 
-export type HabitControllerCreateHabitMutationResult = NonNullable<
-  AsyncReturnType<typeof habitControllerCreateHabit>
->;
-export type HabitControllerCreateHabitMutationBody = CreateHabitInput;
-export type HabitControllerCreateHabitMutationError = AxiosError<unknown>;
 
-export const useHabitControllerCreateHabit = <
-  TError = AxiosError<unknown>,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof habitControllerCreateHabit>,
-    TError,
-    { data: CreateHabitInput },
-    TContext
-  >;
-  axios?: AxiosRequestConfig;
-}) => {
-  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
 
-  const mutationFn: MutationFunction<
-    AsyncReturnType<typeof habitControllerCreateHabit>,
-    { data: CreateHabitInput }
-  > = (props) => {
-    const { data } = props || {};
+    export type HabitControllerCreateHabitMutationResult = NonNullable<AsyncReturnType<typeof habitControllerCreateHabit>>
+    export type HabitControllerCreateHabitMutationBody = CreateHabitInput
+    export type HabitControllerCreateHabitMutationError = AxiosError<Habit>
 
-    return habitControllerCreateHabit(data, axiosOptions);
-  };
+    export const useHabitControllerCreateHabit = <TError = AxiosError<Habit>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof habitControllerCreateHabit>, TError,{data: CreateHabitInput}, TContext>, axios?: AxiosRequestConfig}
+) => {
+      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
 
-  return useMutation<
-    AsyncReturnType<typeof habitControllerCreateHabit>,
-    TError,
-    { data: CreateHabitInput },
-    TContext
-  >(mutationFn, mutationOptions);
-};
+      
 
+
+      const mutationFn: MutationFunction<AsyncReturnType<typeof habitControllerCreateHabit>, {data: CreateHabitInput}> = (props) => {
+          const {data} = props || {};
+
+          return  habitControllerCreateHabit(data,axiosOptions)
+        }
+
+      return useMutation<AsyncReturnType<typeof habitControllerCreateHabit>, TError, {data: CreateHabitInput}, TContext>(mutationFn, mutationOptions)
+    }
+    
 export const habitControllerEditHabit = (
-  id: string,
-  editHabitInput: EditHabitInput,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.put(`/habits/${id}`, editHabitInput, options);
-};
+    id: string,
+    editHabitInput: EditHabitInput, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    return axios.put(
+      `/habits/${id}`,
+      editHabitInput,options
+    );
+  }
 
-export type HabitControllerEditHabitMutationResult = NonNullable<
-  AsyncReturnType<typeof habitControllerEditHabit>
->;
-export type HabitControllerEditHabitMutationBody = EditHabitInput;
-export type HabitControllerEditHabitMutationError = AxiosError<unknown>;
 
-export const useHabitControllerEditHabit = <
-  TError = AxiosError<unknown>,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof habitControllerEditHabit>,
-    TError,
-    { id: string; data: EditHabitInput },
-    TContext
-  >;
-  axios?: AxiosRequestConfig;
-}) => {
-  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
 
-  const mutationFn: MutationFunction<
-    AsyncReturnType<typeof habitControllerEditHabit>,
-    { id: string; data: EditHabitInput }
-  > = (props) => {
-    const { id, data } = props || {};
+    export type HabitControllerEditHabitMutationResult = NonNullable<AsyncReturnType<typeof habitControllerEditHabit>>
+    export type HabitControllerEditHabitMutationBody = EditHabitInput
+    export type HabitControllerEditHabitMutationError = AxiosError<Habit>
 
-    return habitControllerEditHabit(id, data, axiosOptions);
-  };
+    export const useHabitControllerEditHabit = <TError = AxiosError<Habit>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof habitControllerEditHabit>, TError,{id: string;data: EditHabitInput}, TContext>, axios?: AxiosRequestConfig}
+) => {
+      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
 
-  return useMutation<
-    AsyncReturnType<typeof habitControllerEditHabit>,
-    TError,
-    { id: string; data: EditHabitInput },
-    TContext
-  >(mutationFn, mutationOptions);
-};
+      
 
+
+      const mutationFn: MutationFunction<AsyncReturnType<typeof habitControllerEditHabit>, {id: string;data: EditHabitInput}> = (props) => {
+          const {id,data} = props || {};
+
+          return  habitControllerEditHabit(id,data,axiosOptions)
+        }
+
+      return useMutation<AsyncReturnType<typeof habitControllerEditHabit>, TError, {id: string;data: EditHabitInput}, TContext>(mutationFn, mutationOptions)
+    }
+    
 export const habitControllerDeleteHabit = (
-  id: string,
-  options?: AxiosRequestConfig
-): Promise<AxiosResponse<void>> => {
-  return axios.delete(`/habits/${id}`, options);
-};
+    id: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    return axios.delete(
+      `/habits/${id}`,options
+    );
+  }
 
-export type HabitControllerDeleteHabitMutationResult = NonNullable<
-  AsyncReturnType<typeof habitControllerDeleteHabit>
->;
 
-export type HabitControllerDeleteHabitMutationError = AxiosError<unknown>;
 
-export const useHabitControllerDeleteHabit = <
-  TError = AxiosError<unknown>,
-  TContext = unknown
->(options?: {
-  mutation?: UseMutationOptions<
-    AsyncReturnType<typeof habitControllerDeleteHabit>,
-    TError,
-    { id: string },
-    TContext
-  >;
-  axios?: AxiosRequestConfig;
-}) => {
-  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
+    export type HabitControllerDeleteHabitMutationResult = NonNullable<AsyncReturnType<typeof habitControllerDeleteHabit>>
+    
+    export type HabitControllerDeleteHabitMutationError = AxiosError<Habit>
 
-  const mutationFn: MutationFunction<
-    AsyncReturnType<typeof habitControllerDeleteHabit>,
-    { id: string }
-  > = (props) => {
-    const { id } = props || {};
+    export const useHabitControllerDeleteHabit = <TError = AxiosError<Habit>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof habitControllerDeleteHabit>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
+) => {
+      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
 
-    return habitControllerDeleteHabit(id, axiosOptions);
-  };
+      
 
-  return useMutation<
-    AsyncReturnType<typeof habitControllerDeleteHabit>,
-    TError,
-    { id: string },
-    TContext
-  >(mutationFn, mutationOptions);
-};
+
+      const mutationFn: MutationFunction<AsyncReturnType<typeof habitControllerDeleteHabit>, {id: string}> = (props) => {
+          const {id} = props || {};
+
+          return  habitControllerDeleteHabit(id,axiosOptions)
+        }
+
+      return useMutation<AsyncReturnType<typeof habitControllerDeleteHabit>, TError, {id: string}, TContext>(mutationFn, mutationOptions)
+    }
+    
+
 
 export const getHabitAppMSW = () => [
-  rest.get("*", (_req, res, ctx) => {
-    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
-  }),
-  rest.post("*/auth/temp-register", (_req, res, ctx) => {
-    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
-  }),
-  rest.post("*/auth/login", (_req, res, ctx) => {
-    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
-  }),
-  rest.post("*/auth/register", (_req, res, ctx) => {
-    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
-  }),
-  rest.post("*/auth/google", (_req, res, ctx) => {
-    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
-  }),
-  rest.get("*/user/current-user", (_req, res, ctx) => {
-    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
-  }),
-  rest.get("*/habits", (_req, res, ctx) => {
-    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
-  }),
-  rest.post("*/habits/create", (_req, res, ctx) => {
-    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
-  }),
-  rest.put("*/habits/:id", (_req, res, ctx) => {
-    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
-  }),
-  rest.delete("*/habits/:id", (_req, res, ctx) => {
-    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
-  }),
-];
+rest.get('*', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+        )
+      }),rest.post('*/auth/temp-register', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+        )
+      }),rest.post('*/auth/login', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+        )
+      }),rest.post('*/auth/register', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+        )
+      }),rest.post('*/auth/google', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+        )
+      }),rest.get('*/user/current-user', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+        )
+      }),rest.get('*/habits', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+        )
+      }),rest.post('*/habits/create', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+        )
+      }),rest.put('*/habits/:id', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+        )
+      }),rest.delete('*/habits/:id', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+        )
+      }),]

@@ -1,0 +1,172 @@
+openapi: 3.0.0
+paths:
+  /:
+    get:
+      operationId: AppController_getHello
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  /auth/temp-register:
+    post:
+      operationId: AuthController_tempRegister
+      parameters: []
+      responses:
+        "201":
+          description: ""
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "201":
+          description: ""
+  /auth/register:
+    post:
+      operationId: AuthController_register
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUserInput"
+      responses:
+        "201":
+          description: ""
+  /auth/google:
+    post:
+      operationId: AuthController_googleAuth
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoogleAuthInput"
+      responses:
+        "201":
+          description: ""
+  /user/current-user:
+    get:
+      operationId: UserController_currentUser
+      parameters: []
+      responses:
+        "200":
+          description: ""
+  /habits:
+    get:
+      operationId: HabitController_findAllByUserId
+      parameters: []
+      responses:
+        default:
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Habit"
+  /habits/create:
+    post:
+      operationId: HabitController_createHabit
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateHabitInput"
+      responses:
+        "201":
+          description: ""
+  "/habits/{id}":
+    put:
+      operationId: HabitController_editHabit
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditHabitInput"
+      responses:
+        "200":
+          description: ""
+    delete:
+      operationId: HabitController_deleteHabit
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+info:
+  title: Habit App
+  description: Habit App made by Oybek Alimatov
+  version: 1.0.0
+  contact: {}
+tags: []
+servers: []
+components:
+  schemas:
+    LoginInput:
+      type: object
+      properties: {}
+    RegisterUserInput:
+      type: object
+      properties: {}
+    GoogleAuthInput:
+      type: object
+      properties: {}
+    Habit:
+      type: object
+      properties:
+        userId:
+          type: string
+        title:
+          type: string
+        isoWeekdays:
+          type: array
+          items:
+            type: number
+        dateCreated:
+          type: number
+        archived:
+          type: boolean
+        currentStreakDates:
+          type: array
+          items:
+            type: number
+        longestStreakDates:
+          type: array
+          items:
+            type: number
+      required:
+        - userId
+        - title
+        - isoWeekdays
+        - dateCreated
+        - archived
+        - currentStreakDates
+        - longestStreakDates
+    CreateHabitInput:
+      type: object
+      properties: {}
+    EditHabitInput:
+      type: object
+      properties: {}

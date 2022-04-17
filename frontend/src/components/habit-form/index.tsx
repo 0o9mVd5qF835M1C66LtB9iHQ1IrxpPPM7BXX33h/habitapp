@@ -2,10 +2,13 @@ import { Form } from "../form";
 import { Input } from "../input";
 import { WeekSelector } from "../week-selector";
 import { Button } from "../button";
+import { Habit } from "../../generated/api";
 
-type HabitFormProps = {};
+type HabitFormProps = {
+  habit: Habit;
+};
 
-export function HabitForm() {
+export function HabitForm({}: HabitFormProps) {
   return (
     <Form className="flex flex-1 flex-col items-center pt-32">
       <h1 className="text-base text-gray-900 font-bold text-center mb-20">

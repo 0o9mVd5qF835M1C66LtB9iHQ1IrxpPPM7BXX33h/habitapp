@@ -1,6 +1,8 @@
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import { stringify as yamlStringify } from "yaml";
+import * as fs from "fs/promises";
 
 import * as dayjs from "dayjs";
 import * as isoWeek from "dayjs/plugin/isoWeek";
@@ -25,6 +27,8 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, documentConfig);
+  await fs.writeFile("./open-api.yaml", yamlStringify(document));
+
   SwaggerModule.setup("api", app, document);
 
   await app.listen(process.env.PORT);

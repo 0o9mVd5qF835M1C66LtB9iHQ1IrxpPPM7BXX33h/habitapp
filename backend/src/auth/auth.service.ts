@@ -92,12 +92,17 @@ export class AuthService {
 
     const accessToken = this.jwtService.sign({ userId: tempUser._id });
 
+    if (tempUser.password) {
+      throw new BadRequestException("Email and password was used to register");
+    }
+
     if (tempUser.email) {
-      if (tempUser.password) {
+      if (tempUser.email.toLowerCase() != email.toLowerCase()) {
         throw new BadRequestException(
-          "Email and password was used to register",
+          `Email is not correct for user ${tempUserId}`,
         );
       }
+
       return { accessToken };
     }
 

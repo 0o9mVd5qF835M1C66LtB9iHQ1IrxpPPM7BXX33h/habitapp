@@ -1,5 +1,4 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
+import { Body, Controller, Post, UseGuards } from "@nestjs/common";
 
 import { GoogleAuthInput, LoginInput, RegisterUserInput } from "./auth.dto";
 import { AuthService } from "./auth.service";

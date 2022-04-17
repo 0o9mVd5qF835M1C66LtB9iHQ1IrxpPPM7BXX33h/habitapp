@@ -5,13 +5,25 @@
  * Habit App made by Oybek Alimatov
  * OpenAPI spec version: 1.0.0
  */
-import axios,{
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios'
-export interface EditHabitInput { [key: string]: any }
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import {
+  useQuery,
+  useMutation,
+  UseQueryOptions,
+  UseMutationOptions,
+  QueryFunction,
+  MutationFunction,
+  UseQueryResult,
+  QueryKey,
+} from "react-query";
+import { rest } from "msw";
+export interface EditHabitInput {
+  [key: string]: any;
+}
 
-export interface CreateHabitInput { [key: string]: any }
+export interface CreateHabitInput {
+  [key: string]: any;
+}
 
 export interface Habit {
   userId: string;
@@ -23,108 +35,497 @@ export interface Habit {
   longestStreakDates: number[];
 }
 
-export interface GoogleAuthInput { [key: string]: any }
+export interface GoogleAuthInput {
+  [key: string]: any;
+}
 
-export interface RegisterUserInput { [key: string]: any }
+export interface RegisterUserInput {
+  [key: string]: any;
+}
 
-export interface LoginInput { [key: string]: any }
+export interface LoginInput {
+  [key: string]: any;
+}
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AsyncReturnType<T extends (...args: any) => Promise<any>> = T extends (
+  ...args: any
+) => Promise<infer R>
+  ? R
+  : any;
 
+export const appControllerGetHello = (
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<void>> => {
+  return axios.get(`/`, options);
+};
 
+export const getAppControllerGetHelloQueryKey = () => [`/`];
 
-  export const appControllerGetHello = <TData = AxiosResponse<void>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/`,options
-    );
-  }
+export type AppControllerGetHelloQueryResult = NonNullable<
+  AsyncReturnType<typeof appControllerGetHello>
+>;
+export type AppControllerGetHelloQueryError = AxiosError<unknown>;
 
-export const authControllerTempRegister = <TData = AxiosResponse<void>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/auth/temp-register`,undefined,options
-    );
-  }
+export const useAppControllerGetHello = <
+  TData = AsyncReturnType<typeof appControllerGetHello>,
+  TError = AxiosError<unknown>
+>(options?: {
+  query?: UseQueryOptions<
+    AsyncReturnType<typeof appControllerGetHello>,
+    TError,
+    TData
+  >;
+  axios?: AxiosRequestConfig;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const { query: queryOptions, axios: axiosOptions } = options || {};
 
-export const authControllerLogin = <TData = AxiosResponse<void>>(
-    loginInput: LoginInput, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/auth/login`,
-      loginInput,options
-    );
-  }
+  const queryKey = queryOptions?.queryKey ?? getAppControllerGetHelloQueryKey();
 
-export const authControllerRegister = <TData = AxiosResponse<void>>(
-    registerUserInput: RegisterUserInput, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/auth/register`,
-      registerUserInput,options
-    );
-  }
+  const queryFn: QueryFunction<
+    AsyncReturnType<typeof appControllerGetHello>
+  > = () => appControllerGetHello(axiosOptions);
 
-export const authControllerGoogleAuth = <TData = AxiosResponse<void>>(
-    googleAuthInput: GoogleAuthInput, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/auth/google`,
-      googleAuthInput,options
-    );
-  }
+  const query = useQuery<
+    AsyncReturnType<typeof appControllerGetHello>,
+    TError,
+    TData
+  >(queryKey, queryFn, queryOptions);
 
-export const userControllerCurrentUser = <TData = AxiosResponse<void>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/user/current-user`,options
-    );
-  }
+  return {
+    queryKey,
+    ...query,
+  };
+};
 
-export const habitControllerFindAllByUserId = <TData = AxiosResponse<unknown>>(
-     options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.get(
-      `/habits`,options
-    );
-  }
+export const authControllerTempRegister = (
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<void>> => {
+  return axios.post(`/auth/temp-register`, undefined, options);
+};
 
-export const habitControllerCreateHabit = <TData = AxiosResponse<void>>(
-    createHabitInput: CreateHabitInput, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.post(
-      `/habits/create`,
-      createHabitInput,options
-    );
-  }
+export type AuthControllerTempRegisterMutationResult = NonNullable<
+  AsyncReturnType<typeof authControllerTempRegister>
+>;
 
-export const habitControllerEditHabit = <TData = AxiosResponse<void>>(
-    id: string,
-    editHabitInput: EditHabitInput, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.put(
-      `/habits/${id}`,
-      editHabitInput,options
-    );
-  }
+export type AuthControllerTempRegisterMutationError = AxiosError<unknown>;
 
-export const habitControllerDeleteHabit = <TData = AxiosResponse<void>>(
-    id: string, options?: AxiosRequestConfig
- ): Promise<TData> => {
-    return axios.delete(
-      `/habits/${id}`,options
-    );
-  }
+export const useAuthControllerTempRegister = <
+  TError = AxiosError<unknown>,
+  TVariables = void,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    AsyncReturnType<typeof authControllerTempRegister>,
+    TError,
+    TVariables,
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}) => {
+  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
 
-export type AppControllerGetHelloResult = AxiosResponse<void>
-export type AuthControllerTempRegisterResult = AxiosResponse<void>
-export type AuthControllerLoginResult = AxiosResponse<void>
-export type AuthControllerRegisterResult = AxiosResponse<void>
-export type AuthControllerGoogleAuthResult = AxiosResponse<void>
-export type UserControllerCurrentUserResult = AxiosResponse<void>
-export type HabitControllerFindAllByUserIdResult = AxiosResponse<unknown>
-export type HabitControllerCreateHabitResult = AxiosResponse<void>
-export type HabitControllerEditHabitResult = AxiosResponse<void>
-export type HabitControllerDeleteHabitResult = AxiosResponse<void>
+  const mutationFn: MutationFunction<
+    AsyncReturnType<typeof authControllerTempRegister>,
+    TVariables
+  > = () => {
+    return authControllerTempRegister(axiosOptions);
+  };
+
+  return useMutation<
+    AsyncReturnType<typeof authControllerTempRegister>,
+    TError,
+    TVariables,
+    TContext
+  >(mutationFn, mutationOptions);
+};
+
+export const authControllerLogin = (
+  loginInput: LoginInput,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<void>> => {
+  return axios.post(`/auth/login`, loginInput, options);
+};
+
+export type AuthControllerLoginMutationResult = NonNullable<
+  AsyncReturnType<typeof authControllerLogin>
+>;
+export type AuthControllerLoginMutationBody = LoginInput;
+export type AuthControllerLoginMutationError = AxiosError<unknown>;
+
+export const useAuthControllerLogin = <
+  TError = AxiosError<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    AsyncReturnType<typeof authControllerLogin>,
+    TError,
+    { data: LoginInput },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}) => {
+  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
+
+  const mutationFn: MutationFunction<
+    AsyncReturnType<typeof authControllerLogin>,
+    { data: LoginInput }
+  > = (props) => {
+    const { data } = props || {};
+
+    return authControllerLogin(data, axiosOptions);
+  };
+
+  return useMutation<
+    AsyncReturnType<typeof authControllerLogin>,
+    TError,
+    { data: LoginInput },
+    TContext
+  >(mutationFn, mutationOptions);
+};
+
+export const authControllerRegister = (
+  registerUserInput: RegisterUserInput,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<void>> => {
+  return axios.post(`/auth/register`, registerUserInput, options);
+};
+
+export type AuthControllerRegisterMutationResult = NonNullable<
+  AsyncReturnType<typeof authControllerRegister>
+>;
+export type AuthControllerRegisterMutationBody = RegisterUserInput;
+export type AuthControllerRegisterMutationError = AxiosError<unknown>;
+
+export const useAuthControllerRegister = <
+  TError = AxiosError<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    AsyncReturnType<typeof authControllerRegister>,
+    TError,
+    { data: RegisterUserInput },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}) => {
+  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
+
+  const mutationFn: MutationFunction<
+    AsyncReturnType<typeof authControllerRegister>,
+    { data: RegisterUserInput }
+  > = (props) => {
+    const { data } = props || {};
+
+    return authControllerRegister(data, axiosOptions);
+  };
+
+  return useMutation<
+    AsyncReturnType<typeof authControllerRegister>,
+    TError,
+    { data: RegisterUserInput },
+    TContext
+  >(mutationFn, mutationOptions);
+};
+
+export const authControllerGoogleAuth = (
+  googleAuthInput: GoogleAuthInput,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<void>> => {
+  return axios.post(`/auth/google`, googleAuthInput, options);
+};
+
+export type AuthControllerGoogleAuthMutationResult = NonNullable<
+  AsyncReturnType<typeof authControllerGoogleAuth>
+>;
+export type AuthControllerGoogleAuthMutationBody = GoogleAuthInput;
+export type AuthControllerGoogleAuthMutationError = AxiosError<unknown>;
+
+export const useAuthControllerGoogleAuth = <
+  TError = AxiosError<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    AsyncReturnType<typeof authControllerGoogleAuth>,
+    TError,
+    { data: GoogleAuthInput },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}) => {
+  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
+
+  const mutationFn: MutationFunction<
+    AsyncReturnType<typeof authControllerGoogleAuth>,
+    { data: GoogleAuthInput }
+  > = (props) => {
+    const { data } = props || {};
+
+    return authControllerGoogleAuth(data, axiosOptions);
+  };
+
+  return useMutation<
+    AsyncReturnType<typeof authControllerGoogleAuth>,
+    TError,
+    { data: GoogleAuthInput },
+    TContext
+  >(mutationFn, mutationOptions);
+};
+
+export const userControllerCurrentUser = (
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<void>> => {
+  return axios.get(`/user/current-user`, options);
+};
+
+export const getUserControllerCurrentUserQueryKey = () => [
+  `/user/current-user`,
+];
+
+export type UserControllerCurrentUserQueryResult = NonNullable<
+  AsyncReturnType<typeof userControllerCurrentUser>
+>;
+export type UserControllerCurrentUserQueryError = AxiosError<unknown>;
+
+export const useUserControllerCurrentUser = <
+  TData = AsyncReturnType<typeof userControllerCurrentUser>,
+  TError = AxiosError<unknown>
+>(options?: {
+  query?: UseQueryOptions<
+    AsyncReturnType<typeof userControllerCurrentUser>,
+    TError,
+    TData
+  >;
+  axios?: AxiosRequestConfig;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const { query: queryOptions, axios: axiosOptions } = options || {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getUserControllerCurrentUserQueryKey();
+
+  const queryFn: QueryFunction<
+    AsyncReturnType<typeof userControllerCurrentUser>
+  > = () => userControllerCurrentUser(axiosOptions);
+
+  const query = useQuery<
+    AsyncReturnType<typeof userControllerCurrentUser>,
+    TError,
+    TData
+  >(queryKey, queryFn, queryOptions);
+
+  return {
+    queryKey,
+    ...query,
+  };
+};
+
+export const habitControllerFindAllByUserId = (
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<unknown>> => {
+  return axios.get(`/habits`, options);
+};
+
+export const getHabitControllerFindAllByUserIdQueryKey = () => [`/habits`];
+
+export type HabitControllerFindAllByUserIdQueryResult = NonNullable<
+  AsyncReturnType<typeof habitControllerFindAllByUserId>
+>;
+export type HabitControllerFindAllByUserIdQueryError = AxiosError<Habit[]>;
+
+export const useHabitControllerFindAllByUserId = <
+  TData = AsyncReturnType<typeof habitControllerFindAllByUserId>,
+  TError = AxiosError<Habit[]>
+>(options?: {
+  query?: UseQueryOptions<
+    AsyncReturnType<typeof habitControllerFindAllByUserId>,
+    TError,
+    TData
+  >;
+  axios?: AxiosRequestConfig;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const { query: queryOptions, axios: axiosOptions } = options || {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getHabitControllerFindAllByUserIdQueryKey();
+
+  const queryFn: QueryFunction<
+    AsyncReturnType<typeof habitControllerFindAllByUserId>
+  > = () => habitControllerFindAllByUserId(axiosOptions);
+
+  const query = useQuery<
+    AsyncReturnType<typeof habitControllerFindAllByUserId>,
+    TError,
+    TData
+  >(queryKey, queryFn, queryOptions);
+
+  return {
+    queryKey,
+    ...query,
+  };
+};
+
+export const habitControllerCreateHabit = (
+  createHabitInput: CreateHabitInput,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<void>> => {
+  return axios.post(`/habits/create`, createHabitInput, options);
+};
+
+export type HabitControllerCreateHabitMutationResult = NonNullable<
+  AsyncReturnType<typeof habitControllerCreateHabit>
+>;
+export type HabitControllerCreateHabitMutationBody = CreateHabitInput;
+export type HabitControllerCreateHabitMutationError = AxiosError<unknown>;
+
+export const useHabitControllerCreateHabit = <
+  TError = AxiosError<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    AsyncReturnType<typeof habitControllerCreateHabit>,
+    TError,
+    { data: CreateHabitInput },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}) => {
+  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
+
+  const mutationFn: MutationFunction<
+    AsyncReturnType<typeof habitControllerCreateHabit>,
+    { data: CreateHabitInput }
+  > = (props) => {
+    const { data } = props || {};
+
+    return habitControllerCreateHabit(data, axiosOptions);
+  };
+
+  return useMutation<
+    AsyncReturnType<typeof habitControllerCreateHabit>,
+    TError,
+    { data: CreateHabitInput },
+    TContext
+  >(mutationFn, mutationOptions);
+};
+
+export const habitControllerEditHabit = (
+  id: string,
+  editHabitInput: EditHabitInput,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<void>> => {
+  return axios.put(`/habits/${id}`, editHabitInput, options);
+};
+
+export type HabitControllerEditHabitMutationResult = NonNullable<
+  AsyncReturnType<typeof habitControllerEditHabit>
+>;
+export type HabitControllerEditHabitMutationBody = EditHabitInput;
+export type HabitControllerEditHabitMutationError = AxiosError<unknown>;
+
+export const useHabitControllerEditHabit = <
+  TError = AxiosError<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    AsyncReturnType<typeof habitControllerEditHabit>,
+    TError,
+    { id: string; data: EditHabitInput },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}) => {
+  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
+
+  const mutationFn: MutationFunction<
+    AsyncReturnType<typeof habitControllerEditHabit>,
+    { id: string; data: EditHabitInput }
+  > = (props) => {
+    const { id, data } = props || {};
+
+    return habitControllerEditHabit(id, data, axiosOptions);
+  };
+
+  return useMutation<
+    AsyncReturnType<typeof habitControllerEditHabit>,
+    TError,
+    { id: string; data: EditHabitInput },
+    TContext
+  >(mutationFn, mutationOptions);
+};
+
+export const habitControllerDeleteHabit = (
+  id: string,
+  options?: AxiosRequestConfig
+): Promise<AxiosResponse<void>> => {
+  return axios.delete(`/habits/${id}`, options);
+};
+
+export type HabitControllerDeleteHabitMutationResult = NonNullable<
+  AsyncReturnType<typeof habitControllerDeleteHabit>
+>;
+
+export type HabitControllerDeleteHabitMutationError = AxiosError<unknown>;
+
+export const useHabitControllerDeleteHabit = <
+  TError = AxiosError<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    AsyncReturnType<typeof habitControllerDeleteHabit>,
+    TError,
+    { id: string },
+    TContext
+  >;
+  axios?: AxiosRequestConfig;
+}) => {
+  const { mutation: mutationOptions, axios: axiosOptions } = options || {};
+
+  const mutationFn: MutationFunction<
+    AsyncReturnType<typeof habitControllerDeleteHabit>,
+    { id: string }
+  > = (props) => {
+    const { id } = props || {};
+
+    return habitControllerDeleteHabit(id, axiosOptions);
+  };
+
+  return useMutation<
+    AsyncReturnType<typeof habitControllerDeleteHabit>,
+    TError,
+    { id: string },
+    TContext
+  >(mutationFn, mutationOptions);
+};
+
+export const getHabitAppMSW = () => [
+  rest.get("*", (_req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
+  rest.post("*/auth/temp-register", (_req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
+  rest.post("*/auth/login", (_req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
+  rest.post("*/auth/register", (_req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
+  rest.post("*/auth/google", (_req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
+  rest.get("*/user/current-user", (_req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
+  rest.get("*/habits", (_req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
+  rest.post("*/habits/create", (_req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
+  rest.put("*/habits/:id", (_req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
+  rest.delete("*/habits/:id", (_req, res, ctx) => {
+    return res(ctx.delay(1000), ctx.status(200, "Mocked status"));
+  }),
+];

@@ -1,4 +1,5 @@
 import { HiOutlineX } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 import {
   Button,
@@ -10,20 +11,24 @@ import {
   WeekSelector,
 } from "../../components";
 
-export type AddHabitPageProps = {};
+export function AddHabitPage() {
+  const navigate = useNavigate();
 
-export function AddHabitPage(props: AddHabitPageProps) {
+  function handleGoBackClick() {
+    navigate(-1);
+  }
+
   return (
     <Modal>
       <PageContainer>
         <PageHeader>
           <div className="flex flex-row-reverse justify-between items-center">
-            <Button>
+            <Button onClick={handleGoBackClick}>
               <HiOutlineX />
             </Button>
           </div>
         </PageHeader>
-        <Form className="flex flex-1 flex-col justify-center items-center pb-20">
+        <Form className="flex flex-1 flex-col items-center pt-32">
           <h1 className="text-base text-gray-900 font-bold text-center mb-20">
             Add new habit
           </h1>

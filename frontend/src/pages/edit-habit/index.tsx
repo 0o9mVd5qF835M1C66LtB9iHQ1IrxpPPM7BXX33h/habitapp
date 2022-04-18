@@ -17,7 +17,7 @@ export function EditHabitPage() {
   }
 
   return (
-    <Modal>
+    <Modal isOpen={true} onClose={() => {}}>
       <PageContainer>
         <PageHeader>
           <div className="flex flex-row-reverse justify-between items-center">

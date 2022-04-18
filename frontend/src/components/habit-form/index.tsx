@@ -1,22 +1,51 @@
-import { Form } from "../form";
-import { Input } from "../input";
-import { WeekSelector } from "../week-selector";
-import { Button } from "../button";
-import { Habit } from "../../generated/api";
+import { Input, Button, Heading } from "@chakra-ui/react";
+import { useState } from "react";
+import { WeekSelector } from "./week-selector";
 
 type HabitFormProps = {};
 
 export function HabitForm({}: HabitFormProps) {
+  const [title, setTitle] = useState("");
+  const [selectedWeekdays, setSelectedWeekdays] = useState<number[]>([]);
+
+  function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setTitle(e.target.value);
+  }
+
+  function handleWeekdayClick(weekday: number) {
+    setSelectedWeekdays((currentSelected) => {
+      if (currentSelected.includes(weekday)) {
+        return currentSelected.filter((selected) => selected !== weekday);
+      }
+
+      return [...currentSelected, weekday];
+    });
+  }
+
   return (
-    <Form className="flex flex-1 flex-col items-center">
-      <h1 className="text-base text-gray-900 font-bold text-center mb-20">
+    <form>
+      <Heading
+        as="h1"
+        size="md"
+        marginBottom="16"
+        color="gray.900"
+        textAlign="center"
+      >
         Add new habit
-      </h1>
-      <Input className="w-full mb-2" placeholder="Enter your habit" />
-      <WeekSelector className="mb-6" />
-      <Button className="text-white bg-primary-600 p-2 w-full text-base">
-        Create habit
+      </Heading>
+      <Input
+        value={title}
+        marginBottom="3"
+        placeholder="Type habit name"
+        onChange={handleTitleChange}
+      />
+      <WeekSelector
+        selectedWeekdays={selectedWeekdays}
+        onWeekdaySelect={handleWeekdayClick}
+      />
+      <Button isFullWidth colorScheme="purple" marginTop="8">
+        Create Habit
       </Button>
-    </Form>
+    </form>
   );
 }

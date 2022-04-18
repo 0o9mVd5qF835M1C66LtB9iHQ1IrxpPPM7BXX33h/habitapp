@@ -3,6 +3,8 @@ import { ReactNode } from "react";
 type ButtonProps = {
   children?: ReactNode;
   className?: string;
+  variant?: "primary" | "secondary";
+  outline?: boolean;
   type?: "button" | "submit" | "reset";
   icon?: ReactNode;
   onClick?(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void;
@@ -17,7 +19,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={`${className} flex items-center p-3 rounded-md text-lg align-middle justify-center`}
+      className={`${className} flex items-center justify-center rounded-lg text-base transition-colors hover:bg-primary-500`}
       onClick={onClick}
       type={type || "button"}
     >

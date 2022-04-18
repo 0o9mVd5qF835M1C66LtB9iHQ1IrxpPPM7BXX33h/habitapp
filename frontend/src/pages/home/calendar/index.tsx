@@ -1,9 +1,7 @@
 import { useRef, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import dayjs, { Dayjs } from "dayjs";
-
-import { weekDays } from "../../constants";
-import { Button } from "../button";
+import { Button, chakra } from "@chakra-ui/react";
 
 function getDays() {
   const calendarDays: Dayjs[] = [];
@@ -16,11 +14,13 @@ function getDays() {
   return calendarDays;
 }
 
+const ChakraScrollContainer = chakra(ScrollContainer);
+
 type CalendarSliderProps = {
   onClick?: (day: Dayjs) => void;
 };
 
-export function CalendarSlider({ onClick = () => {} }: CalendarSliderProps) {
+export function Calendar({ onClick = () => {} }: CalendarSliderProps) {
   const daysRef = useRef<Dayjs[]>(getDays());
   const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
 
@@ -30,25 +30,28 @@ export function CalendarSlider({ onClick = () => {} }: CalendarSliderProps) {
   }
 
   return (
-    <ScrollContainer className="py-3 flex overflow-auto flex-row-reverse">
+    <ChakraScrollContainer
+      display="flex"
+      flexDirection="row-reverse"
+      paddingY="2"
+      gap="8px"
+    >
       {daysRef.current.map((day) => {
         const isSelectedDate = selectedDate.isSame(day, "day");
-
         return (
           <Button
-            className={`mx-1 ${
-              isSelectedDate ? "bg-primary-600" : "bg-white"
-            } ${!isSelectedDate ? "border-gray-300" : ""} border ${
-              isSelectedDate ? "text-white" : "text-gray-900"
-            } font-normal w-[44px] min-w-[44px] h-[44px] p-0 text-xs`}
+            variant={isSelectedDate || day.isToday() ? "solid" : "outline"}
+            colorScheme={isSelectedDate ? "purple" : "gray"}
             onClick={() => handleDayClick(day)}
+            fontSize="small"
+            boxShadow="sm"
           >
             {day.date()}
             <br />
-            {weekDays[day.day()]}
+            {day.format("ddd")}
           </Button>
         );
       })}
-    </ScrollContainer>
+    </ChakraScrollContainer>
   );
 }

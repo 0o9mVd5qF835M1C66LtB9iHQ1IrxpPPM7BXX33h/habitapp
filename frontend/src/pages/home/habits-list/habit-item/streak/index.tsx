@@ -1,5 +1,5 @@
 import { IoFlame } from "react-icons/io5";
-import { Habit } from "../../../types";
+import { Habit } from "../../../../../generated/api";
 
 type Props = {
   habit: Habit;

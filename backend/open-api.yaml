@@ -12,8 +12,12 @@ paths:
       operationId: AuthController_tempRegister
       parameters: []
       responses:
-        "201":
+        "200":
           description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
   /auth/login:
     post:
       operationId: AuthController_login
@@ -25,8 +29,12 @@ paths:
             schema:
               $ref: "#/components/schemas/LoginInput"
       responses:
-        "201":
+        "200":
           description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
   /auth/register:
     post:
       operationId: AuthController_register
@@ -38,8 +46,12 @@ paths:
             schema:
               $ref: "#/components/schemas/RegisterUserInput"
       responses:
-        "201":
+        "200":
           description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
   /auth/google:
     post:
       operationId: AuthController_googleAuth
@@ -51,21 +63,23 @@ paths:
             schema:
               $ref: "#/components/schemas/GoogleAuthInput"
       responses:
-        "201":
+        "200":
           description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
   /user/current-user:
     get:
       operationId: UserController_currentUser
       parameters: []
       responses:
-        default:
+        "200":
           description: ""
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/User"
   /habits:
     get:
       operationId: HabitController_findAllByUserId
@@ -142,6 +156,13 @@ tags: []
 servers: []
 components:
   schemas:
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+      required:
+        - accessToken
     LoginInput:
       type: object
       properties:

@@ -1,11 +1,11 @@
 import { Dayjs } from "dayjs";
-import { addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore";
-import { Habit, HabitCompletedDate } from "../../types";
+import { Box } from "@chakra-ui/react";
+import { Habit } from "../../../../generated/api";
+
 import { WeekdayText } from "./weekday-text";
 import { Streak } from "./streak";
 import { Checkbox } from "./checkbox";
 import { Title } from "./title";
-import { Box } from "@chakra-ui/react";
 
 type Props = {
   habit: Habit;
@@ -32,11 +32,11 @@ export function HabitItem(props: Props) {
       className="flex flex-row items-center py-2 mb-2 border shadow-sm rounded-xl text-slate-900 px-3 cursor-pointer bg-purple-max"
     >
       <div className="w-full">
-        <WeekdayText weekdays={habit.weekdays} />
+        <WeekdayText weekdays={habit.isoWeekdays} />
         <Title title={habit.title} isCompleted={isHabitCompleted} />
         <Streak habit={habit} />
       </div>
-      {habit.weekdays.includes(selectedDate.isoWeekday()) ? (
+      {habit.isoWeekdays.includes(selectedDate.isoWeekday()) ? (
         <Checkbox
           onComplete={() => onComplete(habit)}
           onUncomplete={() => onUncomplete(habit)}

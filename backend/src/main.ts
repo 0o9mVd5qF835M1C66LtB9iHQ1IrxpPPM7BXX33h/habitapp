@@ -18,6 +18,7 @@ dayjs.extend(isSameOrBefore);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   app.useGlobalPipes(new ValidationPipe());
 
   const documentConfig = new DocumentBuilder()

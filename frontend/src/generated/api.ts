@@ -23,6 +23,9 @@ import {
 import {
   rest
 } from 'msw'
+import {
+  faker
+} from '@faker-js/faker'
 export interface EditHabitInput {
   title: string;
   isoWeekdays: number[];
@@ -69,6 +72,10 @@ export interface RegisterUserInput {
 export interface LoginInput {
   email: string;
   password: string;
+}
+
+export interface AuthResponse {
+  accessToken: string;
 }
 
 
@@ -118,7 +125,7 @@ export const useAppControllerGetHello = <TData = AsyncReturnType<typeof appContr
 
 export const authControllerTempRegister = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
+ ): Promise<AxiosResponse<AuthResponse>> => {
     return axios.post(
       `/auth/temp-register`,undefined,options
     );
@@ -150,7 +157,7 @@ export const authControllerTempRegister = (
     
 export const authControllerLogin = (
     loginInput: LoginInput, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
+ ): Promise<AxiosResponse<AuthResponse>> => {
     return axios.post(
       `/auth/login`,
       loginInput,options
@@ -183,7 +190,7 @@ export const authControllerLogin = (
     
 export const authControllerRegister = (
     registerUserInput: RegisterUserInput, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
+ ): Promise<AxiosResponse<AuthResponse>> => {
     return axios.post(
       `/auth/register`,
       registerUserInput,options
@@ -216,7 +223,7 @@ export const authControllerRegister = (
     
 export const authControllerGoogleAuth = (
     googleAuthInput: GoogleAuthInput, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
+ ): Promise<AxiosResponse<AuthResponse>> => {
     return axios.post(
       `/auth/google`,
       googleAuthInput,options
@@ -249,7 +256,7 @@ export const authControllerGoogleAuth = (
     
 export const userControllerCurrentUser = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
+ ): Promise<AxiosResponse<User>> => {
     return axios.get(
       `/user/current-user`,options
     );
@@ -260,9 +267,9 @@ export const getUserControllerCurrentUserQueryKey = () => [`/user/current-user`]
 
     
 export type UserControllerCurrentUserQueryResult = NonNullable<AsyncReturnType<typeof userControllerCurrentUser>>
-export type UserControllerCurrentUserQueryError = AxiosError<User[]>
+export type UserControllerCurrentUserQueryError = AxiosError<unknown>
 
-export const useUserControllerCurrentUser = <TData = AsyncReturnType<typeof userControllerCurrentUser>, TError = AxiosError<User[]>>(
+export const useUserControllerCurrentUser = <TData = AsyncReturnType<typeof userControllerCurrentUser>, TError = AxiosError<unknown>>(
   options?: { query?:UseQueryOptions<AsyncReturnType<typeof userControllerCurrentUser>, TError, TData>, axios?: AxiosRequestConfig}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -422,6 +429,16 @@ export const habitControllerDeleteHabit = (
     
 
 
+export const getAuthControllerTempRegisterMock = () => ({accessToken: faker.random.word()})
+
+export const getAuthControllerLoginMock = () => ({accessToken: faker.random.word()})
+
+export const getAuthControllerRegisterMock = () => ({accessToken: faker.random.word()})
+
+export const getAuthControllerGoogleAuthMock = () => ({accessToken: faker.random.word()})
+
+export const getUserControllerCurrentUserMock = () => ({email: faker.random.word(), password: faker.helpers.randomize([faker.random.word(), undefined]), isTemp: faker.datatype.boolean(), dateCreated: faker.datatype.number()})
+
 export const getHabitAppMSW = () => [
 rest.get('*', (_req, res, ctx) => {
         return res(
@@ -432,26 +449,31 @@ rest.get('*', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
+ctx.json(getAuthControllerTempRegisterMock()),
         )
       }),rest.post('*/auth/login', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
+ctx.json(getAuthControllerLoginMock()),
         )
       }),rest.post('*/auth/register', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
+ctx.json(getAuthControllerRegisterMock()),
         )
       }),rest.post('*/auth/google', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
+ctx.json(getAuthControllerGoogleAuthMock()),
         )
       }),rest.get('*/user/current-user', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
+ctx.json(getUserControllerCurrentUserMock()),
         )
       }),rest.get('*/habits', (_req, res, ctx) => {
         return res(

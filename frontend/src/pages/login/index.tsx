@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
+import { Heading, Text } from "@chakra-ui/react";
 
 import {
   Modal,
   PageContainer,
   PageHeader,
   PageCloseButton,
+  GoogleLogin,
   GoogleLoginButton,
   Input,
   Button,
@@ -24,26 +26,29 @@ export function LoginPage() {
   }
 
   return (
-    <Modal isOpen={true} onClose={() => {}}>
+    <Modal isOpen={true}>
       <PageContainer>
-        <PageHeader>
-          <div className="flex flex-row-reverse justify-between items-center">
-            <PageCloseButton />
-          </div>
+        <PageHeader display="flex" alignItems="center" justifyContent="end">
+          <PageCloseButton />
         </PageHeader>
-        <h1 className="text-base text-gray-900 font-bold text-center mb-2 pt-32">
+        <Heading
+          as="h1"
+          size="md"
+          color="gray.900"
+          textAlign="center"
+          mb="2"
+          pt="32"
+        >
           Welcome back
-        </h1>
-        <p className="mb-5 text-center text-xs text-gray-500">
+        </Heading>
+        <Text mb="5" textAlign="center" color="gray.500">
           Your data is saved locally
           <br />
           Sign in to sync between devices
-        </p>
-        <GoogleLoginButton
-          buttonText="Sign in with Google"
-          className="mb-9"
-          onLogin={handleGoogleRegister}
-        />
+        </Text>
+        <GoogleLogin onLogin={handleGoogleRegister}>
+          <GoogleLoginButton mb="9">Sign in with Google</GoogleLoginButton>
+        </GoogleLogin>
         <form className="flex flex-col">
           <Input label="Email" type="email" className="mb-4" />
           <Input label="Password" type="password" className="mb-6" />

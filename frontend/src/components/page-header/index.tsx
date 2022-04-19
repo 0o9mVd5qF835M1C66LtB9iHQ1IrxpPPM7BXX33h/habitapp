@@ -1,12 +1,5 @@
-import { ReactNode } from "react";
+import { Box, BoxProps, forwardRef } from "@chakra-ui/react";
 
-type PageHeaderProps = {
-  className?: string;
-  children?: ReactNode;
-};
-
-export function PageHeader(props: PageHeaderProps) {
-  return (
-    <div className={`w-full h-[72px] ${props.className}`}>{props.children}</div>
-  );
-}
+export const PageHeader = forwardRef<BoxProps, "div">((props, ref) => (
+  <Box width="full" height="72px" ref={ref} {...props} />
+));

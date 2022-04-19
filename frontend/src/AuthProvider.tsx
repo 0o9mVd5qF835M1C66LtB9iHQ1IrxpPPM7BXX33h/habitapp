@@ -12,7 +12,7 @@ export type AuthProps = {
   children: ReactNode;
 };
 
-export function AuthProider({ children }: AuthProps) {
+export function AuthProvider({ children }: AuthProps) {
   const currentUser = useSelector((state: RootState) => state.user.current);
   const dispatch = useDispatch();
 

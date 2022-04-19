@@ -70,7 +70,7 @@ export function AddHabitPage() {
 
   return (
     <Modal>
-      <PageHeader></PageHeader>
+      {/* <PageHeader></PageHeader> */}
       <HabitForm habit={habit} onChange={setHabit} onSubmit={handleSubmit} />
     </Modal>
   );

@@ -12,7 +12,7 @@ import axios from "axios";
 import { AddHabitPage, HomePage, LoginPage, RegisterPage } from "./pages";
 import theme from "./theme";
 import { store } from "./redux";
-import { AuthProider } from "./AuthProvider";
+import { AuthProvider } from "./AuthProvider";
 import { userTokenKey } from "./constants";
 
 dayjs.extend(isoWeek);
@@ -38,7 +38,7 @@ function App() {
     <ReduxProvider store={store}>
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme}>
-          <AuthProider>
+          <AuthProvider>
             <Routes>
               <Route
                 path="/"
@@ -49,7 +49,7 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/login" element={<LoginPage />} />
             </Routes>
-          </AuthProider>
+          </AuthProvider>
         </ChakraProvider>
       </QueryClientProvider>
     </ReduxProvider>

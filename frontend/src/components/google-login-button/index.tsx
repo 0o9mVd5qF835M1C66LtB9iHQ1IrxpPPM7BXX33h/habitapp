@@ -1,21 +1,17 @@
-import GoogleLogin, {
+import GoogleLoginComponent, {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from "react-google-login";
 import { FcGoogle } from "react-icons/fc";
-import { Button } from "../button";
+import { Button, ButtonProps, forwardRef } from "@chakra-ui/react";
+import React from "react";
 
-type GoogleLoginButtonProps = {
-  buttonText: string;
-  className?: string;
+type Props = {
+  children: React.ReactNode;
   onLogin(email: string): void;
 };
 
-export function GoogleLoginButton({
-  buttonText,
-  className,
-  onLogin,
-}: GoogleLoginButtonProps) {
+export function GoogleLogin({ children, onLogin }: Props) {
   if (!process.env.REACT_APP_GOOGLE_CLIENT_ID) {
     throw new Error(`Google client id not found in env`);
   }
@@ -34,22 +30,25 @@ export function GoogleLoginButton({
   };
 
   return (
-    <GoogleLogin
+    <GoogleLoginComponent
       clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
       onSuccess={responseGoogle}
       onFailure={responseGoogle}
       cookiePolicy={"single_host_origin"}
-      render={(props) => (
-        <Button
-          className={`${
-            className || ""
-          } border drop-shadow-sm border-gray-300 text-gray-700 font-medium text-base justify-center p-2`}
-          icon={<FcGoogle className="text-2xl mr-2" />}
-          {...props}
-        >
-          {buttonText}
-        </Button>
-      )}
+      render={() => <>{children}</>}
     />
   );
 }
+
+export const GoogleLoginButton = forwardRef<ButtonProps, "button">(
+  (props, ref) => (
+    <Button
+      variant="outline"
+      dropShadow="md"
+      isFullWidth
+      ref={ref}
+      leftIcon={<FcGoogle size={24} color="" />}
+      {...props}
+    />
+  )
+);

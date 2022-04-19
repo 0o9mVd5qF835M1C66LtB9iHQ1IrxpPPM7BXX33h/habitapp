@@ -13,8 +13,13 @@ import {
   IoPersonOutline,
 } from "react-icons/io5";
 import dayjs from "dayjs";
+import { Link } from "react-router-dom";
+
+import { useAuthUser } from "../../../../hooks";
 
 export function SettingsDropdown() {
+  const user = useAuthUser();
+
   return (
     <Menu placement="bottom-end">
       <MenuButton
@@ -24,7 +29,9 @@ export function SettingsDropdown() {
         variant="ghost"
       />
       <MenuList>
-        <MenuItem icon={<IoPersonOutline size={16} />}>Sign In</MenuItem>
+        <MenuItem as={Link} to="/login" icon={<IoPersonOutline size={16} />}>
+          {user.isTemp ? "Sign In" : "Sign out"}
+        </MenuItem>
         <MenuItem icon={<IoMoonOutline size={16} />}>Dark Mode</MenuItem>
         <MenuItem icon={<IoLogoGithub size={16} />}>About</MenuItem>
         <MenuItem

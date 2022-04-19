@@ -8,6 +8,7 @@ import {
   GoogleLoginButton,
   Input,
   Button,
+  GoogleLogin,
 } from "../../components";
 import { useAuthControllerGoogleAuth } from "../../generated/api";
 
@@ -39,11 +40,10 @@ export function RegisterPage() {
           <br />
           Sign up to sync between devices
         </p>
-        <GoogleLoginButton
-          buttonText="Sign up with Google"
-          className="mb-9"
-          onLogin={handleGoogleRegister}
-        />
+        <GoogleLogin onLogin={handleGoogleRegister}>
+          <GoogleLoginButton mb="9">Sign up with Google</GoogleLoginButton>
+        </GoogleLogin>
+
         <form className="flex flex-col">
           <Input label="Email" type="email" className="mb-4" />
           <Input label="Password" type="password" className="mb-6" />

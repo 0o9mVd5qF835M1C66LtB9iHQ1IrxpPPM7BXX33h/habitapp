@@ -1,13 +1,21 @@
 import { ReactNode } from "react";
+import { Box } from "@chakra-ui/react";
 
-type PageContainerProps = {
-  children?: ReactNode;
+type Props = {
+  children: ReactNode;
 };
 
-export function PageContainer(props: PageContainerProps) {
+export function PageContainer({ children }: Props) {
   return (
-    <div className="flex flex-col w-[390px] h-screen m-auto px-6">
-      {props.children}
-    </div>
+    <Box
+      width="sm"
+      display="flex"
+      flexDirection="column"
+      height="100vh"
+      marginX="auto"
+      paddingX="6"
+    >
+      {children}
+    </Box>
   );
 }

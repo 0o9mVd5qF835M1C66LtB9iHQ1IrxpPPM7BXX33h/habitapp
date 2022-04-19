@@ -5,9 +5,9 @@ import { CurrentUser } from "../auth/auth.decorator";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { User, UserDocument } from "./user.schema";
 
-@Controller("user")
+@Controller("users")
 export class UserController {
-  @Get("/current-user")
+  @Get("/current")
   @ApiOkResponse({
     type: User,
   })

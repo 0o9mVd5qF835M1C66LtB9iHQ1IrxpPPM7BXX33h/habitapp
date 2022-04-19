@@ -31,7 +31,7 @@ export class HabitController {
     return await this.habitService.findAllByUserId(user._id);
   }
 
-  @Post("/create")
+  @Post()
   @ApiOkResponse({ type: Habit })
   async createHabit(@Body() createHabitInput: CreateHabitInput) {
     return await this.habitService.createHabit(createHabitInput);

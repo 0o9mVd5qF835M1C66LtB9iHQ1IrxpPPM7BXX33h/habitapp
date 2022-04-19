@@ -1,36 +1,50 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from "@nestjs/common";
-
-import { CurrentUser } from "../auth/auth.decorator";
-import { JwtAuthGuard } from "../auth/jwt-auth.guard";
-import { UserDocument } from "../user/user.schema";
-import { CreateCompletedDateInput } from "./completedDate.dto";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from "@nestjs/common";
+import { ApiOkResponse, ApiParam, ApiResponse } from "@nestjs/swagger";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import {
+  CreateCompletedDateInput,
+  FindAllCompletedDatesInput,
+} from "./completedDate.dto";
+import { CompletedDate } from "./completedDate.schema";
 import { CompletedDateService } from "./completedDate.service";
 
+@UseGuards(JwtAuthGuard)
 @Controller("completed-dates")
 export class CompletedDateController {
   constructor(private completedDateService: CompletedDateService) {}
 
-  @Post("/create-completed-date")
-  @UseGuards(JwtAuthGuard)
-  async createCompletedDate(
-    @Body() createdCompletedDateInput: CreateCompletedDateInput,
-  ) {
-    return await this.completedDateService.createCompletedDate(
-      createdCompletedDateInput,
-    );
+  @Get()
+  @ApiOkResponse({
+    type: [CompletedDate],
+  })
+  async findAllByRange(@Query() input: FindAllCompletedDatesInput) {
+    return this.completedDateService.findAllByRange(input);
   }
 
-  @Get()
-  @UseGuards(JwtAuthGuard)
-  async findAllByDateAndUser(
-    @Query("startDate") startDate: number,
-    @Query("endDate") endDate: number,
-    @CurrentUser() user: UserDocument,
-  ) {
-    return await this.completedDateService.findAllByDateAndUser(
-      startDate,
-      endDate,
-      user._id,
-    );
+  @Post()
+  @ApiOkResponse({
+    type: CompletedDate,
+  })
+  async createCompletedDate(@Body() input: CreateCompletedDateInput) {
+    return this.completedDateService.createCompletedDate(input);
+  }
+
+  @Delete(":id")
+  @ApiParam({
+    name: "id",
+    type: "string",
+  })
+  @ApiResponse({ type: CompletedDate })
+  async deleteCompletedDate(@Param("id") id: string) {
+    return await this.completedDateService.deleteCompletedDate(id);
   }
 }

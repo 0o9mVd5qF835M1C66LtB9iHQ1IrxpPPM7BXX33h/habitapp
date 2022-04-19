@@ -7,11 +7,15 @@ export type CompletedDateDocument = CompletedDate & Document;
 @Schema()
 export class CompletedDate {
   @Prop()
-  @ApiProperty()
+  @ApiProperty({
+    type: "string",
+  })
   userId: Types.ObjectId;
 
   @Prop()
-  @ApiProperty()
+  @ApiProperty({
+    type: "string",
+  })
   habitId: Types.ObjectId;
 
   @ApiProperty()

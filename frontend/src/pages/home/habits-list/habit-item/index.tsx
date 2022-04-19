@@ -1,6 +1,9 @@
 import { Dayjs } from "dayjs";
 import { Flex } from "@chakra-ui/react";
-import { Habit } from "../../../../generated/api";
+import {
+  Habit,
+  useCompletedDateControllerCreateCompletedDate,
+} from "../../../../generated/api";
 
 import { WeekdayText } from "./weekday-text";
 import { Streak } from "./streak";
@@ -14,6 +17,18 @@ type Props = {
 
 export function HabitItem(props: Props) {
   const { habit, isHabitCompleted } = props;
+
+  const [] = useCompletedDateControllerCreateCompletedDate({
+    mutation: {
+      onMutate: () => {},
+      onSuccess: () => {},
+      onSettled: () => {},
+    },
+  });
+
+  function handleComplete() {}
+
+  function handleUnComplete() {}
 
   return (
     <Flex

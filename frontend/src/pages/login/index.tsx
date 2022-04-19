@@ -1,15 +1,12 @@
 import { Link } from "react-router-dom";
-import { Heading, Text } from "@chakra-ui/react";
+import { Heading, Text, Button, Input, Flex } from "@chakra-ui/react";
 
 import {
   Modal,
-  PageContainer,
+  ModalCloseButton,
   PageHeader,
-  PageCloseButton,
   GoogleLogin,
   GoogleLoginButton,
-  Input,
-  Button,
 } from "../../components";
 import { useAuthControllerGoogleAuth } from "../../generated/api";
 
@@ -26,46 +23,64 @@ export function LoginPage() {
   }
 
   return (
-    <Modal isOpen={true}>
-      <PageContainer>
-        <PageHeader display="flex" alignItems="center" justifyContent="end">
-          <PageCloseButton />
-        </PageHeader>
-        <Heading
-          as="h1"
-          size="md"
-          color="gray.900"
-          textAlign="center"
-          mb="2"
-          pt="32"
-        >
-          Welcome back
-        </Heading>
-        <Text mb="5" textAlign="center" color="gray.500">
-          Your data is saved locally
-          <br />
-          Sign in to sync between devices
+    <Modal>
+      <PageHeader justifyContent="end">
+        <ModalCloseButton aria-label="go back" />
+      </PageHeader>
+      <Heading
+        as="h1"
+        size="md"
+        color="gray.900"
+        textAlign="center"
+        mb="2"
+        pt="32"
+      >
+        Welcome back
+      </Heading>
+      <Text mb="5" textAlign="center" color="gray.500">
+        Your data is saved locally
+        <br />
+        Sign in to sync between devices
+      </Text>
+      <GoogleLogin onLogin={handleGoogleRegister}>
+        <GoogleLoginButton mb="9">Sign in with Google</GoogleLoginButton>
+      </GoogleLogin>
+      <form>
+        <Text fontSize="sm" mb="0.5">
+          Email
         </Text>
-        <GoogleLogin onLogin={handleGoogleRegister}>
-          <GoogleLoginButton mb="9">Sign in with Google</GoogleLoginButton>
-        </GoogleLogin>
-        <form className="flex flex-col">
-          <Input label="Email" type="email" className="mb-4" />
-          <Input label="Password" type="password" className="mb-6" />
-          <Button className="bg-primary-600 p-2 text-white text-base mb-10">
-            Login
-          </Button>
-        </form>
-        <div className="text-center">
-          <Link className="text-primary-600 underline" to="/login">
-            Forgot your password?
-          </Link>
-          <br />
-          <Link className="text-primary-600 underline" to="/login">
-            Doesn't have account yet?
-          </Link>
-        </div>
-      </PageContainer>
+        <Input type="email" className="mb-4" />
+        <Text fontSize="sm" mb="0.5">
+          Password
+        </Text>
+        <Input type="password" className="mb-6" />
+        <Button colorScheme="purple" isFullWidth mb="6">
+          Login
+        </Button>
+      </form>
+      <Flex direction="column" alignItems="center">
+        <Button
+          as={Link}
+          to="/login"
+          variant="link"
+          colorScheme="purple"
+          size="sm"
+          mb="3"
+          maxWidth="max-content"
+        >
+          Forgot your password?
+        </Button>
+        <Button
+          as={Link}
+          to="/register"
+          variant="link"
+          colorScheme="purple"
+          size="sm"
+          maxWidth="max-content"
+        >
+          Don't have account yet?
+        </Button>
+      </Flex>
     </Modal>
   );
 }

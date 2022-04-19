@@ -5,7 +5,7 @@ import { ModalCloseButton } from "@chakra-ui/react";
 import { useQueryClient } from "react-query";
 import { AxiosError } from "axios";
 
-import { Modal, PageHeader, HabitForm, PageContainer } from "../../components";
+import { Modal, PageHeader, HabitForm } from "../../components";
 import {
   HabitControllerFindAllByUserIdQueryResult,
   useHabitControllerCreateHabit,
@@ -84,12 +84,10 @@ export function AddHabitPage() {
 
   return (
     <Modal>
-      <PageContainer>
-        <PageHeader marginBottom="10">
-          <ModalCloseButton />
-        </PageHeader>
-        <HabitForm habit={habit} onChange={setHabit} onSubmit={handleSubmit} />
-      </PageContainer>
+      <PageHeader marginBottom="10">
+        <ModalCloseButton />
+      </PageHeader>
+      <HabitForm habit={habit} onChange={setHabit} onSubmit={handleSubmit} />
     </Modal>
   );
 }

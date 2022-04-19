@@ -55,7 +55,12 @@ export function HabitForm({ habit, onChange, onSubmit }: HabitFormProps) {
           selectedWeekdays={habit.isoWeekdays}
           onWeekdaySelect={handleWeekdayClick}
         />
-        <Button type="submit" isFullWidth colorScheme="purple" marginTop="8">
+        <Button
+          type="submit"
+          isFullWidth
+          colorScheme="purple.600"
+          marginTop="8"
+        >
           Create Habit
         </Button>
       </form>

@@ -1,3 +1,5 @@
+import { Text } from "@chakra-ui/react";
+
 type Props = {
   title: string;
   isCompleted: boolean;
@@ -5,12 +7,12 @@ type Props = {
 
 export function Title({ title, isCompleted }: Props) {
   return (
-    <div
-      className={`text-sm text-orange-1 font-medium ${
-        isCompleted ? "line-through" : ""
-      } pb-3`}
+    <Text
+      fontSize="md"
+      textDecoration={isCompleted ? "line-through" : "none"}
+      mb="2.5"
     >
       {title}
-    </div>
+    </Text>
   );
 }

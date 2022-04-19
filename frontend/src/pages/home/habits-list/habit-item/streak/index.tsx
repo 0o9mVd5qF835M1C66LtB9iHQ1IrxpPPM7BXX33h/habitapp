@@ -1,4 +1,6 @@
-import { IoFlame } from "react-icons/io5";
+import { Flex, Icon, Text } from "@chakra-ui/react";
+import { HiOutlineLightningBolt } from "react-icons/hi";
+
 import { Habit } from "../../../../../generated/api";
 
 type Props = {
@@ -7,11 +9,11 @@ type Props = {
 
 export function Streak({ habit }: Props) {
   return (
-    <div className="flex flex-row items-center">
-      <IoFlame className="text-sm text-purple-1" />
-      <div className="text-sm ml-1 text-purple-1">
+    <Flex alignItems="center">
+      <Icon as={HiOutlineLightningBolt} color="yellow.500" marginRight="1" />
+      <Text color="yellow.500" fontSize="xs">
         {habit.currentStreakDates.length} day streak
-      </div>
-    </div>
+      </Text>
+    </Flex>
   );
 }

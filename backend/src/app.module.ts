@@ -7,6 +7,7 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { HabitModule } from "./habit/habit.module";
 import { UserModule } from "./user/user.module";
+import { CompletedDateModule } from "./completed-date/completedDate.module";
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UserModule } from "./user/user.module";
     ConfigModule.forRoot({ isGlobal: true }),
     MongooseModule.forRoot(process.env.DATABASE_URI),
     HabitModule,
+    CompletedDateModule,
   ],
   controllers: [AppController],
   providers: [AppService],

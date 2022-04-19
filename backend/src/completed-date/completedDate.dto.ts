@@ -1,13 +1,30 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsMongoId, IsNumber } from "class-validator";
-import { Schema } from "mongoose";
+
+export class FindAllCompletedDatesInput {
+  @IsNumber()
+  @ApiProperty()
+  startDate: number;
+
+  @IsNumber()
+  @ApiProperty()
+  endDate: number;
+
+  @IsMongoId()
+  @ApiProperty()
+  habitId: string;
+}
 
 export class CreateCompletedDateInput {
   @IsNumber()
+  @ApiProperty()
   date: number;
 
   @IsMongoId()
-  habitId: Schema.Types.ObjectId;
+  @ApiProperty()
+  habitId: string;
 
   @IsMongoId()
-  userId: Schema.Types.ObjectId;
+  @ApiProperty()
+  userId: string;
 }

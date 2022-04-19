@@ -69,7 +69,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthResponse"
-  /user/current-user:
+  /users/current:
     get:
       operationId: UserController_currentUser
       parameters: []
@@ -93,7 +93,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Habit"
-  /habits/create:
     post:
       operationId: HabitController_createHabit
       parameters: []
@@ -147,6 +146,66 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Habit"
+  /completed-dates:
+    get:
+      operationId: CompletedDateController_findAllByRange
+      parameters:
+        - name: startDate
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: endDate
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: habitId
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CompletedDate"
+    post:
+      operationId: CompletedDateController_createCompletedDate
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCompletedDateInput"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompletedDate"
+  "/completed-dates/{id}":
+    delete:
+      operationId: CompletedDateController_deleteCompletedDate
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CompletedDate"
 info:
   title: Habit App
   description: Habit App made by Oybek Alimatov
@@ -294,3 +353,29 @@ components:
       required:
         - title
         - isoWeekdays
+    CompletedDate:
+      type: object
+      properties:
+        userId:
+          type: string
+        habitId:
+          type: string
+        date:
+          type: number
+      required:
+        - userId
+        - habitId
+        - date
+    CreateCompletedDateInput:
+      type: object
+      properties:
+        date:
+          type: number
+        habitId:
+          type: string
+        userId:
+          type: string
+      required:
+        - date
+        - habitId
+        - userId

@@ -1,18 +1,18 @@
 import { useState } from "react";
 import ObjectId from "bson-objectid";
 import { useNavigate } from "react-router-dom";
+import { ModalCloseButton } from "@chakra-ui/react";
+import { useQueryClient } from "react-query";
+import { AxiosError } from "axios";
 
-import { Modal, PageHeader, HabitForm } from "../../components";
+import { Modal, PageHeader, HabitForm, PageContainer } from "../../components";
 import {
-  Habit,
   HabitControllerFindAllByUserIdQueryResult,
   useHabitControllerCreateHabit,
   getHabitControllerFindAllByUserIdQueryKey,
   CreateHabitInput,
 } from "../../generated/api";
 import { useAuthUser } from "../../hooks";
-import { useQueryClient } from "react-query";
-import { AxiosError } from "axios";
 
 export function AddHabitPage() {
   const user = useAuthUser();
@@ -84,8 +84,12 @@ export function AddHabitPage() {
 
   return (
     <Modal>
-      {/* <PageHeader></PageHeader> */}
-      <HabitForm habit={habit} onChange={setHabit} onSubmit={handleSubmit} />
+      <PageContainer>
+        <PageHeader marginBottom="10">
+          <ModalCloseButton />
+        </PageHeader>
+        <HabitForm habit={habit} onChange={setHabit} onSubmit={handleSubmit} />
+      </PageContainer>
     </Modal>
   );
 }

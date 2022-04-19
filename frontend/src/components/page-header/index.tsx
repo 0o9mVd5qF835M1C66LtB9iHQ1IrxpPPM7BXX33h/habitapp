@@ -1,5 +1,5 @@
-import { Box, BoxProps, forwardRef } from "@chakra-ui/react";
+import { Flex, BoxProps, forwardRef } from "@chakra-ui/react";
 
 export const PageHeader = forwardRef<BoxProps, "div">((props, ref) => (
-  <Box width="full" height="72px" ref={ref} {...props} />
+  <Flex width="full" height="72px" alignItems="center" ref={ref} {...props} />
 ));

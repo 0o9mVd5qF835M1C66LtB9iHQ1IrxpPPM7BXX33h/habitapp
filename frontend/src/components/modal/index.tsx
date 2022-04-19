@@ -24,7 +24,6 @@ export function Modal({ isOpen = true, onClose, children }: Props) {
   return (
     <ChakraModal isOpen={isOpen} onClose={handleClose}>
       <Box width="sm" marginX="auto" position="relative">
-        <ModalCloseButton />
         <ModalBody>{children}</ModalBody>
       </Box>
     </ChakraModal>

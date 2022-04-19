@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ObjectId from "bson-objectid";
+import { useNavigate } from "react-router-dom";
 
 import { Modal, PageHeader, HabitForm } from "../../components";
 import {
@@ -15,6 +16,7 @@ import { AxiosError } from "axios";
 
 export function AddHabitPage() {
   const user = useAuthUser();
+  const navigate = useNavigate();
 
   const queryClient = useQueryClient();
   const habitsQueryKey = getHabitControllerFindAllByUserIdQueryKey()[0];
@@ -32,29 +34,41 @@ export function AddHabitPage() {
 
   const createHabitMutation = useHabitControllerCreateHabit<
     AxiosError<unknown, unknown>,
-    { previousHabits: Habit[] }
+    {
+      previousHabitsQueryResult:
+        | HabitControllerFindAllByUserIdQueryResult
+        | undefined;
+    }
   >({
     mutation: {
       onMutate: async ({ data: newHabit }) => {
+        navigate("/home");
+
         await queryClient.cancelQueries();
 
-        const previousHabits =
-          queryClient.getQueryData<
-            HabitControllerFindAllByUserIdQueryResult["data"]
-          >(habitsQueryKey) || [];
+        const previousHabitsQueryResult =
+          queryClient.getQueryData<HabitControllerFindAllByUserIdQueryResult>(
+            habitsQueryKey
+          );
 
         queryClient.setQueryData<
-          HabitControllerFindAllByUserIdQueryResult["data"]
-        >(habitsQueryKey, (prevHabits) => [newHabit, ...(prevHabits || [])]);
+          HabitControllerFindAllByUserIdQueryResult | undefined
+        >(habitsQueryKey, (prevResult) =>
+          prevResult
+            ? { ...prevResult, data: [newHabit, ...prevResult.data] }
+            : undefined
+        );
 
         return {
-          previousHabits,
+          previousHabitsQueryResult,
         };
       },
       onError: (_, __, context) => {
-        queryClient.setQueryData<
-          HabitControllerFindAllByUserIdQueryResult["data"]
-        >(habitsQueryKey, context ? context.previousHabits : []);
+        if (context) {
+          queryClient.setQueryData<
+            HabitControllerFindAllByUserIdQueryResult | undefined
+          >(habitsQueryKey, context.previousHabitsQueryResult);
+        }
       },
       onSettled: () => {
         queryClient.invalidateQueries(habitsQueryKey);

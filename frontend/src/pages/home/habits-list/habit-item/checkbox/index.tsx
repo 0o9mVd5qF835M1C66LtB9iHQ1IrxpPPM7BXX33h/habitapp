@@ -1,4 +1,5 @@
-import { IoCheckmarkCircle, IoEllipseOutline } from "react-icons/io5";
+import { IconButton } from "@chakra-ui/react";
+import { HiOutlineCheck } from "react-icons/hi";
 
 type Props = {
   onComplete: () => void;
@@ -7,24 +8,20 @@ type Props = {
 };
 
 export function Checkbox({ onComplete, onUncomplete, isCompleted }: Props) {
-  function handleClick(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     event.stopPropagation();
     isCompleted ? onUncomplete() : onComplete();
   }
 
   return (
-    <div
+    <IconButton
+      icon={isCompleted ? <HiOutlineCheck /> : undefined}
+      aria-label={isCompleted ? "uncomplete habit" : "complete habit"}
+      borderRadius="full"
+      colorScheme={isCompleted ? "green" : "gray"}
+      variant={isCompleted ? "solid" : "outline"}
+      size="sm"
       onClick={handleClick}
-      className="flex items-center justify-center w-[40px]"
-    >
-      {isCompleted ? (
-        <IoCheckmarkCircle className="text-3xl text-purple-1" />
-      ) : (
-        <>
-          <IoEllipseOutline className="text-3xl text-purple-1" />
-          <div className="rounded-full absolute bg-purple-1 w-[20px] h-[20px] opacity-0 hover:animate-ping hover:opacity-100"></div>
-        </>
-      )}
-    </div>
+    />
   );
 }

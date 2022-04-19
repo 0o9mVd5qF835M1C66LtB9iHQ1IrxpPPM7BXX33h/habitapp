@@ -32,6 +32,7 @@ export interface EditHabitInput {
 }
 
 export interface CreateHabitInput {
+  _id: string;
   title: string;
   userId: string;
   isoWeekdays: number[];
@@ -42,6 +43,7 @@ export interface CreateHabitInput {
 }
 
 export interface Habit {
+  _id: string;
   userId: string;
   title: string;
   isoWeekdays: number[];
@@ -52,6 +54,7 @@ export interface Habit {
 }
 
 export interface User {
+  _id: string;
   email: string;
   password?: string;
   isTemp: boolean;
@@ -293,7 +296,7 @@ export const useUserControllerCurrentUser = <TData = AsyncReturnType<typeof user
 
 export const habitControllerFindAllByUserId = (
      options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
+ ): Promise<AxiosResponse<Habit[]>> => {
     return axios.get(
       `/habits`,options
     );
@@ -304,9 +307,9 @@ export const getHabitControllerFindAllByUserIdQueryKey = () => [`/habits`];
 
     
 export type HabitControllerFindAllByUserIdQueryResult = NonNullable<AsyncReturnType<typeof habitControllerFindAllByUserId>>
-export type HabitControllerFindAllByUserIdQueryError = AxiosError<Habit[]>
+export type HabitControllerFindAllByUserIdQueryError = AxiosError<unknown>
 
-export const useHabitControllerFindAllByUserId = <TData = AsyncReturnType<typeof habitControllerFindAllByUserId>, TError = AxiosError<Habit[]>>(
+export const useHabitControllerFindAllByUserId = <TData = AsyncReturnType<typeof habitControllerFindAllByUserId>, TError = AxiosError<unknown>>(
   options?: { query?:UseQueryOptions<AsyncReturnType<typeof habitControllerFindAllByUserId>, TError, TData>, axios?: AxiosRequestConfig}
 
   ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
@@ -330,7 +333,7 @@ export const useHabitControllerFindAllByUserId = <TData = AsyncReturnType<typeof
 
 export const habitControllerCreateHabit = (
     createHabitInput: CreateHabitInput, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
+ ): Promise<AxiosResponse<Habit>> => {
     return axios.post(
       `/habits/create`,
       createHabitInput,options
@@ -341,9 +344,9 @@ export const habitControllerCreateHabit = (
 
     export type HabitControllerCreateHabitMutationResult = NonNullable<AsyncReturnType<typeof habitControllerCreateHabit>>
     export type HabitControllerCreateHabitMutationBody = CreateHabitInput
-    export type HabitControllerCreateHabitMutationError = AxiosError<Habit>
+    export type HabitControllerCreateHabitMutationError = AxiosError<unknown>
 
-    export const useHabitControllerCreateHabit = <TError = AxiosError<Habit>,
+    export const useHabitControllerCreateHabit = <TError = AxiosError<unknown>,
     
     TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof habitControllerCreateHabit>, TError,{data: CreateHabitInput}, TContext>, axios?: AxiosRequestConfig}
 ) => {
@@ -364,7 +367,7 @@ export const habitControllerCreateHabit = (
 export const habitControllerEditHabit = (
     id: string,
     editHabitInput: EditHabitInput, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
+ ): Promise<AxiosResponse<Habit>> => {
     return axios.put(
       `/habits/${id}`,
       editHabitInput,options
@@ -375,9 +378,9 @@ export const habitControllerEditHabit = (
 
     export type HabitControllerEditHabitMutationResult = NonNullable<AsyncReturnType<typeof habitControllerEditHabit>>
     export type HabitControllerEditHabitMutationBody = EditHabitInput
-    export type HabitControllerEditHabitMutationError = AxiosError<Habit>
+    export type HabitControllerEditHabitMutationError = AxiosError<unknown>
 
-    export const useHabitControllerEditHabit = <TError = AxiosError<Habit>,
+    export const useHabitControllerEditHabit = <TError = AxiosError<unknown>,
     
     TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof habitControllerEditHabit>, TError,{id: string;data: EditHabitInput}, TContext>, axios?: AxiosRequestConfig}
 ) => {
@@ -437,7 +440,13 @@ export const getAuthControllerRegisterMock = () => ({accessToken: faker.random.w
 
 export const getAuthControllerGoogleAuthMock = () => ({accessToken: faker.random.word()})
 
-export const getUserControllerCurrentUserMock = () => ({email: faker.random.word(), password: faker.helpers.randomize([faker.random.word(), undefined]), isTemp: faker.datatype.boolean(), dateCreated: faker.datatype.number()})
+export const getUserControllerCurrentUserMock = () => ({_id: faker.random.word(), email: faker.random.word(), password: faker.helpers.randomize([faker.random.word(), undefined]), isTemp: faker.datatype.boolean(), dateCreated: faker.datatype.number()})
+
+export const getHabitControllerFindAllByUserIdMock = () => ([...Array(faker.datatype.number({min: 1, max: 10}))].map(() => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), archived: faker.datatype.boolean(), currentStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), longestStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number()))})))
+
+export const getHabitControllerCreateHabitMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), archived: faker.datatype.boolean(), currentStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), longestStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number()))})
+
+export const getHabitControllerEditHabitMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), archived: faker.datatype.boolean(), currentStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), longestStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number()))})
 
 export const getHabitAppMSW = () => [
 rest.get('*', (_req, res, ctx) => {
@@ -479,16 +488,19 @@ ctx.json(getUserControllerCurrentUserMock()),
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
+ctx.json(getHabitControllerFindAllByUserIdMock()),
         )
       }),rest.post('*/habits/create', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
+ctx.json(getHabitControllerCreateHabitMock()),
         )
       }),rest.put('*/habits/:id', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
+ctx.json(getHabitControllerEditHabitMock()),
         )
       }),rest.delete('*/habits/:id', (_req, res, ctx) => {
         return res(

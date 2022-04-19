@@ -1,29 +1,40 @@
 import { Input, Button, Heading } from "@chakra-ui/react";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
+
 import { WeekSelector } from "./week-selector";
+import { Habit } from "../../generated/api";
 
-type HabitFormProps = {};
+export type HabitFormProps = {
+  habit: Habit;
+  onChange: Dispatch<SetStateAction<Habit>>;
+  onSubmit(): void;
+};
 
-export function HabitForm({}: HabitFormProps) {
-  const [title, setTitle] = useState("");
-  const [selectedWeekdays, setSelectedWeekdays] = useState<number[]>([]);
-
+export function HabitForm({ habit, onChange, onSubmit }: HabitFormProps) {
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setTitle(e.target.value);
+    onChange((habit) => ({
+      ...habit,
+      title: e.target.value,
+    }));
   }
 
   function handleWeekdayClick(weekday: number) {
-    setSelectedWeekdays((currentSelected) => {
-      if (currentSelected.includes(weekday)) {
-        return currentSelected.filter((selected) => selected !== weekday);
-      }
+    onChange((habit) => ({
+      ...habit,
+      isoWeekdays: habit.isoWeekdays.includes(weekday)
+        ? habit.isoWeekdays.filter((selected) => selected !== weekday)
+        : [...habit.isoWeekdays, weekday],
+    }));
+  }
 
-      return [...currentSelected, weekday];
-    });
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    onSubmit();
   }
 
   return (
-    <form>
+    <>
       <Heading
         as="h1"
         size="md"
@@ -33,19 +44,21 @@ export function HabitForm({}: HabitFormProps) {
       >
         Add new habit
       </Heading>
-      <Input
-        value={title}
-        marginBottom="3"
-        placeholder="Type habit name"
-        onChange={handleTitleChange}
-      />
-      <WeekSelector
-        selectedWeekdays={selectedWeekdays}
-        onWeekdaySelect={handleWeekdayClick}
-      />
-      <Button isFullWidth colorScheme="purple" marginTop="8">
-        Create Habit
-      </Button>
-    </form>
+      <form onSubmit={handleSubmit}>
+        <Input
+          value={habit.title}
+          marginBottom="3"
+          placeholder="Type habit name"
+          onChange={handleTitleChange}
+        />
+        <WeekSelector
+          selectedWeekdays={habit.isoWeekdays}
+          onWeekdaySelect={handleWeekdayClick}
+        />
+        <Button type="submit" isFullWidth colorScheme="purple" marginTop="8">
+          Create Habit
+        </Button>
+      </form>
+    </>
   );
 }

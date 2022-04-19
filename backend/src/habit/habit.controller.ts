@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { ApiParam, ApiResponse } from "@nestjs/swagger";
+import { ApiOkResponse, ApiParam, ApiResponse } from "@nestjs/swagger";
 import { CurrentUser } from "src/auth/auth.decorator";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { UserDocument } from "src/user/user.schema";
@@ -24,7 +24,7 @@ export class HabitController {
   constructor(private habitService: HabitService) {}
 
   @Get()
-  @ApiResponse({
+  @ApiOkResponse({
     type: [Habit],
   })
   async findAllByUserId(@CurrentUser() user: UserDocument) {
@@ -32,7 +32,7 @@ export class HabitController {
   }
 
   @Post("/create")
-  @ApiResponse({ type: Habit })
+  @ApiOkResponse({ type: Habit })
   async createHabit(@Body() createHabitInput: CreateHabitInput) {
     return await this.habitService.createHabit(createHabitInput);
   }
@@ -42,7 +42,7 @@ export class HabitController {
     name: "id",
     type: "string",
   })
-  @ApiResponse({ type: Habit })
+  @ApiOkResponse({ type: Habit })
   async editHabit(
     @Param("id") id: Schema.Types.ObjectId,
     @Body() editHabitInput: EditHabitInput,

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Model, Schema } from "mongoose";
+import { Model, Schema, Types } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 
 import { User, UserDocument } from "./user.schema";
@@ -18,6 +18,7 @@ export class UserService {
 
   async createTempUser() {
     return await this.userModel.create({
+      _id: new Types.ObjectId(),
       isTemp: true,
       dateCreated: Number(new Date()),
     });

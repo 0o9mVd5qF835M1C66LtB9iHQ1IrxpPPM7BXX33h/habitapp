@@ -85,7 +85,7 @@ paths:
       operationId: HabitController_findAllByUserId
       parameters: []
       responses:
-        default:
+        "200":
           description: ""
           content:
             application/json:
@@ -104,7 +104,7 @@ paths:
             schema:
               $ref: "#/components/schemas/CreateHabitInput"
       responses:
-        default:
+        "200":
           description: ""
           content:
             application/json:
@@ -126,7 +126,7 @@ paths:
             schema:
               $ref: "#/components/schemas/EditHabitInput"
       responses:
-        default:
+        "200":
           description: ""
           content:
             application/json:
@@ -199,6 +199,8 @@ components:
     User:
       type: object
       properties:
+        _id:
+          type: string
         email:
           type: string
         password:
@@ -208,12 +210,15 @@ components:
         dateCreated:
           type: number
       required:
+        - _id
         - email
         - isTemp
         - dateCreated
     Habit:
       type: object
       properties:
+        _id:
+          type: string
         userId:
           type: string
         title:
@@ -235,6 +240,7 @@ components:
           items:
             type: number
       required:
+        - _id
         - userId
         - title
         - isoWeekdays
@@ -245,6 +251,8 @@ components:
     CreateHabitInput:
       type: object
       properties:
+        _id:
+          type: string
         title:
           type: string
         userId:
@@ -266,6 +274,7 @@ components:
           items:
             type: number
       required:
+        - _id
         - title
         - userId
         - isoWeekdays

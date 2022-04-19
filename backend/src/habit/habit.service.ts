@@ -1,7 +1,7 @@
 import { Model } from "mongoose";
 import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
-import { Schema } from "mongoose";
+import { Schema, Types } from "mongoose";
 import dayjs from "dayjs";
 
 import { CreateHabitInput, EditHabitInput } from "./habit.dto";
@@ -32,7 +32,11 @@ export class HabitService {
   }
 
   async createHabit(createHabitInput: CreateHabitInput): Promise<Habit> {
-    return await this.habitModel.create(createHabitInput);
+    return await this.habitModel.create({
+      ...createHabitInput,
+      _id: new Types.ObjectId(createHabitInput._id),
+      userId: new Types.ObjectId(createHabitInput.userId),
+    });
   }
 
   async editHabit(

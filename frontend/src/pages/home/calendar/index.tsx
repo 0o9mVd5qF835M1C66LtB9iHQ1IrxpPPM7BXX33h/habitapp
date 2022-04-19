@@ -36,10 +36,11 @@ export function Calendar({ onClick = () => {} }: CalendarSliderProps) {
       paddingY="2"
       gap="8px"
     >
-      {daysRef.current.map((day) => {
+      {daysRef.current.map((day, index) => {
         const isSelectedDate = selectedDate.isSame(day, "day");
         return (
           <Button
+            key={index}
             variant={isSelectedDate || day.isToday() ? "solid" : "outline"}
             colorScheme={isSelectedDate ? "purple" : "gray"}
             onClick={() => handleDayClick(day)}

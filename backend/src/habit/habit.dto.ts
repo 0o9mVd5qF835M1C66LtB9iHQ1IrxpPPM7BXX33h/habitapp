@@ -8,6 +8,10 @@ import {
 } from "class-validator";
 
 export class CreateHabitInput {
+  @IsMongoId()
+  @ApiProperty()
+  _id: string;
+
   @IsNotEmpty()
   @ApiProperty()
   title: string;

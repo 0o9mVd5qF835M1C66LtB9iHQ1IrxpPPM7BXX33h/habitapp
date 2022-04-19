@@ -7,12 +7,13 @@ import isoWeek from "dayjs/plugin/isoWeek";
 import isToday from "dayjs/plugin/isToday";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+import axios from "axios";
 
 import { AddHabitPage, HomePage, LoginPage, RegisterPage } from "./pages";
 import theme from "./theme";
 import { store } from "./redux";
-import { Auth } from "./Auth";
-import axios from "axios";
+import { AuthProider } from "./AuthProvider";
+import { userTokenKey } from "./constants";
 
 dayjs.extend(isoWeek);
 dayjs.extend(isToday);
@@ -20,14 +21,24 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
 const queryClient = new QueryClient();
+
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+
+axios.interceptors.request.use((config) => {
+  config.headers = {
+    ...(config.headers ? config.headers : {}),
+    authorization: `Bearer ${localStorage.getItem(userTokenKey)}`,
+  };
+
+  return config;
+});
 
 function App() {
   return (
     <ReduxProvider store={store}>
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme}>
-          <Auth>
+          <AuthProider>
             <Routes>
               <Route
                 path="/"
@@ -38,7 +49,7 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/login" element={<LoginPage />} />
             </Routes>
-          </Auth>
+          </AuthProider>
         </ChakraProvider>
       </QueryClientProvider>
     </ReduxProvider>

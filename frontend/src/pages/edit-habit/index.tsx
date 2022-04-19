@@ -1,13 +1,7 @@
 import { HiOutlineX } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 
-import {
-  Button,
-  Modal,
-  PageContainer,
-  PageHeader,
-  HabitForm,
-} from "../../components";
+import { Button, Modal, PageContainer, PageHeader } from "../../components";
 
 export function EditHabitPage() {
   const navigate = useNavigate();
@@ -26,7 +20,7 @@ export function EditHabitPage() {
             </Button>
           </div>
         </PageHeader>
-        <HabitForm />
+        {/* <HabitForm habit={} onChange /> */}
       </PageContainer>
     </Modal>
   );

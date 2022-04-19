@@ -1,4 +1,4 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { userTokenKey } from "./constants";
@@ -7,13 +7,12 @@ import {
   useAuthControllerTempRegister,
   useUserControllerCurrentUser,
 } from "./generated/api";
-import axios from "axios";
 
 export type AuthProps = {
-  children?: ReactNode;
+  children: ReactNode;
 };
 
-export function Auth({ children }: AuthProps) {
+export function AuthProider({ children }: AuthProps) {
   const currentUser = useSelector((state: RootState) => state.user.current);
   const dispatch = useDispatch();
 
@@ -37,23 +36,9 @@ export function Auth({ children }: AuthProps) {
         tempRegisterMutation.mutate();
       },
       enabled: !currentUser,
+      retry: false,
     },
   });
-
-  useEffect(() => {
-    const interceptor = axios.interceptors.request.use((config) => {
-      config.headers = {
-        ...(config.headers ? config.headers : {}),
-        authorization: `Bearer ${localStorage.getItem(userTokenKey)}`,
-      };
-
-      return config;
-    });
-
-    return () => {
-      axios.interceptors.request.eject(interceptor);
-    };
-  }, []);
 
   if (!currentUser) {
     return null;

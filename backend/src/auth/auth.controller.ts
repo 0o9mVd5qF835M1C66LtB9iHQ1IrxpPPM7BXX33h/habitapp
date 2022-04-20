@@ -37,6 +37,7 @@ export class AuthController {
     type: AuthResponse,
   })
   async register(@Body() registerUserInput: RegisterUserInput) {
+    console.log("WTF", registerUserInput);
     return await this.authService.register(registerUserInput);
   }
 

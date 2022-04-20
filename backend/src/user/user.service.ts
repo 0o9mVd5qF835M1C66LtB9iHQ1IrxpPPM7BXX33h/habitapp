@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Model, Schema, Types } from "mongoose";
+import { Model, Types } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 
 import { User, UserDocument } from "./user.schema";
@@ -12,7 +12,7 @@ export class UserService {
     return await this.userModel.findOne({ email: email.toLowerCase() });
   }
 
-  async findById(_id: Schema.Types.ObjectId) {
+  async findById(_id: Types.ObjectId) {
     return await this.userModel.findById(_id);
   }
 
@@ -25,11 +25,11 @@ export class UserService {
   }
 
   async setTempUserAsRegistered(
-    tempUserId: Schema.Types.ObjectId,
+    tempUserId: Types.ObjectId,
     info: { email: string; password?: string },
   ) {
-    const data = await this.userModel.findOneAndUpdate(
-      { _id: tempUserId },
+    const data = await this.userModel.findByIdAndUpdate(
+      tempUserId,
       {
         email: info.email,
         password: info.password,

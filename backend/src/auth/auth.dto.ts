@@ -1,6 +1,7 @@
-import { Schema } from "mongoose";
-import { IsEmail, IsMongoId, MinLength } from "class-validator";
+import { Types } from "mongoose";
+import { IsEmail, IsNotEmpty, MinLength } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { Transform } from "class-transformer";
 
 export class AuthResponse {
   @ApiProperty()
@@ -8,9 +9,10 @@ export class AuthResponse {
 }
 
 export class RegisterUserInput {
-  @IsMongoId()
+  @IsNotEmpty()
   @ApiProperty({ type: String })
-  tempUserId: Schema.Types.ObjectId;
+  @Transform(({ value }) => new Types.ObjectId(value))
+  tempUserId: Types.ObjectId;
 
   @IsEmail()
   @ApiProperty()
@@ -32,9 +34,10 @@ export class LoginInput {
 }
 
 export class GoogleAuthInput {
-  @IsMongoId()
+  @IsNotEmpty()
   @ApiProperty({ type: String })
-  tempUserId: Schema.Types.ObjectId;
+  @Transform(({ value }) => new Types.ObjectId(value))
+  tempUserId: Types.ObjectId;
 
   @IsEmail()
   @ApiProperty()

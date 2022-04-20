@@ -42,6 +42,8 @@ export function RegisterPage() {
       return;
     }
 
+    console.log(user._id);
+
     register({ email, password, tempUserId: user._id });
   }
 

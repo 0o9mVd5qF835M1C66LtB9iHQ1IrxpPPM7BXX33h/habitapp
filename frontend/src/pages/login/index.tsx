@@ -8,17 +8,16 @@ import {
   GoogleLogin,
   GoogleLoginButton,
 } from "../../components";
-import { useAuthControllerGoogleAuth } from "../../generated/api";
+import { useAuth, useAuthUser } from "../../hooks";
 
 export function LoginPage() {
-  const googleAuthMutation = useAuthControllerGoogleAuth();
+  const user = useAuthUser();
+  const { googleRegister } = useAuth();
 
   function handleGoogleRegister(email: string) {
-    googleAuthMutation.mutate({
-      data: {
-        tempUserId: "",
-        email,
-      },
+    googleRegister({
+      email,
+      tempUserId: user._id,
     });
   }
 

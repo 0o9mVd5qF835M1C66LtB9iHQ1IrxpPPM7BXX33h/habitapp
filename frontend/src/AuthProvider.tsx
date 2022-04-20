@@ -1,30 +1,18 @@
 import { ReactNode } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { userTokenKey } from "./constants";
-import { RootState, setCurrentUser } from "./redux";
-import {
-  useAuthControllerTempRegister,
-  useUserControllerCurrentUser,
-} from "./generated/api";
+import { setCurrentUser } from "./redux";
+import { useUserControllerCurrentUser } from "./generated/api";
+import { useAuth } from "./hooks";
 
 export type AuthProps = {
   children: ReactNode;
 };
 
 export function AuthProvider({ children }: AuthProps) {
-  const currentUser = useSelector((state: RootState) => state.user.current);
+  const { tempRegister, user } = useAuth();
   const dispatch = useDispatch();
-
-  const tempRegisterMutation = useAuthControllerTempRegister({
-    mutation: {
-      onSuccess: (res) => {
-        localStorage.setItem(userTokenKey, res.data.accessToken);
-        window.location.reload();
-      },
-      onError: () => {},
-    },
-  });
 
   useUserControllerCurrentUser({
     query: {
@@ -33,14 +21,14 @@ export function AuthProvider({ children }: AuthProps) {
       },
       onError: () => {
         localStorage.removeItem(userTokenKey);
-        tempRegisterMutation.mutate();
+        tempRegister();
       },
-      enabled: !currentUser,
+      enabled: !user,
       retry: false,
     },
   });
 
-  if (!currentUser) {
+  if (!user) {
     return null;
   }
 

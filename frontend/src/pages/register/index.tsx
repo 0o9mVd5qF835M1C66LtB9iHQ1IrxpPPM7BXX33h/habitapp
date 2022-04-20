@@ -7,6 +7,7 @@ import {
   InputGroup,
   IconButton,
   Box,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { HiEye } from "react-icons/hi";
@@ -19,19 +20,33 @@ import {
   ModalCloseButton,
   GoogleLoginButton,
 } from "../../components";
-import { useAuthControllerGoogleAuth } from "../../generated/api";
+import { useAuth, useAuthUser } from "../../hooks";
 
 export function RegisterPage() {
+  const { googleRegister, register } = useAuth();
+  const user = useAuthUser();
+  const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
-  const googleAuthMutation = useAuthControllerGoogleAuth();
+  const [input, setInput] = useState({ email: "", password: "" });
+
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+    setInput((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleRegister() {
+    const { email, password } = input;
+
+    if (!email.trim() || !password.trim()) {
+      toast({ status: "error", description: "Email and password required." });
+      return;
+    }
+
+    register({ email, password, tempUserId: user._id });
+  }
 
   function handleGoogleRegister(email: string) {
-    googleAuthMutation.mutate({
-      data: {
-        tempUserId: "",
-        email,
-      },
-    });
+    googleRegister({ email, tempUserId: user._id });
   }
 
   return (
@@ -52,7 +67,7 @@ export function RegisterPage() {
       <Text mb="5" textAlign="center" color="gray.500">
         Your data is saved locally
         <br />
-        Sign in to sync between devices
+        Register to sync between devices
       </Text>
       <GoogleLogin onLogin={handleGoogleRegister}>
         <GoogleLoginButton mb="9">Sign up with Google</GoogleLoginButton>
@@ -61,12 +76,26 @@ export function RegisterPage() {
         <Text fontSize="sm" mb="0.5">
           Email
         </Text>
-        <Input type="email" className="mb-4" />
+        <Input
+          type="email"
+          name="email"
+          value={input.email}
+          className="mb-4"
+          onChange={handleChange}
+          required
+        />
         <Text fontSize="sm" mb="0.5">
           Password
         </Text>
         <InputGroup>
-          <Input type={showPassword ? "text" : "password"} className="mb-6" />
+          <Input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            value={input.password}
+            className="mb-6"
+            required
+            onChange={handleChange}
+          />
           <InputRightElement>
             <IconButton
               aria-label={showPassword ? "show password" : "hide password"}
@@ -77,7 +106,13 @@ export function RegisterPage() {
             />
           </InputRightElement>
         </InputGroup>
-        <Button type="button" colorScheme="purple" isFullWidth mb="6">
+        <Button
+          type="button"
+          colorScheme="purple"
+          isFullWidth
+          mb="6"
+          onClick={handleRegister}
+        >
           Register
         </Button>
       </form>

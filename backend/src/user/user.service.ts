@@ -28,7 +28,7 @@ export class UserService {
     tempUserId: Schema.Types.ObjectId,
     info: { email: string; password?: string },
   ) {
-    return await this.userModel.findOneAndUpdate(
+    const data = await this.userModel.findOneAndUpdate(
       { _id: tempUserId },
       {
         email: info.email,
@@ -39,5 +39,9 @@ export class UserService {
         new: true,
       },
     );
+
+    console.log(data);
+
+    return data;
   }
 }

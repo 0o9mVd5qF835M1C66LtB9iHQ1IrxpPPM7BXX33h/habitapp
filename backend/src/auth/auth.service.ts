@@ -67,7 +67,7 @@ export class AuthService {
       const isNonUniqueError = err.name === "MongoError" && err.code === 11000;
 
       if (isNonUniqueError) {
-        new BadRequestException("User already exists");
+        throw new BadRequestException("User already exists");
       }
 
       console.error(err);
@@ -109,6 +109,8 @@ export class AuthService {
     await this.userService.setTempUserAsRegistered(tempUser._id, {
       email,
     });
+
+    console.log("are you here", accessToken);
 
     return { accessToken };
   }

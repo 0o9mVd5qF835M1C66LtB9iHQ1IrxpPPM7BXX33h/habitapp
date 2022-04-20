@@ -1,8 +1,7 @@
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux";
+import { useAuth } from "../use-auth";
 
 export function useAuthUser() {
-  const user = useSelector((state: RootState) => state.user.current);
+  const { user } = useAuth();
 
   if (!user) {
     throw new Error("Not authenticated");

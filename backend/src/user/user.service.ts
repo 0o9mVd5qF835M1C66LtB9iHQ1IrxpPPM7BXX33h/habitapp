@@ -12,7 +12,7 @@ export class UserService {
     return await this.userModel.findOne({ email: email.toLowerCase() });
   }
 
-  async findById(_id: Types.ObjectId) {
+  async findById(_id: ObjectId) {
     return await this.userModel.findById(_id);
   }
 
@@ -25,10 +25,10 @@ export class UserService {
   }
 
   async setTempUserAsRegistered(
-    tempUserId: Types.ObjectId,
+    tempUserId: ObjectId,
     info: { email: string; password?: string },
   ) {
-    const data = await this.userModel.findByIdAndUpdate(
+    return await this.userModel.findByIdAndUpdate(
       tempUserId,
       {
         email: info.email,
@@ -39,9 +39,5 @@ export class UserService {
         new: true,
       },
     );
-
-    console.log(data);
-
-    return data;
   }
 }

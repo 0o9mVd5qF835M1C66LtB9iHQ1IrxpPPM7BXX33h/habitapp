@@ -57,7 +57,7 @@ export function useAuth() {
     });
   }
 
-  function googleRegister(data: GoogleAuthInput) {
+  function googleAuth(data: GoogleAuthInput) {
     googleAuthMutation.mutateAsync({
       data,
     });
@@ -67,10 +67,14 @@ export function useAuth() {
     loginMutation.mutateAsync({ data });
   }
 
-  function logout() {}
+  function logout() {
+    console.log("calling");
+    localStorage.removeItem(userTokenKey);
+    refreshPage();
+  }
 
   function refreshPage() {
-    window.location.reload();
+    window.location.href = "/";
   }
 
   function setTokenToLocalStorage(token: string) {
@@ -86,5 +90,5 @@ export function useAuth() {
     toast({ status: "error", description: err.message });
   }
 
-  return { register, login, logout, googleRegister, tempRegister, user };
+  return { register, login, logout, googleAuth, tempRegister, user };
 }

@@ -47,7 +47,6 @@ export class AuthController {
     type: AuthResponse,
   })
   async googleAuth(@Body() googleAuthInput: GoogleAuthInput) {
-    console.log(googleAuthInput);
     return await this.authService.googleAuth(googleAuthInput);
   }
 }

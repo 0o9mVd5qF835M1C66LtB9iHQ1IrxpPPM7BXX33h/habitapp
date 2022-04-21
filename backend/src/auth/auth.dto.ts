@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { IsEmail, IsNotEmpty, MinLength } from "class-validator";
+import { IsEmail, IsInstance, MinLength } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { Transform } from "class-transformer";
 
@@ -9,10 +9,10 @@ export class AuthResponse {
 }
 
 export class RegisterUserInput {
-  @IsNotEmpty()
+  @IsInstance(Types.ObjectId)
   @ApiProperty({ type: String })
   @Transform(({ value }) => new Types.ObjectId(value))
-  tempUserId: Types.ObjectId;
+  tempUserId: ObjectId;
 
   @IsEmail()
   @ApiProperty()
@@ -34,10 +34,10 @@ export class LoginInput {
 }
 
 export class GoogleAuthInput {
-  @IsNotEmpty()
+  @IsInstance(Types.ObjectId)
   @ApiProperty({ type: String })
   @Transform(({ value }) => new Types.ObjectId(value))
-  tempUserId: Types.ObjectId;
+  tempUserId: ObjectId;
 
   @IsEmail()
   @ApiProperty()

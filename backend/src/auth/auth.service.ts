@@ -4,7 +4,6 @@ import {
   UnauthorizedException,
   InternalServerErrorException,
 } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
 
 import { GoogleAuthInput, LoginInput, RegisterUserInput } from "./auth.dto";
 import { UserService } from "../user/user.service";
@@ -14,7 +13,6 @@ import { AuthHelper } from "./auth.helper";
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtService,
     private authHelper: AuthHelper,
   ) {}
 
@@ -34,12 +32,7 @@ export class AuthService {
       throw new UnauthorizedException("Incorrect email or password!");
     }
 
-    const accessToken = this.jwtService.sign(
-      { userId: user._id },
-      {
-        expiresIn: "30 days",
-      },
-    );
+    const accessToken = this.authHelper.signAccessToken(user._id);
 
     return { accessToken };
   }
@@ -55,12 +48,7 @@ export class AuthService {
         password: hashedPassword,
       });
 
-      const accessToken = this.jwtService.sign(
-        { userId: user._id },
-        {
-          expiresIn: "30 days",
-        },
-      );
+      const accessToken = this.authHelper.signAccessToken(user._id);
 
       return { accessToken };
     } catch (err) {
@@ -78,39 +66,40 @@ export class AuthService {
   async registerTempUser() {
     const tempUser = await this.userService.createTempUser();
 
-    const accessToken = this.jwtService.sign({ userId: tempUser._id });
+    const accessToken = this.authHelper.signAccessToken(tempUser._id, false);
     return { accessToken };
   }
 
   async googleAuth(googleAuthInput: GoogleAuthInput) {
+    const { email } = googleAuthInput;
+    const user = await this.userService.findByEmail(email);
+
+    if (!user) {
+      return await this.googleRegister(googleAuthInput);
+    }
+
+    return await this.googleLogin(email);
+  }
+
+  async googleLogin(email: string) {
+    const user = await this.userService.findByEmail(email);
+
+    if (user.password) {
+      throw new BadRequestException("Email and password was used to register.");
+    }
+
+    const accessToken = this.authHelper.signAccessToken(user._id);
+    return { accessToken };
+  }
+
+  async googleRegister(googleAuthInput: GoogleAuthInput) {
     const { email, tempUserId } = googleAuthInput;
-    const tempUser = await this.userService.findById(tempUserId);
 
-    if (!tempUser) {
-      throw new BadRequestException("Temp user not found");
-    }
-
-    const accessToken = this.jwtService.sign({ userId: tempUser._id });
-
-    if (tempUser.password) {
-      throw new BadRequestException("Email and password was used to register");
-    }
-
-    if (tempUser.email) {
-      if (tempUser.email.toLowerCase() != email.toLowerCase()) {
-        throw new BadRequestException(
-          `Email is not correct for user ${tempUserId}`,
-        );
-      }
-
-      return { accessToken };
-    }
-
-    await this.userService.setTempUserAsRegistered(tempUser._id, {
+    const user = await this.userService.setTempUserAsRegistered(tempUserId, {
       email,
     });
 
-    console.log("are you here", accessToken);
+    const accessToken = this.authHelper.signAccessToken(user._id);
 
     return { accessToken };
   }

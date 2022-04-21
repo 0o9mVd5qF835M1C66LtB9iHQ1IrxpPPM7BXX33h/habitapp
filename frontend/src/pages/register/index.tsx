@@ -23,7 +23,7 @@ import {
 import { useAuth, useAuthUser } from "../../hooks";
 
 export function RegisterPage() {
-  const { googleRegister, register } = useAuth();
+  const { googleAuth, register } = useAuth();
   const user = useAuthUser();
   const toast = useToast();
   const [showPassword, setShowPassword] = useState(false);
@@ -34,7 +34,8 @@ export function RegisterPage() {
     setInput((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleRegister() {
+  function handleRegister(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     const { email, password } = input;
 
     if (!email.trim() || !password.trim()) {
@@ -42,13 +43,11 @@ export function RegisterPage() {
       return;
     }
 
-    console.log(user._id);
-
     register({ email, password, tempUserId: user._id });
   }
 
   function handleGoogleRegister(email: string) {
-    googleRegister({ email, tempUserId: user._id });
+    googleAuth({ email, tempUserId: user._id });
   }
 
   return (
@@ -74,7 +73,7 @@ export function RegisterPage() {
       <GoogleLogin onLogin={handleGoogleRegister}>
         <GoogleLoginButton mb="9">Sign up with Google</GoogleLoginButton>
       </GoogleLogin>
-      <form>
+      <form onSubmit={handleRegister}>
         <Text fontSize="sm" mb="0.5">
           Email
         </Text>
@@ -108,13 +107,7 @@ export function RegisterPage() {
             />
           </InputRightElement>
         </InputGroup>
-        <Button
-          type="button"
-          colorScheme="purple"
-          isFullWidth
-          mb="6"
-          onClick={handleRegister}
-        >
+        <Button type="button" colorScheme="purple" isFullWidth mb="6">
           Register
         </Button>
       </form>

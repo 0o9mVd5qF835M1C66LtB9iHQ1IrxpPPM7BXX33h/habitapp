@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 import { Flex } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { useQueryClient } from "react-query";
+import dayjs from "dayjs";
 
 import {
   Habit,
@@ -87,11 +88,19 @@ export function HabitItem({ habit, isHabitCompleted }: Props) {
         <Title title={habit.title} isCompleted={isHabitCompleted} />
         <Streak habit={habit} />
       </div>
-      <Checkbox
-        onComplete={handleComplete}
-        onUncomplete={() => {}}
-        isCompleted={isHabitCompleted}
-      />
+      {(() => {
+        if (habit.isoWeekdays.includes(dayjs(selectedDay).isoWeekday())) {
+          return (
+            <Checkbox
+              onComplete={handleComplete}
+              onUncomplete={() => {}}
+              isCompleted={isHabitCompleted}
+            />
+          );
+        }
+
+        return null;
+      })()}
     </Flex>
   );
 }

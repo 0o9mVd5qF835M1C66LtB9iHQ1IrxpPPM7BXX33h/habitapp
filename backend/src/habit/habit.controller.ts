@@ -8,12 +8,12 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { ApiOkResponse, ApiParam, ApiResponse } from "@nestjs/swagger";
-import { CurrentUser } from "src/auth/auth.decorator";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
-import { UserDocument } from "src/user/user.schema";
 import { Schema } from "mongoose";
+import { ApiOkResponse, ApiParam, ApiResponse } from "@nestjs/swagger";
 
+import { CurrentUser } from "../auth/auth.decorator";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { UserDocument } from "../user/user.schema";
 import { CreateHabitInput, EditHabitInput } from "./habit.dto";
 import { Habit } from "./habit.schema";
 import { HabitService } from "./habit.service";

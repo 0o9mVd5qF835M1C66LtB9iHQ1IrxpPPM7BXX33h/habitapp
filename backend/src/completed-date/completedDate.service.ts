@@ -7,12 +7,14 @@ import {
   CreateCompletedDateInput,
   FindAllCompletedDatesInput,
 } from "./completedDate.dto";
+import { HabitService } from "src/habit/habit.service";
 
 @Injectable()
 export class CompletedDateService {
   constructor(
     @InjectModel(CompletedDate.name)
     private completedDateModel: Model<CompletedDateDocument>,
+    private habitService: HabitService,
   ) {}
 
   async findAllByRange(input: FindAllCompletedDatesInput) {
@@ -25,15 +27,30 @@ export class CompletedDateService {
     });
   }
 
-  async createCompletedDate(
-    createCompletedDateInput: CreateCompletedDateInput,
-  ) {
-    return await this.completedDateModel.create(createCompletedDateInput);
+  async createCompletedDate(input: CreateCompletedDateInput) {
+    await this.habitService.addNewDateToCurrentStreak(
+      input.habitId,
+      input.date,
+    );
+    return await this.completedDateModel.create(input);
   }
 
   async deleteCompletedDate(completedDateId: string) {
-    return await this.completedDateModel.findByIdAndDelete(
-      new Types.ObjectId(completedDateId),
+    const deletedCompletedDate =
+      await this.completedDateModel.findByIdAndDelete(
+        new Types.ObjectId(completedDateId),
+      );
+
+    await this.habitService.removeDateFromCurrentStreak(
+      deletedCompletedDate.habitId,
+      deletedCompletedDate.date,
     );
+
+    await this.habitService.removeDateFromLongestStreak(
+      deletedCompletedDate.habitId,
+      deletedCompletedDate.date,
+    );
+
+    return deletedCompletedDate;
   }
 }

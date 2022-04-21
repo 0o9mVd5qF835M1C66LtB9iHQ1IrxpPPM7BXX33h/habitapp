@@ -20,6 +20,7 @@ export function Checkbox({ onComplete, onUncomplete, isCompleted }: Props) {
       borderRadius="full"
       colorScheme={isCompleted ? "green" : "gray"}
       variant={isCompleted ? "solid" : "outline"}
+      boxShadow="sm"
       size="sm"
       onClick={handleClick}
     />

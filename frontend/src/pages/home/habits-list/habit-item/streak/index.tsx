@@ -9,11 +9,12 @@ type Props = {
 
 export function Streak({ habit }: Props) {
   return (
-    <Flex alignItems="center">
-      <Icon as={HiOutlineLightningBolt} color="yellow.500" marginRight="1" />
-      <Text color="yellow.500" fontSize="xs">
-        {habit.currentStreakDates.length} day streak
-      </Text>
+    <Flex
+      alignItems="center"
+      color={habit.currentStreakDates.length ? "yellow.500" : "gray.500"}
+    >
+      <Icon as={HiOutlineLightningBolt} marginRight="1" />
+      <Text fontSize="xs">{habit.currentStreakDates.length} day streak</Text>
     </Flex>
   );
 }

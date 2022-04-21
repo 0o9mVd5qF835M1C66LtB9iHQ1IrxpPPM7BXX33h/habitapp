@@ -10,6 +10,12 @@ export class CompletedDate {
   @ApiProperty({
     type: "string",
   })
+  _id: Types.ObjectId;
+
+  @Prop()
+  @ApiProperty({
+    type: "string",
+  })
   userId: Types.ObjectId;
 
   @Prop()

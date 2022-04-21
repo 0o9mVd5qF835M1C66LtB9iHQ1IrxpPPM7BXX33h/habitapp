@@ -8,12 +8,14 @@ import {
   Habit,
   useCompletedDateControllerCreateCompletedDate as useCreateCompletedDate,
   CompletedDateControllerFindAllByRangeQueryResult as CompletedDatesQueryResult,
+  useCompletedDateControllerDeleteCompletedDate as useCompletedDateDelete,
 } from "../../../../generated/api";
 import { WeekdayText } from "./weekday-text";
 import { Streak } from "./streak";
 import { Checkbox } from "./checkbox";
 import { Title } from "./title";
 import { RootState } from "../../../../redux";
+import ObjectID from "bson-objectid";
 
 type Props = {
   habit: Habit;
@@ -58,9 +60,46 @@ export function HabitItem({ habit, isHabitCompleted }: Props) {
     },
   });
 
+  const deleteCompletedDateMutation = useCompletedDateDelete<
+    AxiosError<unknown, unknown>,
+    {
+      prevCompletedDatesResult: CompletedDatesQueryResult | undefined;
+    }
+  >({
+    mutation: {
+      onMutate: ({ id }) => {
+        const prevCompletedDatesResult =
+          queryClient.getQueryData<CompletedDatesQueryResult>(
+            completedDatesQueryKey
+          );
+
+        queryClient.setQueryData<CompletedDatesQueryResult | undefined>(
+          completedDatesQueryKey,
+          (state) =>
+            state
+              ? {
+                  ...state,
+                  data: state.data.filter(
+                    (completedDate) => completedDate._id !== id
+                  ),
+                }
+              : undefined
+        );
+
+        return {
+          prevCompletedDatesResult,
+        };
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(completedDatesQueryKey);
+      },
+    },
+  });
+
   function handleComplete() {
     createCompletedDateMutation.mutate({
       data: {
+        _id: ObjectID().toHexString(),
         date: selectedDay,
         habitId: habit._id,
         userId: habit.userId,

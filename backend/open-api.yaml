@@ -356,6 +356,8 @@ components:
     CompletedDate:
       type: object
       properties:
+        _id:
+          type: string
         userId:
           type: string
         habitId:
@@ -363,19 +365,23 @@ components:
         date:
           type: number
       required:
+        - _id
         - userId
         - habitId
         - date
     CreateCompletedDateInput:
       type: object
       properties:
-        date:
-          type: number
+        _id:
+          type: string
         habitId:
           type: string
         userId:
           type: string
+        date:
+          type: number
       required:
-        - date
+        - _id
         - habitId
         - userId
+        - date

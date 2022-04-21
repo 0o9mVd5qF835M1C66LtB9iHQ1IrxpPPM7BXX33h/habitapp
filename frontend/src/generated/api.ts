@@ -29,12 +29,14 @@ import {
 export type CompletedDateControllerFindAllByRangeParams = { startDate: number; endDate: number; habitId?: string };
 
 export interface CreateCompletedDateInput {
-  date: number;
+  _id: string;
   habitId: string;
   userId: string;
+  date: number;
 }
 
 export interface CompletedDate {
+  _id: string;
   userId: string;
   habitId: string;
   date: number;
@@ -566,9 +568,9 @@ export const getHabitControllerCreateHabitMock = () => ({_id: faker.random.word(
 
 export const getHabitControllerEditHabitMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), archived: faker.datatype.boolean(), currentStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), longestStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number()))})
 
-export const getCompletedDateControllerFindAllByRangeMock = () => ([...Array(faker.datatype.number({min: 1, max: 10}))].map(() => ({userId: faker.random.word(), habitId: faker.random.word(), date: faker.datatype.number()})))
+export const getCompletedDateControllerFindAllByRangeMock = () => ([...Array(faker.datatype.number({min: 1, max: 10}))].map(() => ({_id: faker.random.word(), userId: faker.random.word(), habitId: faker.random.word(), date: faker.datatype.number()})))
 
-export const getCompletedDateControllerCreateCompletedDateMock = () => ({userId: faker.random.word(), habitId: faker.random.word(), date: faker.datatype.number()})
+export const getCompletedDateControllerCreateCompletedDateMock = () => ({_id: faker.random.word(), userId: faker.random.word(), habitId: faker.random.word(), date: faker.datatype.number()})
 
 export const getHabitAppMSW = () => [
 rest.get('*', (_req, res, ctx) => {

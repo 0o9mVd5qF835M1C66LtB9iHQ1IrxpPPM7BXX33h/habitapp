@@ -26,7 +26,7 @@ export function HabitsList() {
     completedDatesQueryParams
   );
 
-  const completedDatesForDayQuery = useCompletedDateControllerFindAllByRange(
+  const completedDatesQuery = useCompletedDateControllerFindAllByRange(
     completedDatesQueryParams,
     {
       query: {
@@ -38,25 +38,26 @@ export function HabitsList() {
     }
   );
 
-  const completedDates = completedDatesForDayQuery.data
-    ? completedDatesForDayQuery.data.data
+  const completedDates = completedDatesQuery.data
+    ? completedDatesQuery.data.data
     : [];
+
+  const habits = habitsQuery.data ? habitsQuery.data.data : [];
 
   return (
     <Flex direction="column" flex="1">
       {(() => {
-        const isInitialLoading =
+        const isHabitsInitialLoading =
           habitsQuery.isLoading && !habitsQuery.isFetching;
+        const isCompletedDatesLoading = completedDatesQuery.isLoading;
 
-        if (isInitialLoading || !habitsQuery.data) {
+        if (isHabitsInitialLoading || isCompletedDatesLoading) {
           return (
             <Flex flex="1" justifyContent="center">
               <Spinner marginTop="20" size="lg" color="gray.200" />
             </Flex>
           );
         }
-
-        const habits = habitsQuery.data.data;
 
         return habits.map((habit) => (
           <HabitItem

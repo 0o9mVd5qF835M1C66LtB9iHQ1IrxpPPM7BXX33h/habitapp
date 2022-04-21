@@ -24,10 +24,12 @@ export class FindAllCompletedDatesInput {
 }
 
 export class CreateCompletedDateInput {
-  @IsNumber()
-  @ApiProperty()
-  @Transform(({ value }) => Number(value))
-  date: number;
+  @IsInstance(Types.ObjectId)
+  @ApiProperty({
+    type: "string",
+  })
+  @Transform(({ value }) => new Types.ObjectId(value))
+  _id: Types.ObjectId;
 
   @IsInstance(Types.ObjectId)
   @ApiProperty({
@@ -42,4 +44,9 @@ export class CreateCompletedDateInput {
   })
   @Transform(({ value }) => new Types.ObjectId(value))
   userId: Types.ObjectId;
+
+  @IsNumber()
+  @ApiProperty()
+  @Transform(({ value }) => Number(value))
+  date: number;
 }

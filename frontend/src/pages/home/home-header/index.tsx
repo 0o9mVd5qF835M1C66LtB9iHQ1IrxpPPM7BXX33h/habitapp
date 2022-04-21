@@ -1,13 +1,14 @@
 import { Box, Flex, HStack, IconButton, Text } from "@chakra-ui/react";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { IoAddOutline } from "react-icons/io5";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { RootState } from "../../../redux";
 import { SettingsDropdown } from "./settings-dropdown";
 
-type Props = {
-  selectedDay: Dayjs;
-};
-export function HomeHeader({ selectedDay }: Props) {
+export function HomeHeader() {
+  const selectedDay = useSelector((state: RootState) => state.home.selectedDay);
+
   function getDayTitle() {
     const today = dayjs();
 
@@ -15,15 +16,17 @@ export function HomeHeader({ selectedDay }: Props) {
       return "Today";
     }
 
-    if (selectedDay.isSame(today.subtract(1, "day"), "day")) {
+    const selectedDayInDayjs = dayjs(selectedDay);
+
+    if (selectedDayInDayjs.isSame(today.subtract(1, "day"), "day")) {
       return "Yesterday";
     }
 
-    if (selectedDay.isSame(today.add(1, "day"), "day")) {
+    if (selectedDayInDayjs.isSame(today.add(1, "day"), "day")) {
       return "Tomorrow";
     }
 
-    return selectedDay.format("MMM, D");
+    return selectedDayInDayjs.format("MMM, D");
   }
 
   return (

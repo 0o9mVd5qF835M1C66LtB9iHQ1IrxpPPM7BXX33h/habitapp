@@ -1,3 +1,3 @@
 import { homeSlice } from "./home-slice";
 
-export const { setSelectedDate } = homeSlice.actions;
+export const { setSelectedDay, setCompletedDatesQueryKey } = homeSlice.actions;

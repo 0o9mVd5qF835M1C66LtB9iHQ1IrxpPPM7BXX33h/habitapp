@@ -26,7 +26,7 @@ import {
 import {
   faker
 } from '@faker-js/faker'
-export type CompletedDateControllerFindAllByRangeParams = { startDate: number; endDate: number; habitId: string };
+export type CompletedDateControllerFindAllByRangeParams = { startDate: number; endDate: number; habitId?: string };
 
 export interface CreateCompletedDateInput {
   date: number;

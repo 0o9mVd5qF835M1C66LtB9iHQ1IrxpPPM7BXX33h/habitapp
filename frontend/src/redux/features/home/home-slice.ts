@@ -1,19 +1,36 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  CompletedDateControllerFindAllByRangeParams,
+  getCompletedDateControllerFindAllByRangeQueryKey,
+} from "../../../generated/api";
 
 export type HomeState = {
-  selectedDate: number;
+  selectedDay: number;
+  completedDatesQueryKey: (
+    | string
+    | CompletedDateControllerFindAllByRangeParams
+  )[];
 };
 
 export const initialState: HomeState = {
-  selectedDate: Date.now(),
+  selectedDay: Date.now(),
+  completedDatesQueryKey: getCompletedDateControllerFindAllByRangeQueryKey(),
 };
 
 export const homeSlice = createSlice({
   name: "home",
   initialState,
   reducers: {
-    setSelectedDate: (state, action: PayloadAction<number>) => {
-      state.selectedDate = action.payload;
+    setSelectedDay: (state, action: PayloadAction<number>) => {
+      state.selectedDay = action.payload;
+    },
+    setCompletedDatesQueryKey: (
+      state,
+      action: PayloadAction<
+        (string | CompletedDateControllerFindAllByRangeParams)[]
+      >
+    ) => {
+      state.completedDatesQueryKey = action.payload;
     },
   },
 });

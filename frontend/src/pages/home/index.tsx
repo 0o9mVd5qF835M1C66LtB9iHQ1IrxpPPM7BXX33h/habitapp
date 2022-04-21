@@ -7,16 +7,10 @@ import { Calendar } from "./calendar";
 import { HabitsList } from "./habits-list";
 
 export function HomePage() {
-  const [selectedDay, setSelectedDay] = useState<Dayjs>(dayjs());
-
-  function handleDayClick(dayjs: Dayjs) {
-    setSelectedDay(dayjs);
-  }
-
   return (
     <PageContainer>
-      <HomeHeader selectedDay={selectedDay} />
-      <Calendar onClick={handleDayClick} />
+      <HomeHeader />
+      <Calendar />
       <HabitsList />
     </PageContainer>
   );

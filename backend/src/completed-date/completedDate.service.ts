@@ -17,7 +17,7 @@ export class CompletedDateService {
 
   async findAllByRange(input: FindAllCompletedDatesInput) {
     return this.completedDateModel.find({
-      habitId: new Types.ObjectId(input.habitId),
+      ...(input.habitId ? { habitId: new Types.ObjectId(input.habitId) } : {}),
       date: {
         $gte: input.startDate,
         $lte: input.endDate,

@@ -1,32 +1,71 @@
-import { Dayjs } from "dayjs";
+import { AxiosError } from "axios";
 import { Flex } from "@chakra-ui/react";
+import { useSelector } from "react-redux";
+import { useQueryClient } from "react-query";
+
 import {
   Habit,
-  useCompletedDateControllerCreateCompletedDate,
+  useCompletedDateControllerCreateCompletedDate as useCreateCompletedDate,
+  CompletedDateControllerFindAllByRangeQueryResult as CompletedDatesQueryResult,
 } from "../../../../generated/api";
-
 import { WeekdayText } from "./weekday-text";
 import { Streak } from "./streak";
 import { Checkbox } from "./checkbox";
 import { Title } from "./title";
+import { RootState } from "../../../../redux";
 
 type Props = {
   habit: Habit;
   isHabitCompleted: boolean;
 };
 
-export function HabitItem(props: Props) {
-  const { habit, isHabitCompleted } = props;
+export function HabitItem({ habit, isHabitCompleted }: Props) {
+  const selectedDay = useSelector((state: RootState) => state.home.selectedDay);
+  const queryClient = useQueryClient();
+  const completedDatesQueryKey = useSelector(
+    (state: RootState) => state.home.completedDatesQueryKey
+  );
 
-  const [] = useCompletedDateControllerCreateCompletedDate({
+  const createCompletedDateMutation = useCreateCompletedDate<
+    AxiosError<unknown, unknown>,
+    {
+      prevCompletedDatesResult: CompletedDatesQueryResult | undefined;
+    }
+  >({
     mutation: {
-      onMutate: () => {},
-      onSuccess: () => {},
-      onSettled: () => {},
+      onMutate: ({ data: newCompletedDate }) => {
+        const prevCompletedDatesResult =
+          queryClient.getQueryData<CompletedDatesQueryResult>(
+            completedDatesQueryKey
+          );
+
+        queryClient.setQueryData<CompletedDatesQueryResult | undefined>(
+          completedDatesQueryKey,
+          (state) =>
+            state
+              ? { ...state, data: [...state.data, newCompletedDate] }
+              : undefined
+        );
+
+        return {
+          prevCompletedDatesResult,
+        };
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(completedDatesQueryKey);
+      },
     },
   });
 
-  function handleComplete() {}
+  function handleComplete() {
+    createCompletedDateMutation.mutate({
+      data: {
+        date: selectedDay,
+        habitId: habit._id,
+        userId: habit.userId,
+      },
+    });
+  }
 
   function handleUnComplete() {}
 
@@ -49,7 +88,7 @@ export function HabitItem(props: Props) {
         <Streak habit={habit} />
       </div>
       <Checkbox
-        onComplete={() => {}}
+        onComplete={handleComplete}
         onUncomplete={() => {}}
         isCompleted={isHabitCompleted}
       />

@@ -161,7 +161,7 @@ paths:
           schema:
             type: number
         - name: habitId
-          required: true
+          required: false
           in: query
           schema:
             type: string
@@ -366,6 +366,9 @@ components:
         - userId
         - habitId
         - date
+    ObjectId:
+      type: object
+      properties: {}
     CreateCompletedDateInput:
       type: object
       properties:
@@ -374,7 +377,7 @@ components:
         habitId:
           type: string
         userId:
-          type: string
+          $ref: "#/components/schemas/ObjectId"
       required:
         - date
         - habitId

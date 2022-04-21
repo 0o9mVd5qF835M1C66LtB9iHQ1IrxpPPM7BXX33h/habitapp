@@ -1,7 +1,9 @@
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import dayjs, { Dayjs } from "dayjs";
 import { Button, chakra } from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, setSelectedDay } from "../../../redux";
 
 function getDays() {
   const calendarDays: Dayjs[] = [];
@@ -16,17 +18,13 @@ function getDays() {
 
 const ChakraScrollContainer = chakra(ScrollContainer);
 
-type CalendarSliderProps = {
-  onClick?: (day: Dayjs) => void;
-};
-
-export function Calendar({ onClick = () => {} }: CalendarSliderProps) {
+export function Calendar() {
   const daysRef = useRef<Dayjs[]>(getDays());
-  const [selectedDate, setSelectedDate] = useState<Dayjs>(dayjs());
+  const selectedDay = useSelector((state: RootState) => state.home.selectedDay);
+  const dispatch = useDispatch();
 
   function handleDayClick(day: Dayjs) {
-    setSelectedDate(day);
-    onClick(day);
+    dispatch(setSelectedDay(Number(day.toDate())));
   }
 
   return (
@@ -38,10 +36,10 @@ export function Calendar({ onClick = () => {} }: CalendarSliderProps) {
       marginBottom="3"
     >
       {daysRef.current.map((day, index) => {
-        const isSelectedDate = selectedDate.isSame(day, "day");
+        const isSelectedDate = dayjs(selectedDay).isSame(day, "day");
         return (
           <Button
-            key={index}
+            key={`day-${index}`}
             variant={isSelectedDate || day.isToday() ? "solid" : "outline"}
             colorScheme={isSelectedDate ? "purple" : "gray"}
             onClick={() => handleDayClick(day)}

@@ -1,24 +1,32 @@
+import { Types } from "mongoose";
 import { ApiProperty } from "@nestjs/swagger";
 import {
   ArrayNotEmpty,
   IsBoolean,
-  IsMongoId,
+  IsInstance,
   IsNotEmpty,
   IsNumber,
 } from "class-validator";
+import { Transform } from "class-transformer";
 
 export class CreateHabitInput {
-  @IsMongoId()
-  @ApiProperty()
-  _id: string;
+  @IsInstance(Types.ObjectId)
+  @Transform(({ value }) => new Types.ObjectId(value))
+  @ApiProperty({
+    type: "string",
+  })
+  _id: Types.ObjectId;
 
   @IsNotEmpty()
   @ApiProperty()
   title: string;
 
-  @IsMongoId()
-  @ApiProperty()
-  userId: string;
+  @IsInstance(Types.ObjectId)
+  @Transform(({ value }) => new Types.ObjectId(value))
+  @ApiProperty({
+    type: "string",
+  })
+  userId: Types.ObjectId;
 
   @ArrayNotEmpty()
   @IsNumber({}, { each: true })

@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsMongoId, IsNumber, IsOptional } from "class-validator";
+import { IsInstance, IsNumber, IsOptional } from "class-validator";
 import { Transform } from "class-transformer";
 
 export class FindAllCompletedDatesInput {
@@ -14,11 +14,13 @@ export class FindAllCompletedDatesInput {
   @Transform(({ value }) => Number(value))
   endDate: number;
 
-  @IsMongoId()
-  @ApiPropertyOptional()
+  @IsInstance(Types.ObjectId)
+  @ApiPropertyOptional({
+    type: "string",
+  })
   @Transform(({ value }) => (value ? new Types.ObjectId(value) : value))
   @IsOptional()
-  habitId?: string;
+  habitId?: Types.ObjectId;
 }
 
 export class CreateCompletedDateInput {
@@ -27,15 +29,17 @@ export class CreateCompletedDateInput {
   @Transform(({ value }) => Number(value))
   date: number;
 
-  @IsMongoId()
+  @IsInstance(Types.ObjectId)
   @ApiProperty({
     type: "string",
   })
   @Transform(({ value }) => new Types.ObjectId(value))
   habitId: Types.ObjectId;
 
-  @IsMongoId()
-  @ApiProperty()
+  @IsInstance(Types.ObjectId)
+  @ApiProperty({
+    type: "string",
+  })
   @Transform(({ value }) => new Types.ObjectId(value))
   userId: Types.ObjectId;
 }

@@ -10,9 +10,9 @@ export class AuthResponse {
 
 export class RegisterUserInput {
   @IsInstance(Types.ObjectId)
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: "string" })
   @Transform(({ value }) => new Types.ObjectId(value))
-  tempUserId: ObjectId;
+  tempUserId: Types.ObjectId;
 
   @IsEmail()
   @ApiProperty()
@@ -35,9 +35,9 @@ export class LoginInput {
 
 export class GoogleAuthInput {
   @IsInstance(Types.ObjectId)
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: "string" })
   @Transform(({ value }) => new Types.ObjectId(value))
-  tempUserId: ObjectId;
+  tempUserId: Types.ObjectId;
 
   @IsEmail()
   @ApiProperty()

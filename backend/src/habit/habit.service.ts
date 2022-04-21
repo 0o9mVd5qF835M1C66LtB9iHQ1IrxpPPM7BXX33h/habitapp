@@ -32,11 +32,7 @@ export class HabitService {
   }
 
   async createHabit(createHabitInput: CreateHabitInput): Promise<Habit> {
-    return await this.habitModel.create({
-      ...createHabitInput,
-      _id: new Types.ObjectId(createHabitInput._id),
-      userId: new Types.ObjectId(createHabitInput.userId),
-    });
+    return await this.habitModel.create(createHabitInput);
   }
 
   async editHabit(

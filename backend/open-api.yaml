@@ -366,9 +366,6 @@ components:
         - userId
         - habitId
         - date
-    ObjectId:
-      type: object
-      properties: {}
     CreateCompletedDateInput:
       type: object
       properties:
@@ -377,7 +374,7 @@ components:
         habitId:
           type: string
         userId:
-          $ref: "#/components/schemas/ObjectId"
+          type: string
       required:
         - date
         - habitId

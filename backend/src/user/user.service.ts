@@ -12,7 +12,7 @@ export class UserService {
     return await this.userModel.findOne({ email: email.toLowerCase() });
   }
 
-  async findById(_id: ObjectId) {
+  async findById(_id: Types.ObjectId) {
     return await this.userModel.findById(_id);
   }
 
@@ -25,7 +25,7 @@ export class UserService {
   }
 
   async setTempUserAsRegistered(
-    tempUserId: ObjectId,
+    tempUserId: Types.ObjectId,
     info: { email: string; password?: string },
   ) {
     return await this.userModel.findByIdAndUpdate(

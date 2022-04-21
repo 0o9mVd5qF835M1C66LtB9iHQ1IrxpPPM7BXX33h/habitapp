@@ -12,14 +12,14 @@ import {
   HiOutlineUser,
 } from "react-icons/hi";
 import { GoMarkGithub } from "react-icons/go";
-
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 
-import { useAuthUser } from "../../../../hooks";
+import { useAuth, useAuthUser } from "../../../../hooks";
 
 export function SettingsDropdown() {
   const user = useAuthUser();
+  const { logout } = useAuth();
 
   return (
     <Menu placement="bottom-end">
@@ -30,9 +30,15 @@ export function SettingsDropdown() {
         variant="ghost"
       />
       <MenuList>
-        <MenuItem as={Link} to="/login" icon={<HiOutlineUser size={16} />}>
-          {user.isTemp ? "Sign In" : "Sign out"}
-        </MenuItem>
+        {user.isTemp ? (
+          <MenuItem as={Link} to="/login" icon={<HiOutlineUser size={16} />}>
+            Sign In
+          </MenuItem>
+        ) : (
+          <MenuItem onClick={logout} icon={<HiOutlineUser size={16} />}>
+            Sign out
+          </MenuItem>
+        )}
         <MenuItem icon={<HiOutlineMoon size={16} />}>Dark Mode</MenuItem>
         <MenuItem icon={<GoMarkGithub size={16} />}>About</MenuItem>
         <MenuItem

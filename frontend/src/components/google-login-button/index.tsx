@@ -1,17 +1,19 @@
+import React from "react";
 import GoogleLoginComponent, {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
 } from "react-google-login";
 import { FcGoogle } from "react-icons/fc";
-import { Button, ButtonProps, forwardRef } from "@chakra-ui/react";
-import React from "react";
+import { Button, ButtonProps, forwardRef, useToast } from "@chakra-ui/react";
 
 type Props = {
-  children: React.ReactNode;
+  children: React.ReactElement;
   onLogin(email: string): void;
 };
 
 export function GoogleLogin({ children, onLogin }: Props) {
+  const toast = useToast();
+
   if (!process.env.REACT_APP_GOOGLE_CLIENT_ID) {
     throw new Error(`Google client id not found in env`);
   }
@@ -19,14 +21,12 @@ export function GoogleLogin({ children, onLogin }: Props) {
   const responseGoogle = (
     response: GoogleLoginResponse | GoogleLoginResponseOffline
   ) => {
-    if ("getBasicProfile" in response) {
-      const profile = response.getBasicProfile();
-      const email = profile.getEmail();
-
-      onLogin(email);
+    if ("profileObj" in response) {
+      const email = response.profileObj.email;
+      return onLogin(email);
     }
 
-    alert("Something went wrong!");
+    toast({ status: "error", description: "Something went wrong!" });
   };
 
   return (
@@ -35,7 +35,7 @@ export function GoogleLogin({ children, onLogin }: Props) {
       onSuccess={responseGoogle}
       onFailure={responseGoogle}
       cookiePolicy={"single_host_origin"}
-      render={() => <>{children}</>}
+      render={(props) => <>{React.cloneElement(children, { ...props })}</>}
     />
   );
 }

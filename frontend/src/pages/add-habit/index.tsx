@@ -22,13 +22,12 @@ export function AddHabitPage() {
   const habitsQueryKey = getHabitControllerFindAllByUserIdQueryKey()[0];
 
   const [habit, setHabit] = useState<CreateHabitInput>({
-    _id: ObjectId().toHexString(),
+    _id: new ObjectId().toHexString(),
     title: "",
     userId: user._id,
     isoWeekdays: [],
     dateCreated: Number(new Date()),
-    currentStreakDates: [],
-    longestStreakDates: [],
+    completedDates: [],
     archived: false,
   });
 

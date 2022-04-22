@@ -8,13 +8,17 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { Schema } from "mongoose";
+import { Types } from "mongoose";
 import { ApiOkResponse, ApiParam, ApiResponse } from "@nestjs/swagger";
 
 import { CurrentUser } from "../auth/auth.decorator";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { UserDocument } from "../user/user.schema";
-import { CreateHabitInput, EditHabitInput } from "./habit.dto";
+import {
+  CreateHabitInput,
+  EditHabitInput,
+  UpdateHabitCompletedDatesInput,
+} from "./habit.dto";
 import { Habit } from "./habit.schema";
 import { HabitService } from "./habit.service";
 
@@ -33,8 +37,16 @@ export class HabitController {
 
   @Post()
   @ApiOkResponse({ type: Habit })
-  async createHabit(@Body() createHabitInput: CreateHabitInput) {
-    return await this.habitService.createHabit(createHabitInput);
+  async createHabit(@Body() input: CreateHabitInput) {
+    return await this.habitService.createHabit(input);
+  }
+
+  @Post("/update-completed-date")
+  @ApiOkResponse({ type: Habit })
+  async updateHabitCompletedDates(
+    @Body() input: UpdateHabitCompletedDatesInput,
+  ) {
+    return await this.habitService.updateHabitCompletedDates(input);
   }
 
   @Put(":id")
@@ -44,7 +56,8 @@ export class HabitController {
   })
   @ApiOkResponse({ type: Habit })
   async editHabit(
-    @Param("id") id: Schema.Types.ObjectId,
+    @Param("id")
+    id: Types.ObjectId,
     @Body() editHabitInput: EditHabitInput,
   ) {
     return await this.habitService.editHabit(id, editHabitInput);

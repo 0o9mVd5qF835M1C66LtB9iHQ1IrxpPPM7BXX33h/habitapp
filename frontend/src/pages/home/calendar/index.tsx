@@ -24,7 +24,7 @@ export function Calendar() {
   const dispatch = useDispatch();
 
   function handleDayClick(day: Dayjs) {
-    dispatch(setSelectedDay(Number(day.toDate())));
+    dispatch(setSelectedDay(day));
   }
 
   return (

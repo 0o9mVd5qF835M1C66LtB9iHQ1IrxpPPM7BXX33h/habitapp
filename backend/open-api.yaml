@@ -109,6 +109,23 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Habit"
+  /habits/update-completed-date:
+    post:
+      operationId: HabitController_updateHabitCompletedDates
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateHabitCompletedDatesInput"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Habit"
   "/habits/{id}":
     put:
       operationId: HabitController_editHabit
@@ -146,66 +163,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Habit"
-  /completed-dates:
-    get:
-      operationId: CompletedDateController_findAllByRange
-      parameters:
-        - name: startDate
-          required: true
-          in: query
-          schema:
-            type: number
-        - name: endDate
-          required: true
-          in: query
-          schema:
-            type: number
-        - name: habitId
-          required: false
-          in: query
-          schema:
-            type: string
-      responses:
-        "200":
-          description: ""
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/CompletedDate"
-    post:
-      operationId: CompletedDateController_createCompletedDate
-      parameters: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateCompletedDateInput"
-      responses:
-        "200":
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CompletedDate"
-  "/completed-dates/{id}":
-    delete:
-      operationId: CompletedDateController_deleteCompletedDate
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        default:
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CompletedDate"
 info:
   title: Habit App
   description: Habit App made by Oybek Alimatov
@@ -288,25 +245,20 @@ components:
             type: number
         dateCreated:
           type: number
+        completedDates:
+          type: array
+          items:
+            type: number
         archived:
           type: boolean
-        currentStreakDates:
-          type: array
-          items:
-            type: number
-        longestStreakDates:
-          type: array
-          items:
-            type: number
       required:
         - _id
         - userId
         - title
         - isoWeekdays
         - dateCreated
+        - completedDates
         - archived
-        - currentStreakDates
-        - longestStreakDates
     CreateHabitInput:
       type: object
       properties:
@@ -322,25 +274,32 @@ components:
             type: number
         dateCreated:
           type: number
+        completedDates:
+          type: array
+          items:
+            type: number
         archived:
           type: boolean
-        currentStreakDates:
-          type: array
-          items:
-            type: number
-        longestStreakDates:
-          type: array
-          items:
-            type: number
       required:
         - _id
         - title
         - userId
         - isoWeekdays
         - dateCreated
+        - completedDates
         - archived
-        - currentStreakDates
-        - longestStreakDates
+    UpdateHabitCompletedDatesInput:
+      type: object
+      properties:
+        habitId:
+          type: string
+        completedDates:
+          type: array
+          items:
+            type: number
+      required:
+        - habitId
+        - completedDates
     EditHabitInput:
       type: object
       properties:
@@ -353,35 +312,3 @@ components:
       required:
         - title
         - isoWeekdays
-    CompletedDate:
-      type: object
-      properties:
-        _id:
-          type: string
-        userId:
-          type: string
-        habitId:
-          type: string
-        date:
-          type: number
-      required:
-        - _id
-        - userId
-        - habitId
-        - date
-    CreateCompletedDateInput:
-      type: object
-      properties:
-        _id:
-          type: string
-        habitId:
-          type: string
-        userId:
-          type: string
-        date:
-          type: number
-      required:
-        - _id
-        - habitId
-        - userId
-        - date

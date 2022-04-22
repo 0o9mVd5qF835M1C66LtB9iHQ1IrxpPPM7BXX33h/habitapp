@@ -3,111 +3,101 @@ import { Flex } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { useQueryClient } from "react-query";
 import dayjs from "dayjs";
+import produce from "immer";
 
 import {
   Habit,
-  useCompletedDateControllerCreateCompletedDate as useCreateCompletedDate,
-  CompletedDateControllerFindAllByRangeQueryResult as CompletedDatesQueryResult,
-  useCompletedDateControllerDeleteCompletedDate as useCompletedDateDelete,
+  getHabitControllerFindAllByUserIdQueryKey,
+  HabitControllerFindAllByUserIdQueryResult as HabitsQueryResult,
+  useHabitControllerUpdateHabitCompletedDates,
 } from "../../../../generated/api";
 import { WeekdayText } from "./weekday-text";
 import { Streak } from "./streak";
 import { Checkbox } from "./checkbox";
 import { Title } from "./title";
 import { RootState } from "../../../../redux";
-import ObjectID from "bson-objectid";
 
 type Props = {
   habit: Habit;
-  isHabitCompleted: boolean;
 };
 
-export function HabitItem({ habit, isHabitCompleted }: Props) {
+export function HabitItem({ habit }: Props) {
   const selectedDay = useSelector((state: RootState) => state.home.selectedDay);
   const queryClient = useQueryClient();
-  const completedDatesQueryKey = useSelector(
-    (state: RootState) => state.home.completedDatesQueryKey
-  );
+  const queryKey = getHabitControllerFindAllByUserIdQueryKey();
 
-  const createCompletedDateMutation = useCreateCompletedDate<
-    AxiosError<unknown, unknown>,
-    {
-      prevCompletedDatesResult: CompletedDatesQueryResult | undefined;
-    }
-  >({
-    mutation: {
-      onMutate: ({ data: newCompletedDate }) => {
-        const prevCompletedDatesResult =
-          queryClient.getQueryData<CompletedDatesQueryResult>(
-            completedDatesQueryKey
-          );
+  const updateHabitCompletedDatesMutation =
+    useHabitControllerUpdateHabitCompletedDates<
+      AxiosError<unknown, unknown>,
+      {
+        prevHabitsQueryResult: HabitsQueryResult | undefined;
+      }
+    >({
+      mutation: {
+        onMutate: async ({ data }) => {
+          queryClient.cancelQueries(queryKey);
 
-        queryClient.setQueryData<CompletedDatesQueryResult | undefined>(
-          completedDatesQueryKey,
-          (state) =>
-            state
-              ? { ...state, data: [...state.data, newCompletedDate] }
-              : undefined
-        );
+          const prevHabitsQueryResult =
+            queryClient.getQueryData<HabitsQueryResult>(queryKey);
 
-        return {
-          prevCompletedDatesResult,
-        };
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries(completedDatesQueryKey);
-      },
-    },
-  });
+          if (prevHabitsQueryResult) {
+            queryClient.setQueryData<HabitsQueryResult | undefined>(
+              queryKey,
+              (prevData) => {
+                if (prevData) {
+                  return produce(prevData, (draft) => {
+                    const updatingHabit = draft.data.find(
+                      (habit) => habit._id === data.habitId
+                    );
 
-  const deleteCompletedDateMutation = useCompletedDateDelete<
-    AxiosError<unknown, unknown>,
-    {
-      prevCompletedDatesResult: CompletedDatesQueryResult | undefined;
-    }
-  >({
-    mutation: {
-      onMutate: ({ id }) => {
-        const prevCompletedDatesResult =
-          queryClient.getQueryData<CompletedDatesQueryResult>(
-            completedDatesQueryKey
-          );
+                    if (!updatingHabit) {
+                      throw new Error("Can't not found habit.");
+                    }
 
-        queryClient.setQueryData<CompletedDatesQueryResult | undefined>(
-          completedDatesQueryKey,
-          (state) =>
-            state
-              ? {
-                  ...state,
-                  data: state.data.filter(
-                    (completedDate) => completedDate._id !== id
-                  ),
+                    updatingHabit.completedDates = data.completedDates;
+                  });
                 }
-              : undefined
-        );
+                return undefined;
+              }
+            );
+          }
 
-        return {
-          prevCompletedDatesResult,
-        };
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries(completedDatesQueryKey);
-      },
-    },
-  });
-
-  function handleComplete() {
-    createCompletedDateMutation.mutate({
-      data: {
-        _id: ObjectID().toHexString(),
-        date: selectedDay,
-        habitId: habit._id,
-        userId: habit.userId,
+          return { prevHabitsQueryResult };
+        },
+        onError: (_, __, context) => {
+          queryClient.setQueryData(queryKey, context?.prevHabitsQueryResult);
+        },
+        onSettled: () => {
+          queryClient.invalidateQueries(queryKey);
+        },
       },
     });
+
+  function handleUpdateHabitCompletedDates(action: "complete" | "uncomplete") {
+    if (action === "complete") {
+      updateHabitCompletedDatesMutation.mutate({
+        data: {
+          habitId: habit._id,
+          completedDates: [...habit.completedDates, selectedDay.valueOf()].sort(
+            (a, b) => a - b
+          ),
+        },
+      });
+    } else {
+      updateHabitCompletedDatesMutation.mutate({
+        data: {
+          habitId: habit._id,
+          completedDates: habit.completedDates.filter(
+            (completedDate) => !selectedDay.isSame(completedDate, "day")
+          ),
+        },
+      });
+    }
   }
 
-  function handleUnComplete() {}
+  const isCompletedOnSelectedDay = habit.completedDates.some((completedDate) =>
+    selectedDay.isSame(completedDate, "day")
+  );
 
   return (
     <Flex
@@ -120,20 +110,18 @@ export function HabitItem({ habit, isHabitCompleted }: Props) {
       borderColor="gray.100"
       borderRadius="lg"
       cursor="pointer"
-      // onClick={() => onClick(habit)}
     >
       <div className="w-full">
         <WeekdayText weekdays={habit.isoWeekdays} />
-        <Title title={habit.title} isCompleted={isHabitCompleted} />
+        <Title title={habit.title} isCompleted={isCompletedOnSelectedDay} />
         <Streak habit={habit} />
       </div>
       {(() => {
         if (habit.isoWeekdays.includes(dayjs(selectedDay).isoWeekday())) {
           return (
             <Checkbox
-              onComplete={handleComplete}
-              onUncomplete={() => {}}
-              isCompleted={isHabitCompleted}
+              onComplete={handleUpdateHabitCompletedDates}
+              isCompleted={isCompletedOnSelectedDay}
             />
           );
         }

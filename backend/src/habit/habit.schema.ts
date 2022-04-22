@@ -31,16 +31,12 @@ export class Habit {
   dateCreated: number;
 
   @Prop()
+  @ApiProperty({ type: [Number] })
+  completedDates: number[];
+
+  @Prop()
   @ApiProperty()
   archived: boolean;
-
-  @Prop()
-  @ApiProperty({ type: [Number] })
-  currentStreakDates: number[];
-
-  @Prop()
-  @ApiProperty({ type: [Number] })
-  longestStreakDates: number[];
 }
 
 export const HabitSchema = SchemaFactory.createForClass(Habit);

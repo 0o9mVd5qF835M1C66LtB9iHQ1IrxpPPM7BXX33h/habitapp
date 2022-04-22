@@ -26,25 +26,14 @@ import {
 import {
   faker
 } from '@faker-js/faker'
-export type CompletedDateControllerFindAllByRangeParams = { startDate: number; endDate: number; habitId?: string };
-
-export interface CreateCompletedDateInput {
-  _id: string;
-  habitId: string;
-  userId: string;
-  date: number;
-}
-
-export interface CompletedDate {
-  _id: string;
-  userId: string;
-  habitId: string;
-  date: number;
-}
-
 export interface EditHabitInput {
   title: string;
   isoWeekdays: number[];
+}
+
+export interface UpdateHabitCompletedDatesInput {
+  habitId: string;
+  completedDates: number[];
 }
 
 export interface CreateHabitInput {
@@ -53,9 +42,8 @@ export interface CreateHabitInput {
   userId: string;
   isoWeekdays: number[];
   dateCreated: number;
+  completedDates: number[];
   archived: boolean;
-  currentStreakDates: number[];
-  longestStreakDates: number[];
 }
 
 export interface Habit {
@@ -64,9 +52,8 @@ export interface Habit {
   title: string;
   isoWeekdays: number[];
   dateCreated: number;
+  completedDates: number[];
   archived: boolean;
-  currentStreakDates: number[];
-  longestStreakDates: number[];
 }
 
 export interface User {
@@ -380,6 +367,39 @@ export const habitControllerCreateHabit = (
       return useMutation<AsyncReturnType<typeof habitControllerCreateHabit>, TError, {data: CreateHabitInput}, TContext>(mutationFn, mutationOptions)
     }
     
+export const habitControllerUpdateHabitCompletedDates = (
+    updateHabitCompletedDatesInput: UpdateHabitCompletedDatesInput, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<Habit>> => {
+    return axios.post(
+      `/habits/update-completed-date`,
+      updateHabitCompletedDatesInput,options
+    );
+  }
+
+
+
+    export type HabitControllerUpdateHabitCompletedDatesMutationResult = NonNullable<AsyncReturnType<typeof habitControllerUpdateHabitCompletedDates>>
+    export type HabitControllerUpdateHabitCompletedDatesMutationBody = UpdateHabitCompletedDatesInput
+    export type HabitControllerUpdateHabitCompletedDatesMutationError = AxiosError<unknown>
+
+    export const useHabitControllerUpdateHabitCompletedDates = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof habitControllerUpdateHabitCompletedDates>, TError,{data: UpdateHabitCompletedDatesInput}, TContext>, axios?: AxiosRequestConfig}
+) => {
+      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
+
+      
+
+
+      const mutationFn: MutationFunction<AsyncReturnType<typeof habitControllerUpdateHabitCompletedDates>, {data: UpdateHabitCompletedDatesInput}> = (props) => {
+          const {data} = props || {};
+
+          return  habitControllerUpdateHabitCompletedDates(data,axiosOptions)
+        }
+
+      return useMutation<AsyncReturnType<typeof habitControllerUpdateHabitCompletedDates>, TError, {data: UpdateHabitCompletedDatesInput}, TContext>(mutationFn, mutationOptions)
+    }
+    
 export const habitControllerEditHabit = (
     id: string,
     editHabitInput: EditHabitInput, options?: AxiosRequestConfig
@@ -446,110 +466,6 @@ export const habitControllerDeleteHabit = (
       return useMutation<AsyncReturnType<typeof habitControllerDeleteHabit>, TError, {id: string}, TContext>(mutationFn, mutationOptions)
     }
     
-export const completedDateControllerFindAllByRange = (
-    params?: CompletedDateControllerFindAllByRangeParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CompletedDate[]>> => {
-    return axios.get(
-      `/completed-dates`,{
-        params,
-    ...options}
-    );
-  }
-
-
-export const getCompletedDateControllerFindAllByRangeQueryKey = (params?: CompletedDateControllerFindAllByRangeParams,) => [`/completed-dates`, ...(params ? [params]: [])];
-
-    
-export type CompletedDateControllerFindAllByRangeQueryResult = NonNullable<AsyncReturnType<typeof completedDateControllerFindAllByRange>>
-export type CompletedDateControllerFindAllByRangeQueryError = AxiosError<unknown>
-
-export const useCompletedDateControllerFindAllByRange = <TData = AsyncReturnType<typeof completedDateControllerFindAllByRange>, TError = AxiosError<unknown>>(
- params?: CompletedDateControllerFindAllByRangeParams, options?: { query?:UseQueryOptions<AsyncReturnType<typeof completedDateControllerFindAllByRange>, TError, TData>, axios?: AxiosRequestConfig}
-
-  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-
-  const {query: queryOptions, axios: axiosOptions} = options || {}
-
-  const queryKey = queryOptions?.queryKey ?? getCompletedDateControllerFindAllByRangeQueryKey(params);
-
-  
-
-  const queryFn: QueryFunction<AsyncReturnType<typeof completedDateControllerFindAllByRange>> = () => completedDateControllerFindAllByRange(params, axiosOptions);
-
-  const query = useQuery<AsyncReturnType<typeof completedDateControllerFindAllByRange>, TError, TData>(queryKey, queryFn, queryOptions)
-
-  return {
-    queryKey,
-    ...query
-  }
-}
-
-
-export const completedDateControllerCreateCompletedDate = (
-    createCompletedDateInput: CreateCompletedDateInput, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<CompletedDate>> => {
-    return axios.post(
-      `/completed-dates`,
-      createCompletedDateInput,options
-    );
-  }
-
-
-
-    export type CompletedDateControllerCreateCompletedDateMutationResult = NonNullable<AsyncReturnType<typeof completedDateControllerCreateCompletedDate>>
-    export type CompletedDateControllerCreateCompletedDateMutationBody = CreateCompletedDateInput
-    export type CompletedDateControllerCreateCompletedDateMutationError = AxiosError<unknown>
-
-    export const useCompletedDateControllerCreateCompletedDate = <TError = AxiosError<unknown>,
-    
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof completedDateControllerCreateCompletedDate>, TError,{data: CreateCompletedDateInput}, TContext>, axios?: AxiosRequestConfig}
-) => {
-      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
-
-      
-
-
-      const mutationFn: MutationFunction<AsyncReturnType<typeof completedDateControllerCreateCompletedDate>, {data: CreateCompletedDateInput}> = (props) => {
-          const {data} = props || {};
-
-          return  completedDateControllerCreateCompletedDate(data,axiosOptions)
-        }
-
-      return useMutation<AsyncReturnType<typeof completedDateControllerCreateCompletedDate>, TError, {data: CreateCompletedDateInput}, TContext>(mutationFn, mutationOptions)
-    }
-    
-export const completedDateControllerDeleteCompletedDate = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axios.delete(
-      `/completed-dates/${id}`,options
-    );
-  }
-
-
-
-    export type CompletedDateControllerDeleteCompletedDateMutationResult = NonNullable<AsyncReturnType<typeof completedDateControllerDeleteCompletedDate>>
-    
-    export type CompletedDateControllerDeleteCompletedDateMutationError = AxiosError<CompletedDate>
-
-    export const useCompletedDateControllerDeleteCompletedDate = <TError = AxiosError<CompletedDate>,
-    
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof completedDateControllerDeleteCompletedDate>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
-) => {
-      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
-
-      
-
-
-      const mutationFn: MutationFunction<AsyncReturnType<typeof completedDateControllerDeleteCompletedDate>, {id: string}> = (props) => {
-          const {id} = props || {};
-
-          return  completedDateControllerDeleteCompletedDate(id,axiosOptions)
-        }
-
-      return useMutation<AsyncReturnType<typeof completedDateControllerDeleteCompletedDate>, TError, {id: string}, TContext>(mutationFn, mutationOptions)
-    }
-    
 
 
 export const getAuthControllerTempRegisterMock = () => ({accessToken: faker.random.word()})
@@ -562,15 +478,13 @@ export const getAuthControllerGoogleAuthMock = () => ({accessToken: faker.random
 
 export const getUserControllerCurrentUserMock = () => ({_id: faker.random.word(), email: faker.random.word(), password: faker.helpers.randomize([faker.random.word(), undefined]), isTemp: faker.datatype.boolean(), dateCreated: faker.datatype.number()})
 
-export const getHabitControllerFindAllByUserIdMock = () => ([...Array(faker.datatype.number({min: 1, max: 10}))].map(() => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), archived: faker.datatype.boolean(), currentStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), longestStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number()))})))
+export const getHabitControllerFindAllByUserIdMock = () => ([...Array(faker.datatype.number({min: 1, max: 10}))].map(() => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), completedDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), archived: faker.datatype.boolean()})))
 
-export const getHabitControllerCreateHabitMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), archived: faker.datatype.boolean(), currentStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), longestStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number()))})
+export const getHabitControllerCreateHabitMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), completedDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), archived: faker.datatype.boolean()})
 
-export const getHabitControllerEditHabitMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), archived: faker.datatype.boolean(), currentStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), longestStreakDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number()))})
+export const getHabitControllerUpdateHabitCompletedDatesMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), completedDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), archived: faker.datatype.boolean()})
 
-export const getCompletedDateControllerFindAllByRangeMock = () => ([...Array(faker.datatype.number({min: 1, max: 10}))].map(() => ({_id: faker.random.word(), userId: faker.random.word(), habitId: faker.random.word(), date: faker.datatype.number()})))
-
-export const getCompletedDateControllerCreateCompletedDateMock = () => ({_id: faker.random.word(), userId: faker.random.word(), habitId: faker.random.word(), date: faker.datatype.number()})
+export const getHabitControllerEditHabitMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), completedDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), archived: faker.datatype.boolean()})
 
 export const getHabitAppMSW = () => [
 rest.get('*', (_req, res, ctx) => {
@@ -620,6 +534,12 @@ ctx.json(getHabitControllerFindAllByUserIdMock()),
           ctx.status(200, 'Mocked status'),
 ctx.json(getHabitControllerCreateHabitMock()),
         )
+      }),rest.post('*/habits/update-completed-date', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+ctx.json(getHabitControllerUpdateHabitCompletedDatesMock()),
+        )
       }),rest.put('*/habits/:id', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
@@ -627,23 +547,6 @@ ctx.json(getHabitControllerCreateHabitMock()),
 ctx.json(getHabitControllerEditHabitMock()),
         )
       }),rest.delete('*/habits/:id', (_req, res, ctx) => {
-        return res(
-          ctx.delay(1000),
-          ctx.status(200, 'Mocked status'),
-        )
-      }),rest.get('*/completed-dates', (_req, res, ctx) => {
-        return res(
-          ctx.delay(1000),
-          ctx.status(200, 'Mocked status'),
-ctx.json(getCompletedDateControllerFindAllByRangeMock()),
-        )
-      }),rest.post('*/completed-dates', (_req, res, ctx) => {
-        return res(
-          ctx.delay(1000),
-          ctx.status(200, 'Mocked status'),
-ctx.json(getCompletedDateControllerCreateCompletedDateMock()),
-        )
-      }),rest.delete('*/completed-dates/:id', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),

@@ -2,15 +2,14 @@ import { IconButton } from "@chakra-ui/react";
 import { HiOutlineCheck } from "react-icons/hi";
 
 type Props = {
-  onComplete: () => void;
-  onUncomplete: () => void;
+  onComplete: (action: "complete" | "uncomplete") => void;
   isCompleted: boolean;
 };
 
-export function Checkbox({ onComplete, onUncomplete, isCompleted }: Props) {
+export function Checkbox({ onComplete, isCompleted }: Props) {
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     event.stopPropagation();
-    isCompleted ? onUncomplete() : onComplete();
+    onComplete(isCompleted ? "uncomplete" : "complete");
   }
 
   return (

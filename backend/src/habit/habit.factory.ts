@@ -10,8 +10,7 @@ export class HabitFactory {
       userId: habit.userId || new Types.ObjectId(),
       title: faker.word.verb(2),
       isoWeekdays: habit.isoWeekdays || [0],
-      longestStreakDates: habit.longestStreakDates || [],
-      currentStreakDates: habit.currentStreakDates || [],
+      completedDates: [],
       dateCreated: habit.dateCreated || Date.now(),
       archived: habit.archived || false,
     };

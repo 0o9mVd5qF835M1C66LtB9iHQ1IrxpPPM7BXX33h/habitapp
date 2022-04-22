@@ -37,17 +37,13 @@ export class CreateHabitInput {
   @ApiProperty()
   dateCreated: number;
 
+  @IsNumber({}, { each: true })
+  @ApiProperty({ type: [Number] })
+  completedDates: number[];
+
   @IsBoolean()
   @ApiProperty()
   archived: boolean;
-
-  @IsNumber({}, { each: true })
-  @ApiProperty({ type: [Number] })
-  currentStreakDates: number[];
-
-  @IsNumber({}, { each: true })
-  @ApiProperty({ type: [Number] })
-  longestStreakDates: number[];
 }
 
 export class EditHabitInput {
@@ -59,4 +55,17 @@ export class EditHabitInput {
   @IsNumber({}, { each: true })
   @ApiProperty({ type: [Number] })
   isoWeekdays: number[];
+}
+
+export class UpdateHabitCompletedDatesInput {
+  @IsInstance(Types.ObjectId)
+  @Transform(({ value }) => new Types.ObjectId(value))
+  @ApiProperty({
+    type: "string",
+  })
+  habitId: Types.ObjectId;
+
+  @IsNumber({}, { each: true })
+  @ApiProperty({ type: [Number] })
+  completedDates: [];
 }

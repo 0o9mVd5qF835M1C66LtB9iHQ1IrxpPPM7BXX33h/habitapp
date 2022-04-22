@@ -8,7 +8,6 @@ import {
   Delete,
   UseGuards,
 } from "@nestjs/common";
-import { Types } from "mongoose";
 import { ApiOkResponse, ApiParam, ApiResponse } from "@nestjs/swagger";
 
 import { CurrentUser } from "../auth/auth.decorator";
@@ -16,7 +15,9 @@ import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { UserDocument } from "../user/user.schema";
 import {
   CreateHabitInput,
+  DeleteHabitParam,
   EditHabitInput,
+  EditHabitParam,
   UpdateHabitCompletedDatesInput,
 } from "./habit.dto";
 import { Habit } from "./habit.schema";
@@ -57,10 +58,10 @@ export class HabitController {
   @ApiOkResponse({ type: Habit })
   async editHabit(
     @Param("id")
-    id: Types.ObjectId,
+    params: EditHabitParam,
     @Body() editHabitInput: EditHabitInput,
   ) {
-    return await this.habitService.editHabit(id, editHabitInput);
+    return await this.habitService.editHabit(params.id, editHabitInput);
   }
 
   @Delete(":id")
@@ -69,7 +70,7 @@ export class HabitController {
     type: "string",
   })
   @ApiResponse({ type: Habit })
-  async deleteHabit(@Param("id") id: string) {
-    return await this.habitService.deleteHabit(id);
+  async deleteHabit(@Param("id") params: DeleteHabitParam) {
+    return await this.habitService.deleteHabit(params.id);
   }
 }

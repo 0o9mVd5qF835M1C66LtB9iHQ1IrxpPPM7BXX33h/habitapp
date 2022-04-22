@@ -18,17 +18,23 @@ export class HabitService {
 
   async updateHabitCompletedDates(input: UpdateHabitCompletedDatesInput) {
     const { completedDates, habitId } = input;
-    const habit = await this.habitModel.findById(habitId);
+
+    const habit = await this.habitModel.findByIdAndUpdate(
+      habitId,
+      {
+        $set: { completedDates },
+      },
+      { new: true },
+    );
 
     if (!habit) {
       throw new BadRequestException(`Habit with id ${habitId} not found.`);
     }
 
-    habit.completedDates = completedDates;
-    return await habit.save();
+    return habit;
   }
 
-  async findAllByUserId(userId: Types.ObjectId): Promise<Habit[]> {
+  async findAllByUserId(userId: Types.ObjectId) {
     const habits = await this.habitModel
       .find({ userId })
       .sort({ dateCreated: "desc" });
@@ -36,20 +42,31 @@ export class HabitService {
     return habits;
   }
 
-  async createHabit(createHabitInput: CreateHabitInput): Promise<Habit> {
+  async createHabit(createHabitInput: CreateHabitInput) {
     return await this.habitModel.create(createHabitInput);
   }
 
-  async editHabit(
-    habitId: Types.ObjectId,
-    editHabitInput: EditHabitInput,
-  ): Promise<Habit> {
-    return await this.habitModel.findByIdAndUpdate(habitId, editHabitInput, {
-      new: true,
-    });
+  async editHabit(habitId: Types.ObjectId, editHabitInput: EditHabitInput) {
+    const editedHabit = await this.habitModel.findByIdAndUpdate(
+      habitId,
+      { $set: { ...editHabitInput } },
+      {
+        new: true,
+      },
+    );
+
+    if (!editedHabit) {
+      throw new BadRequestException(`Habit not found with id ${habitId}`);
+    }
+
+    return editedHabit;
   }
 
-  async deleteHabit(id: string): Promise<Habit> {
-    return await this.habitModel.findByIdAndDelete(id);
+  async deleteHabit(habitId: Types.ObjectId) {
+    const deletedHabit = await this.habitModel.findByIdAndDelete(habitId);
+
+    if (!deletedHabit) {
+      throw new BadRequestException(`Habit not found with id ${habitId}`);
+    }
   }
 }

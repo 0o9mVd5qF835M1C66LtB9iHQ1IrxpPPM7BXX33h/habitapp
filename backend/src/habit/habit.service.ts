@@ -69,6 +69,8 @@ export class HabitService {
       },
     );
 
+    console.log(editHabitInput);
+
     if (!editedHabit) {
       throw new BadRequestException(`Habit not found with id ${habitId}`);
     }

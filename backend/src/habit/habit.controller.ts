@@ -16,9 +16,7 @@ import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 import { UserDocument } from "../user/user.schema";
 import {
   CreateHabitInput,
-  DeleteHabitParam,
   EditHabitInput,
-  EditHabitParam,
   UpdateHabitCompletedDatesInput,
 } from "./habit.dto";
 import { Habit } from "./habit.schema";
@@ -71,10 +69,13 @@ export class HabitController {
   @ApiOkResponse({ type: Habit })
   async editHabit(
     @Param("id")
-    params: EditHabitParam,
+    id: string,
     @Body() editHabitInput: EditHabitInput,
   ) {
-    return await this.habitService.editHabit(params.id, editHabitInput);
+    return await this.habitService.editHabit(
+      new Types.ObjectId(id),
+      editHabitInput,
+    );
   }
 
   @Delete(":id")
@@ -83,7 +84,7 @@ export class HabitController {
     type: "string",
   })
   @ApiResponse({ type: Habit })
-  async deleteHabit(@Param("id") params: DeleteHabitParam) {
-    return await this.habitService.deleteHabit(params.id);
+  async deleteHabit(@Param("id") id: string) {
+    return await this.habitService.deleteHabit(new Types.ObjectId(id));
   }
 }

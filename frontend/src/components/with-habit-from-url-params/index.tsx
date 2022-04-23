@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useQueryClient } from "react-query";
 
 import {
@@ -17,38 +16,17 @@ type Props = {
 };
 
 export function WithHabitFromURLParams({ render }: Props): JSX.Element {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
-
   const { habitId } = useParams<Params>();
-  const [habit, setHabit] = useState<Habit>();
 
-  useEffect(() => {
-    if (!habitId) {
-      navigate("/");
-      return;
-    }
+  const queryData = queryClient.getQueryData<HabitsQueryResult>(
+    getHabitsQueryKey()
+  );
 
-    const queryData = queryClient.getQueryData<HabitsQueryResult>(
-      getHabitsQueryKey()
-    );
-
-    if (!queryData) {
-      navigate("/");
-      return;
-    }
-
-    const foundHabit = queryData.data.find((habit) => habit._id === habitId);
-    if (!foundHabit) {
-      navigate("/");
-      return;
-    }
-
-    setHabit(foundHabit);
-  }, [habitId]);
+  const habit = queryData?.data.find((habit) => habit._id === habitId);
 
   if (!habitId || !habit) {
-    return <></>;
+    return <Navigate replace to="/404" />;
   }
 
   return render(habit);

@@ -6,11 +6,19 @@ import { Habit } from "../../generated/api";
 
 export type HabitFormProps = {
   habit: Habit;
+  formTitle: string;
+  submitText: string;
   onChange: Dispatch<SetStateAction<Habit>>;
   onSubmit(): void;
 };
 
-export function HabitForm({ habit, onChange, onSubmit }: HabitFormProps) {
+export function HabitForm({
+  habit,
+  formTitle,
+  submitText,
+  onChange,
+  onSubmit,
+}: HabitFormProps) {
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     onChange((habit) => ({
       ...habit,
@@ -42,7 +50,7 @@ export function HabitForm({ habit, onChange, onSubmit }: HabitFormProps) {
         color="gray.900"
         textAlign="center"
       >
-        Add new habit
+        {formTitle}
       </Heading>
       <form onSubmit={handleSubmit}>
         <Input
@@ -56,7 +64,7 @@ export function HabitForm({ habit, onChange, onSubmit }: HabitFormProps) {
           onWeekdaySelect={handleWeekdayClick}
         />
         <Button type="submit" isFullWidth colorScheme="purple" marginTop="8">
-          Create Habit
+          {submitText}
         </Button>
       </form>
     </>

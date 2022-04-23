@@ -86,7 +86,13 @@ export function AddHabitPage() {
       <PageHeader marginBottom="10">
         <ModalCloseButton />
       </PageHeader>
-      <HabitForm habit={habit} onChange={setHabit} onSubmit={handleSubmit} />
+      <HabitForm
+        formTitle="Add new habit"
+        habit={habit}
+        submitText="Create Habit"
+        onChange={setHabit}
+        onSubmit={handleSubmit}
+      />
     </Modal>
   );
 }

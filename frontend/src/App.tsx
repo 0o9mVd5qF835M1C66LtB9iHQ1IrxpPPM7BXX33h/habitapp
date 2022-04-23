@@ -61,7 +61,14 @@ function App() {
                   />
                 }
               />
-              <Route path="/habits/:habitId/edit" element={<EditHabitPage />} />
+              <Route
+                path="/habits/:habitId/edit"
+                element={
+                  <WithHabitFromURLParams
+                    render={(habit) => <EditHabitPage editingHabit={habit} />}
+                  />
+                }
+              />
               <Route path="/add-habit" element={<AddHabitPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/login" element={<LoginPage />} />

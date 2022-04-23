@@ -27,6 +27,18 @@ import { HabitService } from "./habit.service";
 export class HabitController {
   constructor(private habitService: HabitService) {}
 
+  @Get("/:id")
+  @ApiOkResponse({
+    type: Habit,
+  })
+  @ApiParam({
+    name: "id",
+    type: "string",
+  })
+  async findById(@Param("id") id: string) {
+    return await this.habitService.findById(new Types.ObjectId(id));
+  }
+
   @Get()
   @ApiOkResponse({
     type: [Habit],

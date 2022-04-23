@@ -15,6 +15,7 @@ export function WeekSelector({ selectedWeekdays, onWeekdaySelect }: Props) {
         const isSelectedWeekday = selectedWeekdays.includes(weekday);
         return (
           <Button
+            key={`iso-weekday-${weekday}`}
             variant={isSelectedWeekday ? "solid" : "outline"}
             colorScheme={isSelectedWeekday ? "purple" : "gray"}
             fontSize="small"

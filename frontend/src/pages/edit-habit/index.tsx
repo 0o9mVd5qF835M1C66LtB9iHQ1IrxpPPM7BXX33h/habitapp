@@ -1,7 +1,8 @@
 import { HiOutlineX } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@chakra-ui/react";
 
-import { Button, Modal, PageContainer, PageHeader } from "../../components";
+import { Modal, PageContainer, PageHeader } from "../../components";
 
 export function EditHabitPage() {
   const navigate = useNavigate();

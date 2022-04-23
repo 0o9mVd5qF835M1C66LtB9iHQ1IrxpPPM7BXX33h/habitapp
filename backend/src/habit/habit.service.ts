@@ -1,5 +1,9 @@
 import { Model } from "mongoose";
-import { BadRequestException, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Types } from "mongoose";
 
@@ -16,6 +20,24 @@ export class HabitService {
     @InjectModel(Habit.name) private habitModel: Model<HabitDocument>,
   ) {}
 
+  async findById(habitId: Types.ObjectId) {
+    const habit = await this.habitModel.findById(habitId);
+
+    if (!habit) {
+      new NotFoundException(`Habit with _id ${habitId} not found!`);
+    }
+
+    return habit;
+  }
+
+  async findAllByUserId(userId: Types.ObjectId): Promise<Habit[]> {
+    const habits = await this.habitModel
+      .find({ userId })
+      .sort({ dateCreated: "desc" });
+
+    return habits;
+  }
+
   async updateHabitCompletedDates(input: UpdateHabitCompletedDatesInput) {
     const { completedDates, habitId } = input;
     const habit = await this.habitModel.findById(habitId);
@@ -26,14 +48,6 @@ export class HabitService {
 
     habit.completedDates = completedDates;
     return await habit.save();
-  }
-
-  async findAllByUserId(userId: Types.ObjectId): Promise<Habit[]> {
-    const habits = await this.habitModel
-      .find({ userId })
-      .sort({ dateCreated: "desc" });
-
-    return habits;
   }
 
   async createHabit(createHabitInput: CreateHabitInput): Promise<Habit> {

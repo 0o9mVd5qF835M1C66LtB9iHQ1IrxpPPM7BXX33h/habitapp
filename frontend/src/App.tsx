@@ -9,7 +9,13 @@ import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
 import axios from "axios";
 
-import { AddHabitPage, HomePage, LoginPage, RegisterPage } from "./pages";
+import {
+  AddHabitPage,
+  HomePage,
+  LoginPage,
+  RegisterPage,
+  HabitPage,
+} from "./pages";
 import theme from "./theme";
 import { store } from "./redux";
 import { AuthProvider } from "./AuthProvider";
@@ -45,6 +51,7 @@ function App() {
                 element={<Navigate to="/home" replace={true} />}
               />
               <Route path="/home" element={<HomePage />} />
+              <Route path="/habits/:habitId" element={<HabitPage />} />
               <Route path="/add-habit" element={<AddHabitPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/login" element={<LoginPage />} />

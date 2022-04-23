@@ -297,6 +297,109 @@ export const useUserControllerCurrentUser = <TData = AsyncReturnType<typeof user
 }
 
 
+export const habitControllerFindById = (
+    id: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<Habit>> => {
+    return axios.get(
+      `/habits/${id}`,options
+    );
+  }
+
+
+export const getHabitControllerFindByIdQueryKey = (id: string,) => [`/habits/${id}`];
+
+    
+export type HabitControllerFindByIdQueryResult = NonNullable<AsyncReturnType<typeof habitControllerFindById>>
+export type HabitControllerFindByIdQueryError = AxiosError<unknown>
+
+export const useHabitControllerFindById = <TData = AsyncReturnType<typeof habitControllerFindById>, TError = AxiosError<unknown>>(
+ id: string, options?: { query?:UseQueryOptions<AsyncReturnType<typeof habitControllerFindById>, TError, TData>, axios?: AxiosRequestConfig}
+
+  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+
+  const {query: queryOptions, axios: axiosOptions} = options || {}
+
+  const queryKey = queryOptions?.queryKey ?? getHabitControllerFindByIdQueryKey(id);
+
+  
+
+  const queryFn: QueryFunction<AsyncReturnType<typeof habitControllerFindById>> = () => habitControllerFindById(id, axiosOptions);
+
+  const query = useQuery<AsyncReturnType<typeof habitControllerFindById>, TError, TData>(queryKey, queryFn, {enabled: !!(id), ...queryOptions})
+
+  return {
+    queryKey,
+    ...query
+  }
+}
+
+
+export const habitControllerEditHabit = (
+    id: string,
+    editHabitInput: EditHabitInput, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<Habit>> => {
+    return axios.put(
+      `/habits/${id}`,
+      editHabitInput,options
+    );
+  }
+
+
+
+    export type HabitControllerEditHabitMutationResult = NonNullable<AsyncReturnType<typeof habitControllerEditHabit>>
+    export type HabitControllerEditHabitMutationBody = EditHabitInput
+    export type HabitControllerEditHabitMutationError = AxiosError<unknown>
+
+    export const useHabitControllerEditHabit = <TError = AxiosError<unknown>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof habitControllerEditHabit>, TError,{id: string;data: EditHabitInput}, TContext>, axios?: AxiosRequestConfig}
+) => {
+      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
+
+      
+
+
+      const mutationFn: MutationFunction<AsyncReturnType<typeof habitControllerEditHabit>, {id: string;data: EditHabitInput}> = (props) => {
+          const {id,data} = props || {};
+
+          return  habitControllerEditHabit(id,data,axiosOptions)
+        }
+
+      return useMutation<AsyncReturnType<typeof habitControllerEditHabit>, TError, {id: string;data: EditHabitInput}, TContext>(mutationFn, mutationOptions)
+    }
+    
+export const habitControllerDeleteHabit = (
+    id: string, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    return axios.delete(
+      `/habits/${id}`,options
+    );
+  }
+
+
+
+    export type HabitControllerDeleteHabitMutationResult = NonNullable<AsyncReturnType<typeof habitControllerDeleteHabit>>
+    
+    export type HabitControllerDeleteHabitMutationError = AxiosError<Habit>
+
+    export const useHabitControllerDeleteHabit = <TError = AxiosError<Habit>,
+    
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof habitControllerDeleteHabit>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
+) => {
+      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
+
+      
+
+
+      const mutationFn: MutationFunction<AsyncReturnType<typeof habitControllerDeleteHabit>, {id: string}> = (props) => {
+          const {id} = props || {};
+
+          return  habitControllerDeleteHabit(id,axiosOptions)
+        }
+
+      return useMutation<AsyncReturnType<typeof habitControllerDeleteHabit>, TError, {id: string}, TContext>(mutationFn, mutationOptions)
+    }
+    
 export const habitControllerFindAllByUserId = (
      options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Habit[]>> => {
@@ -400,72 +503,6 @@ export const habitControllerUpdateHabitCompletedDates = (
       return useMutation<AsyncReturnType<typeof habitControllerUpdateHabitCompletedDates>, TError, {data: UpdateHabitCompletedDatesInput}, TContext>(mutationFn, mutationOptions)
     }
     
-export const habitControllerEditHabit = (
-    id: string,
-    editHabitInput: EditHabitInput, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<Habit>> => {
-    return axios.put(
-      `/habits/${id}`,
-      editHabitInput,options
-    );
-  }
-
-
-
-    export type HabitControllerEditHabitMutationResult = NonNullable<AsyncReturnType<typeof habitControllerEditHabit>>
-    export type HabitControllerEditHabitMutationBody = EditHabitInput
-    export type HabitControllerEditHabitMutationError = AxiosError<unknown>
-
-    export const useHabitControllerEditHabit = <TError = AxiosError<unknown>,
-    
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof habitControllerEditHabit>, TError,{id: string;data: EditHabitInput}, TContext>, axios?: AxiosRequestConfig}
-) => {
-      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
-
-      
-
-
-      const mutationFn: MutationFunction<AsyncReturnType<typeof habitControllerEditHabit>, {id: string;data: EditHabitInput}> = (props) => {
-          const {id,data} = props || {};
-
-          return  habitControllerEditHabit(id,data,axiosOptions)
-        }
-
-      return useMutation<AsyncReturnType<typeof habitControllerEditHabit>, TError, {id: string;data: EditHabitInput}, TContext>(mutationFn, mutationOptions)
-    }
-    
-export const habitControllerDeleteHabit = (
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axios.delete(
-      `/habits/${id}`,options
-    );
-  }
-
-
-
-    export type HabitControllerDeleteHabitMutationResult = NonNullable<AsyncReturnType<typeof habitControllerDeleteHabit>>
-    
-    export type HabitControllerDeleteHabitMutationError = AxiosError<Habit>
-
-    export const useHabitControllerDeleteHabit = <TError = AxiosError<Habit>,
-    
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<AsyncReturnType<typeof habitControllerDeleteHabit>, TError,{id: string}, TContext>, axios?: AxiosRequestConfig}
-) => {
-      const {mutation: mutationOptions, axios: axiosOptions} = options || {}
-
-      
-
-
-      const mutationFn: MutationFunction<AsyncReturnType<typeof habitControllerDeleteHabit>, {id: string}> = (props) => {
-          const {id} = props || {};
-
-          return  habitControllerDeleteHabit(id,axiosOptions)
-        }
-
-      return useMutation<AsyncReturnType<typeof habitControllerDeleteHabit>, TError, {id: string}, TContext>(mutationFn, mutationOptions)
-    }
-    
 
 
 export const getAuthControllerTempRegisterMock = () => ({accessToken: faker.random.word()})
@@ -478,13 +515,15 @@ export const getAuthControllerGoogleAuthMock = () => ({accessToken: faker.random
 
 export const getUserControllerCurrentUserMock = () => ({_id: faker.random.word(), email: faker.random.word(), password: faker.helpers.randomize([faker.random.word(), undefined]), isTemp: faker.datatype.boolean(), dateCreated: faker.datatype.number()})
 
+export const getHabitControllerFindByIdMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), completedDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), archived: faker.datatype.boolean()})
+
+export const getHabitControllerEditHabitMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), completedDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), archived: faker.datatype.boolean()})
+
 export const getHabitControllerFindAllByUserIdMock = () => ([...Array(faker.datatype.number({min: 1, max: 10}))].map(() => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), completedDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), archived: faker.datatype.boolean()})))
 
 export const getHabitControllerCreateHabitMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), completedDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), archived: faker.datatype.boolean()})
 
 export const getHabitControllerUpdateHabitCompletedDatesMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), completedDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), archived: faker.datatype.boolean()})
-
-export const getHabitControllerEditHabitMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), completedDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), archived: faker.datatype.boolean()})
 
 export const getHabitAppMSW = () => [
 rest.get('*', (_req, res, ctx) => {
@@ -522,6 +561,23 @@ ctx.json(getAuthControllerGoogleAuthMock()),
           ctx.status(200, 'Mocked status'),
 ctx.json(getUserControllerCurrentUserMock()),
         )
+      }),rest.get('*/habits/:id', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+ctx.json(getHabitControllerFindByIdMock()),
+        )
+      }),rest.put('*/habits/:id', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+ctx.json(getHabitControllerEditHabitMock()),
+        )
+      }),rest.delete('*/habits/:id', (_req, res, ctx) => {
+        return res(
+          ctx.delay(1000),
+          ctx.status(200, 'Mocked status'),
+        )
       }),rest.get('*/habits', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
@@ -539,16 +595,5 @@ ctx.json(getHabitControllerCreateHabitMock()),
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
 ctx.json(getHabitControllerUpdateHabitCompletedDatesMock()),
-        )
-      }),rest.put('*/habits/:id', (_req, res, ctx) => {
-        return res(
-          ctx.delay(1000),
-          ctx.status(200, 'Mocked status'),
-ctx.json(getHabitControllerEditHabitMock()),
-        )
-      }),rest.delete('*/habits/:id', (_req, res, ctx) => {
-        return res(
-          ctx.delay(1000),
-          ctx.status(200, 'Mocked status'),
         )
       }),]

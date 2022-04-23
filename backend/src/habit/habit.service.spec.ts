@@ -24,7 +24,7 @@ describe("Habit service", () => {
     tempUser = await userService.createTempUser();
   });
 
-  describe("method createHabit", () => {});
+  // describe("method createHabit", () => {});
 
   describe("method findAllByUserId", () => {
     it("should get all habits of the user, by user id", async () => {

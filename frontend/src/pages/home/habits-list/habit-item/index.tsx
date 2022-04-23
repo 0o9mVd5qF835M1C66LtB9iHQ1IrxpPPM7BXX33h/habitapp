@@ -16,6 +16,11 @@ import { Streak } from "./streak";
 import { Checkbox } from "./checkbox";
 import { Title } from "./title";
 import { RootState } from "../../../../redux";
+import {
+  isCompletedOnDate,
+  shouldBeCompletedOnWeekday,
+} from "../../../../helpers";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   habit: Habit;
@@ -25,6 +30,7 @@ export function HabitItem({ habit }: Props) {
   const selectedDay = useSelector((state: RootState) => state.home.selectedDay);
   const queryClient = useQueryClient();
   const queryKey = getHabitControllerFindAllByUserIdQueryKey();
+  const navigate = useNavigate();
 
   const updateHabitCompletedDatesMutation =
     useHabitControllerUpdateHabitCompletedDates<
@@ -88,17 +94,18 @@ export function HabitItem({ habit }: Props) {
         data: {
           habitId: habit._id,
           completedDates: habit.completedDates.filter(
-            (completedDate) => !selectedDay.isSame(completedDate, "day")
+            (completedDate) => !dayjs(selectedDay).isSame(completedDate, "day")
           ),
         },
       });
     }
   }
 
-  const isCompletedOnSelectedDay = habit.completedDates.some((completedDate) =>
-    selectedDay.isSame(completedDate, "day")
-  );
+  function handleHabitItemClick() {
+    navigate(`/habits/${habit._id}`);
+  }
 
+  const isCompletedOnSelectedDay = isCompletedOnDate(habit, dayjs(selectedDay));
   return (
     <Flex
       width="100%"
@@ -110,6 +117,9 @@ export function HabitItem({ habit }: Props) {
       borderColor="gray.100"
       borderRadius="lg"
       cursor="pointer"
+      role="button"
+      aria-label={`Habit: ${habit.title}`}
+      onClick={handleHabitItemClick}
     >
       <div className="w-full">
         <WeekdayText weekdays={habit.isoWeekdays} />
@@ -117,7 +127,9 @@ export function HabitItem({ habit }: Props) {
         <Streak habit={habit} />
       </div>
       {(() => {
-        if (habit.isoWeekdays.includes(dayjs(selectedDay).isoWeekday())) {
+        if (
+          shouldBeCompletedOnWeekday(habit, dayjs(selectedDay).isoWeekday())
+        ) {
           return (
             <Checkbox
               onComplete={handleUpdateHabitCompletedDates}

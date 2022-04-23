@@ -80,6 +80,58 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
+  "/habits/{id}":
+    get:
+      operationId: HabitController_findById
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Habit"
+    put:
+      operationId: HabitController_editHabit
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditHabitInput"
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Habit"
+    delete:
+      operationId: HabitController_deleteHabit
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        default:
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Habit"
   /habits:
     get:
       operationId: HabitController_findAllByUserId
@@ -121,43 +173,6 @@ paths:
               $ref: "#/components/schemas/UpdateHabitCompletedDatesInput"
       responses:
         "200":
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Habit"
-  "/habits/{id}":
-    put:
-      operationId: HabitController_editHabit
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EditHabitInput"
-      responses:
-        "200":
-          description: ""
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Habit"
-    delete:
-      operationId: HabitController_deleteHabit
-      parameters:
-        - name: id
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        default:
           description: ""
           content:
             application/json:

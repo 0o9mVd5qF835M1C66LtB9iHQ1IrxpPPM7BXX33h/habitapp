@@ -1,20 +1,19 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import dayjs, { Dayjs } from "dayjs";
 import {} from "../../../generated/api";
 
 export type HomeState = {
-  selectedDay: Dayjs;
+  selectedDay: number;
 };
 
 export const initialState: HomeState = {
-  selectedDay: dayjs(),
+  selectedDay: Date.now(),
 };
 
 export const homeSlice = createSlice({
   name: "home",
   initialState,
   reducers: {
-    setSelectedDay: (state, action: PayloadAction<Dayjs>) => {
+    setSelectedDay: (state, action: PayloadAction<number>) => {
       state.selectedDay = action.payload;
     },
   },

@@ -1,79 +1,31 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { ModalCloseButton } from "@chakra-ui/react";
-import { useQueryClient } from "react-query";
-import { AxiosError } from "axios";
+import { useRef, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  Button,
+  Flex,
+  ModalCloseButton,
+} from "@chakra-ui/react";
 
 import { Modal, PageHeader, HabitForm } from "../../components";
-import {
-  HabitControllerFindAllByUserIdQueryResult as HabitsQueryResult,
-  getHabitControllerFindAllByUserIdQueryKey,
-  Habit,
-  useHabitControllerEditHabit as useHabitEditMutation,
-} from "../../generated/api";
+import { Habit } from "../../generated/api";
+import { useEditHabitMutation } from "./use-edit-habit-mutation";
+import { useDeleteHabitMutation } from "./use-delete-habit-mutation";
 
 type Props = {
   editingHabit: Habit;
 };
 
 export function EditHabitPage({ editingHabit }: Props) {
-  const navigate = useNavigate();
-
-  const queryClient = useQueryClient();
-  const habitsQueryKey = getHabitControllerFindAllByUserIdQueryKey()[0];
-
+  const editHabitMutation = useEditHabitMutation();
+  const deleteHabitMutation = useDeleteHabitMutation();
   const [habit, setHabit] = useState<Habit>(editingHabit);
-
-  const editHabitMutation = useHabitEditMutation<
-    AxiosError<unknown, unknown>,
-    {
-      previousHabitsQueryResult: HabitsQueryResult | undefined;
-    }
-  >({
-    mutation: {
-      onMutate: async ({ data: newHabit }) => {
-        navigate("/home");
-
-        await queryClient.cancelQueries();
-
-        const previousHabitsQueryResult =
-          queryClient.getQueryData<HabitsQueryResult>(habitsQueryKey);
-
-        queryClient.setQueryData<HabitsQueryResult | undefined>(
-          habitsQueryKey,
-          (prevResult) =>
-            prevResult
-              ? {
-                  ...prevResult,
-                  data: prevResult.data.map((habitInCache) =>
-                    habitInCache._id === habit._id
-                      ? {
-                          ...habitInCache,
-                          ...newHabit,
-                        }
-                      : habitInCache
-                  ),
-                }
-              : undefined
-        );
-
-        return {
-          previousHabitsQueryResult,
-        };
-      },
-      onError: (_, __, context) => {
-        if (context) {
-          queryClient.setQueryData<HabitsQueryResult | undefined>(
-            habitsQueryKey,
-            context.previousHabitsQueryResult
-          );
-        }
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries(habitsQueryKey);
-      },
-    },
-  });
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const deleteDialogCancelRef = useRef(null);
 
   function handleSubmit() {
     editHabitMutation.mutateAsync({
@@ -85,18 +37,68 @@ export function EditHabitPage({ editingHabit }: Props) {
     });
   }
 
+  function handleCancelDeleteDialog() {
+    setIsDeleteDialogOpen(false);
+  }
+
+  function handleOpenDeleteDialog() {
+    setIsDeleteDialogOpen(true);
+  }
+
+  function handleHabitDelete() {
+    deleteHabitMutation.mutateAsync({
+      id: editingHabit._id,
+    });
+  }
+
   return (
     <Modal>
       <PageHeader marginBottom="10">
         <ModalCloseButton />
       </PageHeader>
       <HabitForm
-        formTitle="editHabit"
+        formTitle="Edit habit"
         habit={habit}
         submitText="Edit Habit"
         onChange={setHabit}
         onSubmit={handleSubmit}
       />
+      <Flex width="100%" justifyContent="center" marginTop="4">
+        <Button
+          variant="link"
+          fontWeight="light"
+          textDecoration="underline"
+          color="purple.600"
+          onClick={handleOpenDeleteDialog}
+        >
+          Delete habit
+        </Button>
+      </Flex>
+      <AlertDialog
+        isOpen={isDeleteDialogOpen}
+        leastDestructiveRef={deleteDialogCancelRef}
+        onClose={handleCancelDeleteDialog}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader>Delete habit</AlertDialogHeader>
+            <AlertDialogBody>
+              Are you sure? you can't restore deleted habit.
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button
+                ref={deleteDialogCancelRef}
+                onClick={handleCancelDeleteDialog}
+              >
+                Cancel
+              </Button>
+              <Button colorScheme="red" onClick={handleHabitDelete} ml="3">
+                Delete
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Modal>
   );
 }

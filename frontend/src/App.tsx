@@ -20,6 +20,8 @@ import theme from "./theme";
 import { store } from "./redux";
 import { AuthProvider } from "./AuthProvider";
 import { userTokenKey } from "./constants";
+import { EditHabitPage } from "./pages/edit-habit";
+import { WithHabitFromURLParams } from "./components/with-habit-from-url-params";
 
 dayjs.extend(isoWeek);
 dayjs.extend(isToday);
@@ -51,7 +53,15 @@ function App() {
                 element={<Navigate to="/home" replace={true} />}
               />
               <Route path="/home" element={<HomePage />} />
-              <Route path="/habits/:habitId" element={<HabitPage />} />
+              <Route
+                path="/habits/:habitId"
+                element={
+                  <WithHabitFromURLParams
+                    render={(habit) => <HabitPage habit={habit} />}
+                  />
+                }
+              />
+              <Route path="/habits/:habitId/edit" element={<EditHabitPage />} />
               <Route path="/add-habit" element={<AddHabitPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/login" element={<LoginPage />} />

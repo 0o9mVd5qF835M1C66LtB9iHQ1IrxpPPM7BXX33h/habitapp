@@ -57,6 +57,14 @@ export class EditHabitInput {
   isoWeekdays: number[];
 }
 
+export class EditHabitParam {
+  @IsInstance(Types.ObjectId)
+  @Transform(({ value }) => new Types.ObjectId(value))
+  id: Types.ObjectId;
+}
+
+export class DeleteHabitParam extends EditHabitParam {}
+
 export class UpdateHabitCompletedDatesInput {
   @IsInstance(Types.ObjectId)
   @Transform(({ value }) => new Types.ObjectId(value))
@@ -67,5 +75,5 @@ export class UpdateHabitCompletedDatesInput {
 
   @IsNumber({}, { each: true })
   @ApiProperty({ type: [Number] })
-  completedDates: [];
+  completedDates: number[];
 }

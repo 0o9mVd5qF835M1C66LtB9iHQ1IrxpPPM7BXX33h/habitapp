@@ -4,7 +4,7 @@
   "scripts": {
     "start": "node dist/main.js",
     "build": "npm run build:server && npm run build:frontend",
-    "build:server": "cd backend && npm ci && npm run build",
+    "build:server": "cd backend && npm install && npm run build",
     "build:frontend": "cd frontend && npm ci && npm run build"
   },
   "author": {

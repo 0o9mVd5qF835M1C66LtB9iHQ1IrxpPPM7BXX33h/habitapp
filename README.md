@@ -1,6 +1,16 @@
 # habitapp
 Habitapp is a simple app that helps you build positive habits, measure progress and achieve your goals
 
+## ✅ Features
+
+- [ ] Working without registration
+- [ ] Sign In/Sign Up to sync between devices
+- [ ] Streak
+- [ ] Longest streak
+- [ ] Calendar view
+
+## 🛠️ Tech Stack
+
 ## ✅ To Do
 
 - [ ] Push notifications

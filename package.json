@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "start": "node dist/main.js",
-    "build": "cd backend && npm run build",
+    "build": "npm run build:server && npm run build:frontend",
     "build:server": "cd backend && npm run build",
     "build:frontend": "cd frontend && npm run build"
   },

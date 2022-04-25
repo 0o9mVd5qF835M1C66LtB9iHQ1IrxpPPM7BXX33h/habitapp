@@ -1,5 +1,6 @@
 # habitapp
-Habitapp is a simple app that helps you build positive habits, measure progress and achieve your goals
+
+Habitapp is a simple app that helps you build positive habits, measure progress and achieve your goals.
 
 ## ✨ Features
 
@@ -23,11 +24,11 @@ Habitapp is a simple app that helps you build positive habits, measure progress 
 - [React](https://github.com/facebook/react)
 - [Create React App](https://github.com/facebook/create-react-app)
 - [Redux](https://github.com/reduxjs/react-redux)
-- [NestJS](https://github.com/nestjs/nest) 
-- [MongoDB](https://github.com/mongodb/mongo)  
-- [Mongoose](https://github.com/Automattic/mongoose) 
-- [Chakra UI](https://github.com/chakra-ui/chakra-ui)  
+- [NestJS](https://github.com/nestjs/nest)
+- [MongoDB](https://github.com/mongodb/mongo)
+- [Mongoose](https://github.com/Automattic/mongoose)
+- [Chakra UI](https://github.com/chakra-ui/chakra-ui)
 
 ## ⚖️ License
 
-MIT © [Oybek Alimatov](https://github.com/oybekalimat)  
+MIT © [Oybek Alimatov](https://github.com/oybekalimat)

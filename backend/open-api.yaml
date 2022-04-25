@@ -1,13 +1,13 @@
 openapi: 3.0.0
 paths:
-  /:
+  /api:
     get:
       operationId: AppController_getHello
       parameters: []
       responses:
         "200":
           description: ""
-  /auth/temp-register:
+  /api/auth/temp-register:
     post:
       operationId: AuthController_tempRegister
       parameters: []
@@ -18,7 +18,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthResponse"
-  /auth/login:
+  /api/auth/login:
     post:
       operationId: AuthController_login
       parameters: []
@@ -35,7 +35,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthResponse"
-  /auth/register:
+  /api/auth/register:
     post:
       operationId: AuthController_register
       parameters: []
@@ -52,7 +52,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthResponse"
-  /auth/google:
+  /api/auth/google:
     post:
       operationId: AuthController_googleAuth
       parameters: []
@@ -69,7 +69,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthResponse"
-  /users/current:
+  /api/users/current:
     get:
       operationId: UserController_currentUser
       parameters: []
@@ -80,7 +80,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
-  "/habits/{id}":
+  "/api/habits/{id}":
     get:
       operationId: HabitController_findById
       parameters:
@@ -132,7 +132,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Habit"
-  /habits:
+  /api/habits:
     get:
       operationId: HabitController_findAllByUserId
       parameters: []
@@ -161,7 +161,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Habit"
-  /habits/update-completed-date:
+  /api/habits/update-completed-date:
     post:
       operationId: HabitController_updateHabitCompletedDates
       parameters: []

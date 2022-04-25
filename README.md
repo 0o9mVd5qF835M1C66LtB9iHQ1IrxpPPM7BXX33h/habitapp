@@ -3,9 +3,9 @@ Habitapp is a simple app that helps you build positive habits, measure progress 
 
 ## ✅ To Do
 
-- [] Push notifications
-- [] Offline mode
-- [] Dark mode
+- [ ] Push notifications
+- [ ] Offline mode
+- [ ] Dark mode
 
 ## 🛠️ Tech Stack
 

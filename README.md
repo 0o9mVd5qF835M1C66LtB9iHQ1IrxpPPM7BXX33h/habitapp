@@ -17,3 +17,7 @@ Habitapp is a simple app that helps you build positive habits, measure progress 
 - [MongoDB](https://github.com/mongodb/mongo)  
 - [Mongoose](https://github.com/Automattic/mongoose) 
 - [Chakra UI](https://github.com/chakra-ui/chakra-ui)  
+
+## 🛠️ Tech Stack
+
+MIT © [Oybek Alimatov](https://github.com/oybekalimat)  

@@ -96,12 +96,12 @@ export const appControllerGetHello = (
      options?: AxiosRequestConfig
  ): Promise<AxiosResponse<void>> => {
     return axios.get(
-      `/`,options
+      `/api`,options
     );
   }
 
 
-export const getAppControllerGetHelloQueryKey = () => [`/`];
+export const getAppControllerGetHelloQueryKey = () => [`/api`];
 
     
 export type AppControllerGetHelloQueryResult = NonNullable<AsyncReturnType<typeof appControllerGetHello>>
@@ -133,7 +133,7 @@ export const authControllerTempRegister = (
      options?: AxiosRequestConfig
  ): Promise<AxiosResponse<AuthResponse>> => {
     return axios.post(
-      `/auth/temp-register`,undefined,options
+      `/api/auth/temp-register`,undefined,options
     );
   }
 
@@ -165,7 +165,7 @@ export const authControllerLogin = (
     loginInput: LoginInput, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<AuthResponse>> => {
     return axios.post(
-      `/auth/login`,
+      `/api/auth/login`,
       loginInput,options
     );
   }
@@ -198,7 +198,7 @@ export const authControllerRegister = (
     registerUserInput: RegisterUserInput, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<AuthResponse>> => {
     return axios.post(
-      `/auth/register`,
+      `/api/auth/register`,
       registerUserInput,options
     );
   }
@@ -231,7 +231,7 @@ export const authControllerGoogleAuth = (
     googleAuthInput: GoogleAuthInput, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<AuthResponse>> => {
     return axios.post(
-      `/auth/google`,
+      `/api/auth/google`,
       googleAuthInput,options
     );
   }
@@ -264,12 +264,12 @@ export const userControllerCurrentUser = (
      options?: AxiosRequestConfig
  ): Promise<AxiosResponse<User>> => {
     return axios.get(
-      `/users/current`,options
+      `/api/users/current`,options
     );
   }
 
 
-export const getUserControllerCurrentUserQueryKey = () => [`/users/current`];
+export const getUserControllerCurrentUserQueryKey = () => [`/api/users/current`];
 
     
 export type UserControllerCurrentUserQueryResult = NonNullable<AsyncReturnType<typeof userControllerCurrentUser>>
@@ -301,12 +301,12 @@ export const habitControllerFindById = (
     id: string, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Habit>> => {
     return axios.get(
-      `/habits/${id}`,options
+      `/api/habits/${id}`,options
     );
   }
 
 
-export const getHabitControllerFindByIdQueryKey = (id: string,) => [`/habits/${id}`];
+export const getHabitControllerFindByIdQueryKey = (id: string,) => [`/api/habits/${id}`];
 
     
 export type HabitControllerFindByIdQueryResult = NonNullable<AsyncReturnType<typeof habitControllerFindById>>
@@ -339,7 +339,7 @@ export const habitControllerEditHabit = (
     editHabitInput: EditHabitInput, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Habit>> => {
     return axios.put(
-      `/habits/${id}`,
+      `/api/habits/${id}`,
       editHabitInput,options
     );
   }
@@ -372,7 +372,7 @@ export const habitControllerDeleteHabit = (
     id: string, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<unknown>> => {
     return axios.delete(
-      `/habits/${id}`,options
+      `/api/habits/${id}`,options
     );
   }
 
@@ -404,12 +404,12 @@ export const habitControllerFindAllByUserId = (
      options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Habit[]>> => {
     return axios.get(
-      `/habits`,options
+      `/api/habits`,options
     );
   }
 
 
-export const getHabitControllerFindAllByUserIdQueryKey = () => [`/habits`];
+export const getHabitControllerFindAllByUserIdQueryKey = () => [`/api/habits`];
 
     
 export type HabitControllerFindAllByUserIdQueryResult = NonNullable<AsyncReturnType<typeof habitControllerFindAllByUserId>>
@@ -441,7 +441,7 @@ export const habitControllerCreateHabit = (
     createHabitInput: CreateHabitInput, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Habit>> => {
     return axios.post(
-      `/habits`,
+      `/api/habits`,
       createHabitInput,options
     );
   }
@@ -474,7 +474,7 @@ export const habitControllerUpdateHabitCompletedDates = (
     updateHabitCompletedDatesInput: UpdateHabitCompletedDatesInput, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<Habit>> => {
     return axios.post(
-      `/habits/update-completed-date`,
+      `/api/habits/update-completed-date`,
       updateHabitCompletedDatesInput,options
     );
   }
@@ -526,71 +526,71 @@ export const getHabitControllerCreateHabitMock = () => ({_id: faker.random.word(
 export const getHabitControllerUpdateHabitCompletedDatesMock = () => ({_id: faker.random.word(), userId: faker.random.word(), title: faker.random.word(), isoWeekdays: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), dateCreated: faker.datatype.number(), completedDates: [...Array(faker.datatype.number({min: 1, max: 10}))].map(() => (faker.datatype.number())), archived: faker.datatype.boolean()})
 
 export const getHabitAppMSW = () => [
-rest.get('*', (_req, res, ctx) => {
+rest.get('*/api', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
         )
-      }),rest.post('*/auth/temp-register', (_req, res, ctx) => {
+      }),rest.post('*/api/auth/temp-register', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
 ctx.json(getAuthControllerTempRegisterMock()),
         )
-      }),rest.post('*/auth/login', (_req, res, ctx) => {
+      }),rest.post('*/api/auth/login', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
 ctx.json(getAuthControllerLoginMock()),
         )
-      }),rest.post('*/auth/register', (_req, res, ctx) => {
+      }),rest.post('*/api/auth/register', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
 ctx.json(getAuthControllerRegisterMock()),
         )
-      }),rest.post('*/auth/google', (_req, res, ctx) => {
+      }),rest.post('*/api/auth/google', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
 ctx.json(getAuthControllerGoogleAuthMock()),
         )
-      }),rest.get('*/users/current', (_req, res, ctx) => {
+      }),rest.get('*/api/users/current', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
 ctx.json(getUserControllerCurrentUserMock()),
         )
-      }),rest.get('*/habits/:id', (_req, res, ctx) => {
+      }),rest.get('*/api/habits/:id', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
 ctx.json(getHabitControllerFindByIdMock()),
         )
-      }),rest.put('*/habits/:id', (_req, res, ctx) => {
+      }),rest.put('*/api/habits/:id', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
 ctx.json(getHabitControllerEditHabitMock()),
         )
-      }),rest.delete('*/habits/:id', (_req, res, ctx) => {
+      }),rest.delete('*/api/habits/:id', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
         )
-      }),rest.get('*/habits', (_req, res, ctx) => {
+      }),rest.get('*/api/habits', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
 ctx.json(getHabitControllerFindAllByUserIdMock()),
         )
-      }),rest.post('*/habits', (_req, res, ctx) => {
+      }),rest.post('*/api/habits', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),
 ctx.json(getHabitControllerCreateHabitMock()),
         )
-      }),rest.post('*/habits/update-completed-date', (_req, res, ctx) => {
+      }),rest.post('*/api/habits/update-completed-date', (_req, res, ctx) => {
         return res(
           ctx.delay(1000),
           ctx.status(200, 'Mocked status'),

@@ -42,8 +42,10 @@ describe("Habit service", () => {
       };
 
       const habit = await habitService.createHabit(input);
-
+      const savedHabits = await habitService.findAllByUserId(tempUser._id);
+      
       expect(habit).toMatchObject(input);
+      expect(savedHabits).toHaveLength(1);
     });
   });
 

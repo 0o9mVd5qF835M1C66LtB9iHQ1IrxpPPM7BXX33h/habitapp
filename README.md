@@ -1,7 +1,7 @@
 # habitapp
 Habitapp is a simple app that helps you build positive habits, measure progress and achieve your goals
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - [TypeScript](https://github.com/Microsoft/TypeScript)
 - [React](https://github.com/facebook/react)

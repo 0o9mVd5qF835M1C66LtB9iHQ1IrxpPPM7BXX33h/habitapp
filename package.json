@@ -2,7 +2,7 @@
   "name": "habit-app",
   "version": "0.0.1",
   "scripts": {
-    "start": "node dist/main.js",
+    "start": "node ./backend/dist/main.js",
     "prebuild": "echo \"prebuild script not needed\"",
     "build": "npm run build:server && npm run build:frontend",
     "build:server": "cd backend && npm install && npm run build",

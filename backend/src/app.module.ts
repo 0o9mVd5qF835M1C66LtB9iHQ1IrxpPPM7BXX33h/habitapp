@@ -8,7 +8,7 @@ import { AppService } from "./app.service";
 import { HabitModule } from "./habit/habit.module";
 import { UserModule } from "./user/user.module";
 import { DatabaseModule } from "./database/database.module";
-import path from "path";
+import * as path from "path";
 
 @Module({
   imports: [

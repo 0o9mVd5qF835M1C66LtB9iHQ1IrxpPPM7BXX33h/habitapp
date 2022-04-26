@@ -16,10 +16,11 @@ export function shouldBeCompletedOnWeekday(
 }
 
 export function shouldBeCompletedOnDate(habit: Habit, date: Dayjs): boolean {
-  if (
-    date.isBefore(habit.dateCreated, "day") ||
-    date.isAfter(Date.now(), "day")
-  ) {
+  const isBeforeCreationDate = date.isBefore(habit.dateCreated, "day");
+  const isFutureDate = date.isAfter(Date.now(), "day");
+  const isToday = date.isToday();
+
+  if (isBeforeCreationDate || isFutureDate || isToday) {
     return false;
   }
 
@@ -28,7 +29,6 @@ export function shouldBeCompletedOnDate(habit: Habit, date: Dayjs): boolean {
 
 export function calculateCurrentStreak(habit: Habit) {
   const startDate = dayjs();
-
   let date = startDate;
   const streak = [];
 

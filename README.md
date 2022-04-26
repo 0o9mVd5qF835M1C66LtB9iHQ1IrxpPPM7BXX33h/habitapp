@@ -2,14 +2,17 @@
 
 Habitapp is a simple app that helps you build positive habits, measure progress and achieve your goals.
 
+<img width="1574" alt="Group 11" src="https://user-images.githubusercontent.com/59618418/165255872-2adcfaaf-683e-47a9-92e1-d8f87abff049.png">
+
 ## ✨ Features
 
-- [ ] Working without registration
-- [ ] Sign In/Sign Up to sync between devices
-- [ ] Horizontal calendar
-- [ ] Streak
-- [ ] Longest streak
-- [ ] Calendar view
+
+- Working without registration
+- Sign In/Sign Up to sync between devices
+- Horizontal calendar
+- Streak
+- Longest streak
+- Calendar view
 
 ## ✅ To Do
 

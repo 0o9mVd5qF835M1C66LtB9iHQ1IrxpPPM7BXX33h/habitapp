@@ -54,7 +54,14 @@ export function SettingsDropdown() {
         >
           {colorMode === "light" ? "Dark Mode" : "Light Mode"}
         </MenuItem>
-        <MenuItem icon={<GoMarkGithub size={16} />}>About</MenuItem>
+        <MenuItem
+          as="a"
+          href="https://github.com/oybekalimat/habitapp"
+          target="_blank"
+          icon={<GoMarkGithub size={16} />}
+        >
+          About
+        </MenuItem>
         <MenuItem
           as={Text}
           fontSize="sm"

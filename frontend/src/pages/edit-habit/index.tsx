@@ -68,7 +68,7 @@ export function EditHabitPage({ editingHabit }: Props) {
           variant="link"
           fontWeight="light"
           textDecoration="underline"
-          color="purple.600"
+          color="purple.500"
           onClick={handleOpenDeleteDialog}
         >
           Delete habit

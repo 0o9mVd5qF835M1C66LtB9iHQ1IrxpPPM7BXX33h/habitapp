@@ -1,9 +1,10 @@
 import { AxiosError } from "axios";
-import { Flex } from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { useQueryClient } from "react-query";
 import dayjs from "dayjs";
 import produce from "immer";
+import { useNavigate } from "react-router-dom";
 
 import {
   Habit,
@@ -20,7 +21,6 @@ import {
   isCompletedOnDate,
   shouldBeCompletedOnWeekday,
 } from "../../../../helpers";
-import { useNavigate } from "react-router-dom";
 
 type Props = {
   habit: Habit;
@@ -114,18 +114,18 @@ export function HabitItem({ habit }: Props) {
       paddingY="3.5"
       marginBottom="4"
       border="1px"
-      borderColor="gray.100"
+      borderColor={useColorModeValue("gray.100", "whiteAlpha.200")}
       borderRadius="lg"
       cursor="pointer"
       role="button"
       aria-label={`Habit: ${habit.title}`}
       onClick={handleHabitItemClick}
     >
-      <div className="w-full">
+      <Box width="full">
         <WeekdayText weekdays={habit.isoWeekdays} />
         <Title title={habit.title} isCompleted={isCompletedOnSelectedDay} />
         <Streak habit={habit} />
-      </div>
+      </Box>
       {(() => {
         if (
           shouldBeCompletedOnWeekday(habit, dayjs(selectedDay).isoWeekday())

@@ -7,7 +7,7 @@ type Props = {
 
 export function WeekdayText({ weekdays }: Props) {
   return (
-    <Text color="purple.600" fontWeight="semibold" fontSize="xs">
+    <Text color="purple.500" fontWeight="semibold" fontSize="xs">
       {getOccurenceString(weekdays)}
     </Text>
   );

@@ -18,9 +18,8 @@ export function shouldBeCompletedOnWeekday(
 export function shouldBeCompletedOnDate(habit: Habit, date: Dayjs): boolean {
   const isBeforeCreationDate = date.isBefore(habit.dateCreated, "day");
   const isFutureDate = date.isAfter(Date.now(), "day");
-  const isToday = date.isToday();
 
-  if (isBeforeCreationDate || isFutureDate || isToday) {
+  if (isBeforeCreationDate || isFutureDate) {
     return false;
   }
 
@@ -38,7 +37,14 @@ export function calculateCurrentStreak(habit: Habit) {
       continue;
     }
 
-    if (!isCompletedOnDate(habit, date)) break;
+    if (!isCompletedOnDate(habit, date)) {
+      if (date.isToday()) {
+        date = date.subtract(1, "day");
+        continue;
+      }
+
+      break;
+    }
 
     streak.push(date.valueOf());
     date = date.subtract(1, "day");
@@ -61,6 +67,11 @@ export function calculateLongestStreak(habit: Habit) {
     }
 
     if (!isCompletedOnDate(habit, date)) {
+      if (date.isToday()) {
+        date = date.subtract(1, "day");
+        continue;
+      }
+
       if (streak.length > longestStreak.length) {
         longestStreak = streak;
       }
@@ -99,7 +110,8 @@ export function getOccurenceString(weekdays: number[]): string {
 }
 
 export function getCreatedDateDifference(habit: Habit) {
-  const difference = dayjs(habit.dateCreated).diff(Date.now(), "day");
+  const difference = dayjs(Date.now()).diff(habit.dateCreated, "day");
+
   if (difference === 0) {
     return "Today";
   }

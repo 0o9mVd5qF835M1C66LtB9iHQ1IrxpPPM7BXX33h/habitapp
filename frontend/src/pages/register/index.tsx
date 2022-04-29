@@ -55,14 +55,7 @@ export function RegisterPage() {
       <PageHeader justifyContent="end">
         <ModalCloseButton aria-label="go back" />
       </PageHeader>
-      <Heading
-        as="h1"
-        size="md"
-        color="gray.900"
-        textAlign="center"
-        mb="2"
-        pt="32"
-      >
+      <Heading as="h1" size="md" textAlign="center" mb="2" pt="32">
         Register new account
       </Heading>
       <Text mb="5" textAlign="center" color="gray.500">
@@ -81,7 +74,7 @@ export function RegisterPage() {
           type="email"
           name="email"
           value={input.email}
-          className="mb-4"
+          mb="4"
           onChange={handleChange}
           required
         />
@@ -93,7 +86,7 @@ export function RegisterPage() {
             type={showPassword ? "text" : "password"}
             name="password"
             value={input.password}
-            className="mb-6"
+            mb="6"
             required
             onChange={handleChange}
           />

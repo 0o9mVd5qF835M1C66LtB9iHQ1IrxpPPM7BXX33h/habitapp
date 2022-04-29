@@ -1,26 +1,26 @@
 import { DayPicker } from "react-day-picker";
 import { useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
-import { Text, Flex, IconButton, Icon } from "@chakra-ui/react";
+import {
+  Text,
+  Flex,
+  IconButton,
+  Icon,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
 import { isoWeekdays } from "../../constants";
 import {
   HiChevronLeft,
   HiChevronRight,
   HiOutlineCheckCircle,
+  HiOutlineXCircle,
 } from "react-icons/hi";
 import { Habit } from "../../generated/api";
-import {
-  isCompletedOnDate,
-  shouldBeCompletedOnDate,
-  shouldBeCompletedOnWeekday,
-} from "../../helpers";
+import { isCompletedOnDate, shouldBeCompletedOnDate } from "../../helpers";
 
-function isCurrentMonthDate(date: Date): boolean {
-  const isAfter = dayjs(date).isSameOrAfter(dayjs().startOf("month"));
-  const isBefore = dayjs(date).isSameOrBefore(dayjs().endOf("month"));
-
-  return isAfter && isBefore;
+function isSelectedMonthDate(date: Dayjs, selectedMonth: Dayjs): boolean {
+  return date.isSame(selectedMonth, "month");
 }
 
 type Props = {
@@ -28,23 +28,23 @@ type Props = {
 };
 
 export function Calendar({ habit }: Props) {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
+  const [selectedDate] = useState<Dayjs>(dayjs());
+  const [selectedMonth, setSelectedMonth] = useState<Dayjs>(dayjs());
 
   function handlePrevMonthClick() {
-    setSelectedMonth(dayjs(selectedMonth).subtract(1, "month").toDate());
+    setSelectedMonth(selectedMonth.subtract(1, "month"));
   }
 
   function handleNextMonthClick() {
-    setSelectedMonth(dayjs(selectedMonth).add(1, "month").toDate());
+    setSelectedMonth(selectedMonth.add(1, "month"));
   }
 
   return (
     <DayPicker
-      selected={selectedDate}
-      month={selectedMonth}
+      selected={selectedDate.toDate()}
+      month={selectedMonth.toDate()}
       components={{
-        Caption: ({ id, displayMonth }) => {
+        Caption: ({ id }) => {
           return (
             <Flex
               id={id}
@@ -59,8 +59,8 @@ export function Calendar({ habit }: Props) {
                 icon={<HiChevronLeft size={20} />}
                 onClick={handlePrevMonthClick}
               />
-              <Text textColor="gray.700" fontWeight="medium">
-                {dayjs(selectedMonth).format("MMMM YYYY")}
+              <Text fontWeight="medium">
+                {selectedMonth.format("MMMM YYYY")}
               </Text>
               <IconButton
                 aria-label="previous month"
@@ -94,6 +94,8 @@ export function Calendar({ habit }: Props) {
           );
         },
         Day: ({ date }) => {
+          const dayjsDate = dayjs(date);
+
           return (
             <Flex
               key={`date-${Number(date)}`}
@@ -104,29 +106,35 @@ export function Calendar({ habit }: Props) {
             >
               <Text
                 fontSize="sm"
-                textColor={isCurrentMonthDate(date) ? "gray.700" : "gray.500"}
+                textColor={
+                  isSelectedMonthDate(dayjsDate, selectedMonth)
+                    ? // eslint-disable-next-line react-hooks/rules-of-hooks
+                      useColorModeValue("gray.700", "whiteAlpha.800")
+                    : // eslint-disable-next-line react-hooks/rules-of-hooks
+                      useColorModeValue("gray.300", "gray.600")
+                }
               >
-                {dayjs(date).format("D")}
+                {dayjsDate.format("D")}
               </Text>
               {(() => {
-                if (isCompletedOnDate(habit, dayjs(date))) {
+                if (isCompletedOnDate(habit, dayjsDate)) {
                   return (
                     <Icon
                       position="absolute"
-                      marginTop="5"
+                      marginTop="6"
                       color="green.400"
                       as={HiOutlineCheckCircle}
                     />
                   );
                 }
 
-                if (shouldBeCompletedOnDate(habit, dayjs(date))) {
+                if (shouldBeCompletedOnDate(habit, dayjsDate)) {
                   return (
                     <Icon
                       position="absolute"
-                      marginTop="9"
+                      marginTop="6"
                       color="red.400"
-                      as={HiOutlineCheckCircle}
+                      as={HiOutlineXCircle}
                     />
                   );
                 }

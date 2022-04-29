@@ -5,10 +5,12 @@ import {
   MenuItem,
   MenuList,
   Text,
+  useColorMode,
 } from "@chakra-ui/react";
 import {
   HiOutlineDotsVertical,
   HiOutlineMoon,
+  HiOutlineSun,
   HiOutlineUser,
 } from "react-icons/hi";
 import { GoMarkGithub } from "react-icons/go";
@@ -20,6 +22,7 @@ import { useAuth, useAuthUser } from "../../../../hooks";
 export function SettingsDropdown() {
   const user = useAuthUser();
   const { logout } = useAuth();
+  const { toggleColorMode, colorMode } = useColorMode();
 
   return (
     <Menu placement="bottom-end">
@@ -39,7 +42,18 @@ export function SettingsDropdown() {
             Sign out
           </MenuItem>
         )}
-        <MenuItem icon={<HiOutlineMoon size={16} />}>Dark Mode</MenuItem>
+        <MenuItem
+          icon={
+            colorMode === "light" ? (
+              <HiOutlineMoon size={16} />
+            ) : (
+              <HiOutlineSun size={16} />
+            )
+          }
+          onClick={toggleColorMode}
+        >
+          {colorMode === "light" ? "Dark Mode" : "Light Mode"}
+        </MenuItem>
         <MenuItem icon={<GoMarkGithub size={16} />}>About</MenuItem>
         <MenuItem
           as={Text}

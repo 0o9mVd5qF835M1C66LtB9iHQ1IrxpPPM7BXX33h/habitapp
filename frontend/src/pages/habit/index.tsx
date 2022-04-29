@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
-import { HiArrowLeft, HiPencil, HiOutlineLightningBolt } from "react-icons/hi";
+import {
+  HiArrowLeft,
+  HiPencil,
+  HiOutlineLightningBolt,
+  HiOutlineStar,
+} from "react-icons/hi";
 import { Flex, Icon, Text } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 import {
   calculateCurrentStreak,
@@ -18,7 +24,6 @@ import {
 } from "../../components";
 import { InfoBlock } from "./info-block";
 import { Calendar } from "./calendar";
-import { useNavigate } from "react-router-dom";
 
 type Props = {
   habit: Habit;
@@ -26,9 +31,11 @@ type Props = {
 
 export function HabitPage({ habit }: Props) {
   const navigate = useNavigate();
+
   const [currentStreak, setCurrentStreak] = useState<number[]>(
     calculateCurrentStreak(habit)
   );
+
   const [longestStreak, setLongestStreak] = useState<number[]>(
     calculateLongestStreak(habit)
   );
@@ -63,20 +70,18 @@ export function HabitPage({ habit }: Props) {
           <Flex marginBottom="2">
             <InfoBlock marginRight="1">
               <Flex flexDirection="column">
-                <Text color="purple.600" fontSize="xs" fontWeight="semibold">
+                <Text color="purple.500" fontSize="xs" fontWeight="medium">
                   Days of week
                 </Text>
-                <Text color="gray.900">
-                  {getOccurenceString(habit.isoWeekdays)}
-                </Text>
+                <Text>{getOccurenceString(habit.isoWeekdays)}</Text>
               </Flex>
             </InfoBlock>
             <InfoBlock marginLeft="1">
               <Flex flexDirection="column">
-                <Text color="purple.600" fontSize="xs" fontWeight="semibold">
+                <Text color="purple.500" fontSize="xs" fontWeight="medium">
                   Habit started
                 </Text>
-                <Text color="gray.900">{getCreatedDateDifference(habit)}</Text>
+                <Text>{getCreatedDateDifference(habit)}</Text>
               </Flex>
             </InfoBlock>
           </Flex>
@@ -84,41 +89,35 @@ export function HabitPage({ habit }: Props) {
             <InfoBlock marginBottom="2">
               <Icon
                 as={HiOutlineLightningBolt}
-                w="24px"
-                height="24px"
-                marginRight="2"
+                fontSize={20}
+                marginRight="4"
                 color="yellow.500"
               />
               <Flex alignItems="center" justifyContent="space-between" flex="1">
                 <Flex flexDirection="column">
-                  <Text color="purple.600" fontSize="xs" fontWeight="semibold">
+                  <Text color="purple.500" fontSize="xs" fontWeight="medium">
                     Current streak
                   </Text>
-                  <Text color="gray.900">
-                    {getStreakRangeString(currentStreak)}
-                  </Text>
+                  <Text>{getStreakRangeString(currentStreak)}</Text>
                 </Flex>
-                <Text color="gray.900">{currentStreak.length}</Text>
+                <Text>{currentStreak.length}</Text>
               </Flex>
             </InfoBlock>
             <InfoBlock>
               <Icon
-                as={HiOutlineLightningBolt}
-                w="24px"
-                height="24px"
-                marginRight="2"
+                as={HiOutlineStar}
+                fontSize={20}
+                marginRight="4"
                 color="yellow.500"
               />
               <Flex alignItems="center" justifyContent="space-between" flex="1">
                 <Flex flexDirection="column">
-                  <Text color="purple.600" fontSize="xs" fontWeight="semibold">
+                  <Text color="purple.500" fontSize="xs" fontWeight="medium">
                     Longest streak
                   </Text>
-                  <Text color="gray.900">
-                    {getStreakRangeString(longestStreak)}
-                  </Text>
+                  <Text>{getStreakRangeString(longestStreak)}</Text>
                 </Flex>
-                <Text color="gray.900">{longestStreak.length}</Text>
+                <Text>{longestStreak.length}</Text>
               </Flex>
             </InfoBlock>
           </Flex>

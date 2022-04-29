@@ -1,4 +1,11 @@
-import { Box, Flex, HStack, IconButton, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  HStack,
+  IconButton,
+  Text,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import dayjs from "dayjs";
 import { IoAddOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
@@ -30,13 +37,17 @@ export function HomeHeader() {
   }
 
   return (
-    <Box borderBottom="1px" borderBottomColor="gray.100" paddingY="3">
+    <Box
+      borderBottom="1px"
+      borderBottomColor={useColorModeValue("gray.100", "whiteAlpha.300")}
+      paddingY="3"
+    >
       <Flex alignItems="center" justify="space-between" width="100%">
         <Box>
-          <Text fontSize="2xl" color="gray.900" fontWeight="bold">
+          <Text fontSize="2xl" fontWeight="bold">
             {getDayTitle()}
           </Text>
-          <Text color="gray.500" fontSize="small">
+          <Text color={useColorModeValue("gray.500", "gray.400")}>
             All habits completed
           </Text>
         </Box>

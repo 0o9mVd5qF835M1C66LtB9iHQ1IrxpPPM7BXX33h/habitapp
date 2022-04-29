@@ -46,14 +46,7 @@ export function LoginPage() {
       <PageHeader justifyContent="end">
         <ModalCloseButton aria-label="go back" />
       </PageHeader>
-      <Heading
-        as="h1"
-        size="md"
-        color="gray.900"
-        textAlign="center"
-        mb="2"
-        pt="32"
-      >
+      <Heading as="h1" size="md" textAlign="center" mb="2" pt="32">
         Welcome back
       </Heading>
       <Text mb="5" textAlign="center" color="gray.500">
@@ -72,7 +65,7 @@ export function LoginPage() {
           type="email"
           name="email"
           value={input.email}
-          className="mb-4"
+          mb="4"
           onChange={handleChange}
         />
         <Text fontSize="sm" mb="0.5">
@@ -82,7 +75,7 @@ export function LoginPage() {
           type="password"
           name="password"
           value={input.password}
-          className="mb-6"
+          mb="6"
           onChange={handleChange}
         />
         <Button type="submit" colorScheme="purple" isFullWidth mb="6">

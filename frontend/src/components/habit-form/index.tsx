@@ -43,13 +43,7 @@ export function HabitForm({
 
   return (
     <>
-      <Heading
-        as="h1"
-        size="md"
-        marginBottom="16"
-        color="gray.900"
-        textAlign="center"
-      >
+      <Heading as="h1" size="md" marginBottom="16" textAlign="center">
         {formTitle}
       </Heading>
       <form onSubmit={handleSubmit}>

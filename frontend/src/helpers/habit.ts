@@ -46,7 +46,7 @@ export function calculateCurrentStreak(habit: Habit) {
       break;
     }
 
-    streak.push(date.valueOf());
+    streak.unshift(date.valueOf());
     date = date.subtract(1, "day");
   }
 
@@ -54,7 +54,12 @@ export function calculateCurrentStreak(habit: Habit) {
 }
 
 export function calculateLongestStreak(habit: Habit) {
-  const startDate = dayjs();
+  if (!habit.completedDates.length) {
+    return [];
+  }
+
+  const firstCompletedDate = habit.completedDates[0];
+  const startDate = dayjs(firstCompletedDate);
 
   let date = startDate;
   let longestStreak: number[] = [];
@@ -68,23 +73,23 @@ export function calculateLongestStreak(habit: Habit) {
 
     if (!isCompletedOnDate(habit, date)) {
       if (date.isToday()) {
-        date = date.subtract(1, "day");
+        date = date.add(1, "day");
         continue;
       }
 
       if (streak.length > longestStreak.length) {
-        longestStreak = streak;
+        longestStreak = [...streak];
       }
-      streak = [];
 
+      streak = [];
       continue;
     }
 
     streak.push(date.valueOf());
-    date = date.subtract(1, "day");
+    date = date.add(1, "day");
 
     if (streak.length > longestStreak.length) {
-      longestStreak = streak;
+      longestStreak = [...streak];
     }
   }
 
@@ -128,8 +133,8 @@ export function getStreakRangeString(streakDates: number[]) {
     return "N/A";
   }
 
-  const startDate = dayjs(streakDates[streakDates.length - 1]);
-  const endDate = dayjs(streakDates[0]);
+  const startDate = dayjs(streakDates[0]);
+  const endDate = dayjs(streakDates[streakDates.length - 1]);
 
-  return `${startDate.format("MMM DD")} - ${endDate.format("MMM DD")}`;
+  return `${startDate.format("MMM D")} - ${endDate.format("MMM D")}`;
 }

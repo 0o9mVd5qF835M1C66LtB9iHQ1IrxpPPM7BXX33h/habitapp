@@ -1,10 +1,10 @@
-import { Input, Button, Heading } from "@chakra-ui/react";
+import { Input, Button, Heading, useToast } from "@chakra-ui/react";
 import { Dispatch, SetStateAction } from "react";
 
 import { WeekSelector } from "./week-selector";
 import { Habit } from "../../generated/api";
 
-export type HabitFormProps = {
+export type Props = {
   habit: Habit;
   formTitle: string;
   submitText: string;
@@ -18,7 +18,9 @@ export function HabitForm({
   submitText,
   onChange,
   onSubmit,
-}: HabitFormProps) {
+}: Props) {
+  const toast = useToast();
+
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     onChange((habit) => ({
       ...habit,
@@ -37,6 +39,16 @@ export function HabitForm({
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    if (!habit.title) {
+      toast({ status: "error", description: "Habit title can't be empty." });
+      return;
+    }
+
+    if (!habit.isoWeekdays.length) {
+      toast({ status: "error", description: "Please select weekdays" });
+      return;
+    }
 
     onSubmit();
   }

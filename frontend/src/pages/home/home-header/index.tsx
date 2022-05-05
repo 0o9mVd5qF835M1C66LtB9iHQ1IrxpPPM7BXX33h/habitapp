@@ -3,7 +3,6 @@ import {
   Flex,
   HStack,
   IconButton,
-  Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { IoAddOutline } from "react-icons/io5";
@@ -11,6 +10,7 @@ import { IoAddOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { SettingsDropdown } from "./settings-dropdown";
 import { DateText } from "./date-text";
+import { InfoText } from "./info-text";
 
 export function HomeHeader() {
   return (
@@ -22,9 +22,7 @@ export function HomeHeader() {
       <Flex alignItems="center" justify="space-between" width="100%">
         <Box>
           <DateText />
-          <Text color={useColorModeValue("gray.500", "gray.400")}>
-            All habits completed
-          </Text>
+          <InfoText />
         </Box>
         <HStack>
           <IconButton

@@ -138,3 +138,20 @@ export function getStreakRangeString(streakDates: number[]) {
 
   return `${startDate.format("MMM D")} - ${endDate.format("MMM D")}`;
 }
+
+export function countNumOfUncompletedHabitsOnDate(
+  habits: Habit[],
+  date: Dayjs
+) {
+  const numOfCompletedHabits = habits.filter((habit) =>
+    habit.completedDates.some((comletedDate) =>
+      date.isSame(comletedDate, "day")
+    )
+  ).length;
+
+  const numOfHabitsToCompleteOnSelectedDate = habits.filter((habit) =>
+    habit.isoWeekdays.includes(date.isoWeekday())
+  ).length;
+
+  return numOfHabitsToCompleteOnSelectedDate - numOfCompletedHabits;
+}

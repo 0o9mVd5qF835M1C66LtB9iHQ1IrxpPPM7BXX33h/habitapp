@@ -13,6 +13,7 @@ import {
   CreateHabitInput,
 } from "../../generated/api";
 import { useAuthUser } from "../../hooks";
+import { AppRoutes } from "../../constants";
 
 export function AddHabitPage() {
   const user = useAuthUser();
@@ -41,7 +42,7 @@ export function AddHabitPage() {
   >({
     mutation: {
       onMutate: async ({ data: newHabit }) => {
-        navigate("/home");
+        navigate(AppRoutes.HOME);
 
         await queryClient.cancelQueries();
 

@@ -21,6 +21,7 @@ import {
   isCompletedOnDate,
   shouldBeCompletedOnWeekday,
 } from "../../../../helpers";
+import { AppRoutes } from "../../../../constants";
 
 type Props = {
   habit: Habit;

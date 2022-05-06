@@ -50,9 +50,9 @@ function App() {
             <Routes>
               <Route
                 path={AppRoutes.ROOT}
-                element={<Navigate to="/home" replace={true} />}
+                element={<Navigate to={AppRoutes.HOME} replace={true} />}
               />
-              <Route path="/home" element={<HomePage />} />
+              <Route path={AppRoutes.HOME} element={<HomePage />} />
               <Route
                 path={AppRoutes.HABIT}
                 element={

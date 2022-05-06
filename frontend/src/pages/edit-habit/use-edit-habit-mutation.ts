@@ -7,6 +7,7 @@ import {
   getHabitControllerFindAllByUserIdQueryKey as getHabitsQueryKey,
   useHabitControllerEditHabit,
 } from "../../generated/api";
+import { AppRoutes } from "../../constants";
 
 export function useEditHabitMutation() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export function useEditHabitMutation() {
   >({
     mutation: {
       onMutate: async ({ id: habitId, data: newHabit }) => {
-        navigate("/home");
+        navigate(AppRoutes.HOME);
 
         await queryClient.cancelQueries();
 

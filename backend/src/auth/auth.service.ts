@@ -65,7 +65,6 @@ export class AuthService {
 
   async registerTempUser() {
     const tempUser = await this.userService.createTempUser();
-
     const accessToken = this.authHelper.signAccessToken(tempUser._id, false);
     return { accessToken };
   }

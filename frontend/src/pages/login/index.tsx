@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Heading, Text, Button, Input, Flex, useToast } from "@chakra-ui/react";
 
 import {
@@ -10,11 +10,13 @@ import {
 } from "../../components";
 import { useAuth, useAuthUser } from "../../hooks";
 import { useState } from "react";
+import { AppRoutes } from "../../constants";
 
 export function LoginPage() {
   const user = useAuthUser();
   const { googleAuth, login } = useAuth();
   const toast = useToast();
+  const navigate = useNavigate();
   const [input, setInput] = useState({ email: "", password: "" });
 
   function handleGoogleLogin(email: string) {
@@ -44,7 +46,10 @@ export function LoginPage() {
   return (
     <Modal>
       <PageHeader justifyContent="end">
-        <ModalCloseButton aria-label="go back" />
+        <ModalCloseButton
+          aria-label="go back"
+          onClick={() => navigate(AppRoutes.HOME)}
+        />
       </PageHeader>
       <Heading as="h1" size="md" textAlign="center" mb="2" pt="32">
         Welcome back

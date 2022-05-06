@@ -19,7 +19,7 @@ import {
 import theme from "./theme";
 import { store } from "./redux";
 import { AuthProvider } from "./AuthProvider";
-import { userTokenKey } from "./constants";
+import { AppRoutes, userTokenKey } from "./constants";
 import { EditHabitPage } from "./pages/edit-habit";
 import { WithHabitFromURLParams } from "./components/with-habit-from-url-params";
 
@@ -49,12 +49,12 @@ function App() {
           <AuthProvider>
             <Routes>
               <Route
-                path="/"
+                path={AppRoutes.ROOT}
                 element={<Navigate to="/home" replace={true} />}
               />
               <Route path="/home" element={<HomePage />} />
               <Route
-                path="/habits/:habitId"
+                path={AppRoutes.HABIT}
                 element={
                   <WithHabitFromURLParams
                     render={(habit) => <HabitPage habit={habit} />}
@@ -62,16 +62,16 @@ function App() {
                 }
               />
               <Route
-                path="/habits/:habitId/edit"
+                path={AppRoutes.EDIT_HABIT}
                 element={
                   <WithHabitFromURLParams
                     render={(habit) => <EditHabitPage editingHabit={habit} />}
                   />
                 }
               />
-              <Route path="/add-habit" element={<AddHabitPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/login" element={<LoginPage />} />
+              <Route path={AppRoutes.ADD_HABIT} element={<AddHabitPage />} />
+              <Route path={AppRoutes.REGISTER} element={<RegisterPage />} />
+              <Route path={AppRoutes.LOGIN} element={<LoginPage />} />
             </Routes>
           </AuthProvider>
         </ChakraProvider>

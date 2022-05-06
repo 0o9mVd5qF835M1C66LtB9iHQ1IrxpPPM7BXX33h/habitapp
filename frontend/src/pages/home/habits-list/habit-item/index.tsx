@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, useColorModeValue, useToast } from "@chakra-ui/react";
 import { useSelector } from "react-redux";
 import { useQueryClient } from "react-query";
 import dayjs from "dayjs";
@@ -31,6 +31,7 @@ export function HabitItem({ habit }: Props) {
   const queryClient = useQueryClient();
   const queryKey = getHabitControllerFindAllByUserIdQueryKey();
   const navigate = useNavigate();
+  const toast = useToast();
 
   const updateHabitCompletedDatesMutation =
     useHabitControllerUpdateHabitCompletedDates<
@@ -80,6 +81,13 @@ export function HabitItem({ habit }: Props) {
     });
 
   function handleUpdateHabitCompletedDates(action: "complete" | "uncomplete") {
+    const isSelectedDayFutureDay = dayjs(selectedDay).isAfter(dayjs(), "day");
+
+    if (isSelectedDayFutureDay) {
+      toast({ status: "error", description: "Can't complete future date." });
+      return;
+    }
+
     if (action === "complete") {
       updateHabitCompletedDatesMutation.mutate({
         data: {
@@ -106,6 +114,7 @@ export function HabitItem({ habit }: Props) {
   }
 
   const isCompletedOnSelectedDay = isCompletedOnDate(habit, dayjs(selectedDay));
+
   return (
     <Flex
       width="100%"

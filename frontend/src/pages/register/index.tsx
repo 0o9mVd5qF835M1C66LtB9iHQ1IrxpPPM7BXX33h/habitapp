@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { HiEye } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Modal,
@@ -20,12 +20,14 @@ import {
   ModalCloseButton,
   GoogleLoginButton,
 } from "../../components";
+import { AppRoutes } from "../../constants";
 import { useAuth, useAuthUser } from "../../hooks";
 
 export function RegisterPage() {
   const { googleAuth, register } = useAuth();
   const user = useAuthUser();
   const toast = useToast();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [input, setInput] = useState({ email: "", password: "" });
 
@@ -53,7 +55,10 @@ export function RegisterPage() {
   return (
     <Modal>
       <PageHeader justifyContent="end">
-        <ModalCloseButton aria-label="go back" />
+        <ModalCloseButton
+          aria-label="go back"
+          onClick={() => navigate(AppRoutes.HOME)}
+        />
       </PageHeader>
       <Heading as="h1" size="md" textAlign="center" mb="2" pt="32">
         Register new account

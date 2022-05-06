@@ -13,12 +13,12 @@ Habitapp is a simple app that helps you build positive habits, measure progress 
 - Streak
 - Longest streak
 - Calendar view
+- Dark mode
 
 ## ✅ To Do
 
 - [ ] Push notifications
 - [ ] Offline mode
-- [ ] Dark mode
 - [ ] Landing page
 
 ## 🛠️ Tech Stack

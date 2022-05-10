@@ -25,7 +25,7 @@ paths:
         "200":
           description: ""
           content:
-            application/json:
+            application/json: 
               schema:
                 $ref: "#/components/schemas/AuthResponse"
   /api/auth/register:

@@ -38,9 +38,11 @@ export class DatabaseModule {
   }
 
   static async dropTestMongoDB() {
-    const isMongooseConnected = mongoose.connection.readyState == 1;
-    if (DatabaseModule.testMongoDB && isMongooseConnected) {
-      await mongoose.connection.dropDatabase();
+    for (const connection of mongoose.connections) {
+      const isMongooseConnected = connection.readyState == 1;
+      if (DatabaseModule.testMongoDB && isMongooseConnected) {
+        await connection.dropDatabase();
+      }
     }
   }
 

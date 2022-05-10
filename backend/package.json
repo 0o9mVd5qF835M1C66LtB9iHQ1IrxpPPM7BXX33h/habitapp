@@ -88,6 +88,9 @@
     "setupFilesAfterEnv": [
       "./setupTests.ts"
     ],
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "setupFiles": [
+      "dotenv/config"
+    ]
   }
 }

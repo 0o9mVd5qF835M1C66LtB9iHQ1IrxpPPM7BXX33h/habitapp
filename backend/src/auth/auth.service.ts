@@ -23,7 +23,9 @@ export class AuthService {
       throw new UnauthorizedException("Incorrect email or password!");
     }
 
-    const isValidPassword = this.authHelper.validatePassword(
+    console.log("💩", loginUserInput.password);
+
+    const isValidPassword = await this.authHelper.validatePassword(
       loginUserInput.password,
       user.password,
     );
@@ -40,27 +42,22 @@ export class AuthService {
   async register(registerUserInput: RegisterUserInput) {
     const { password, email, tempUserId } = registerUserInput;
 
+    const isAlreadyRegistered = !!(await this.userService.findByEmail(email));
+
+    if (isAlreadyRegistered) {
+      throw new BadRequestException("Email is already used.");
+    }
+
     const hashedPassword = await this.authHelper.hashPassword(password);
 
-    try {
-      const user = await this.userService.setTempUserAsRegistered(tempUserId, {
-        email,
-        password: hashedPassword,
-      });
+    const user = await this.userService.setTempUserAsRegistered(tempUserId, {
+      email,
+      password: hashedPassword,
+    });
 
-      const accessToken = this.authHelper.signAccessToken(user._id);
+    const accessToken = this.authHelper.signAccessToken(user._id);
 
-      return { accessToken };
-    } catch (err) {
-      const isNonUniqueError = err.name === "MongoError" && err.code === 11000;
-
-      if (isNonUniqueError) {
-        throw new BadRequestException("User already exists");
-      }
-
-      console.error(err);
-      throw new InternalServerErrorException();
-    }
+    return { accessToken };
   }
 
   async registerTempUser() {

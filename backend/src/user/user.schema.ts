@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { ModelDefinition, Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Document, Types } from "mongoose";
 
@@ -38,3 +38,8 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+export const UserModel: ModelDefinition = {
+  name: User.name,
+  schema: UserSchema,
+};

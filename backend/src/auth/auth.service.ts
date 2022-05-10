@@ -2,7 +2,6 @@ import {
   BadRequestException,
   Injectable,
   UnauthorizedException,
-  InternalServerErrorException,
 } from "@nestjs/common";
 
 import { GoogleAuthInput, LoginInput, RegisterUserInput } from "./auth.dto";

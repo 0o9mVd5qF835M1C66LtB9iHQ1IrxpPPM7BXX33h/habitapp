@@ -26,6 +26,8 @@ export function GoogleLogin({ children, onLogin }: Props) {
       return onLogin(email);
     }
 
+    console.log(response);
+
     toast({ status: "error", description: "Something went wrong!" });
   };
 

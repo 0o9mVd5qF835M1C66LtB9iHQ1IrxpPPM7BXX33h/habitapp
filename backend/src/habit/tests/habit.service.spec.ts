@@ -1,18 +1,19 @@
 import { Test } from "@nestjs/testing";
 import { Types } from "mongoose";
 
-import { UserModule } from "../user/user.module";
-import { User } from "../user/user.schema";
-import { UserService } from "../user/user.service";
-import { DatabaseModule } from "../database/database.module";
-import { HabitFactory } from "./habit.factory";
-import { HabitModule } from "./habit.module";
-import { HabitService } from "./habit.service";
+import { UserModule } from "../../user/user.module";
+import { User } from "../../user/user.schema";
+import { UserService } from "../../user/user.service";
+import { DatabaseModule } from "../../database/database.module";
+import { HabitFactory } from "../habit.factory";
+import { HabitModule } from "../habit.module";
+import { HabitService } from "../habit.service";
 import {
   CreateHabitInput,
   EditHabitInput,
   UpdateHabitCompletedDatesInput,
-} from "./habit.dto";
+} from "../habit.dto";
+import { Habit, HabitDocument } from "../habit.schema";
 
 describe("Habit service", () => {
   let tempUser: User;
@@ -43,7 +44,7 @@ describe("Habit service", () => {
 
       const habit = await habitService.createHabit(input);
       const savedHabits = await habitService.findAllByUserId(tempUser._id);
-      
+
       expect(habit).toMatchObject(input);
       expect(savedHabits).toHaveLength(1);
     });
@@ -172,6 +173,28 @@ describe("Habit service", () => {
       const updated = await habitService.updateHabitCompletedDates(input);
 
       expect(updated.completedDates).toEqual(input.completedDates);
+    });
+  });
+
+  describe("method findById", () => {
+    it("should return habit document for given id", async () => {
+      const habit = await habitService.createHabit(
+        HabitFactory.create({
+          userId: tempUser._id,
+          completedDates: [1, 2, 3, 4],
+        }),
+      );
+
+      const data = await habitService.findById(habit._id);
+      // TODO: Find a way to compare two object. toEqual is giving wierd error.
+      expect(data._id).toStrictEqual(habit._id);
+      expect(data.title).toBe(habit.title);
+      expect(data.isoWeekdays).toEqual(habit.isoWeekdays);
+      expect(data.completedDates).toEqual(habit.completedDates);
+    });
+
+    it("should throw if habit not found for given id", async () => {
+      expect(habitService.findById(new Types.ObjectId())).rejects.toThrow();
     });
   });
 });

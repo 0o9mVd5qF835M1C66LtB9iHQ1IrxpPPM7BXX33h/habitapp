@@ -81,7 +81,6 @@ export function RegisterPage() {
           value={input.email}
           mb="4"
           onChange={handleChange}
-          required
         />
         <Text fontSize="sm" mb="0.5">
           Password
@@ -92,7 +91,6 @@ export function RegisterPage() {
             name="password"
             value={input.password}
             mb="6"
-            required
             onChange={handleChange}
           />
           <InputRightElement>
@@ -105,7 +103,7 @@ export function RegisterPage() {
             />
           </InputRightElement>
         </InputGroup>
-        <Button type="button" colorScheme="purple" isFullWidth mb="6">
+        <Button type="submit" colorScheme="purple" isFullWidth mb="6">
           Register
         </Button>
       </form>

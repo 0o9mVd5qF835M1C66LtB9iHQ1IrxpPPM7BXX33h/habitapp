@@ -129,6 +129,7 @@ export function HabitItem({ habit }: Props) {
       cursor="pointer"
       role="button"
       aria-label={`Habit: ${habit.title}`}
+      userSelect="none"
       onClick={handleHabitItemClick}
     >
       <Box width="full">

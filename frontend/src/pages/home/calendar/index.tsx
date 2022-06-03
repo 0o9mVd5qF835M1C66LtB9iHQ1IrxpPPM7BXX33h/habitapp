@@ -31,6 +31,7 @@ export function Calendar() {
     <ChakraScrollContainer
       display="flex"
       flexDirection="row-reverse"
+      flex="0 0 auto"
       paddingY="2"
       gap="8px"
       marginBottom="3"

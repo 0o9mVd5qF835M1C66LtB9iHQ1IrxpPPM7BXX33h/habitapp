@@ -8,12 +8,12 @@ type Props = {
 export function PageContainer({ children }: Props) {
   return (
     <Box
-      width="sm"
+      width={{ sm: "md" }}
       display="flex"
       flexDirection="column"
       height="100vh"
       marginX="auto"
-      paddingX="6"
+      paddingX="4"
     >
       {children}
     </Box>

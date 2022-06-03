@@ -18,6 +18,11 @@ export function HomeHeader() {
       borderBottom="1px"
       borderBottomColor={useColorModeValue("gray.100", "whiteAlpha.300")}
       paddingY="3"
+      position="sticky"
+      top="0"
+      backgroundColor="white"
+      boxShadow="rgb(255 255 255) -3px 0px 3px 1px, rgb(255 255 255) 3px 0px 3px 1px"
+      zIndex="overlay"
     >
       <Flex alignItems="center" justify="space-between" width="100%">
         <Box>
